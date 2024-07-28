@@ -1,7 +1,8 @@
 import uuid
 from datetime import date
+from typing import Optional
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 
 # Shared properties
@@ -22,3 +23,33 @@ class Release(ReleaseBase, table=True):
     year: int | None = Field(default=None)
     sort_date: date | None = Field(default=None)
     release_date: date | None = Field(default=None)
+
+    storage_location_id: uuid.UUID | None = Field(
+        default=None, foreign_key="storage_location.id"
+    )
+    storage_location: Optional["StorageLocation"] = Relationship(
+        back_populates="release"
+    )
+
+
+# Shared properties
+class StorageLocationBase(SQLModel):
+    spreadsheet_id: int | None = Field(default=0)
+    container: str | None = Field(default=None, max_length=255)
+    row: int | None = Field(default=0)
+    position: int | None = Field(default=0)
+
+
+# Database model, database table inferred from class name
+class StorageLocation(StorageLocationBase, table=True):
+    __tablename__ = "storage_location"
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    spreadsheet_id: int | None = Field(default=0)
+    container: str | None = Field(default=None, max_length=255)
+    row: int | None = Field(default=0)
+    position: int | None = Field(default=0)
+
+    release: Release | None = Relationship(
+        sa_relationship_kwargs={"uselist": False}, back_populates="storage_location"
+    )
