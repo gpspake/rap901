@@ -5,9 +5,9 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
 from app.api.deps import CurrentUser, SessionDep
+from app.models.database_models import Release
 from app.models.models import Message
 from app.models.release import (
-    Release,
     ReleaseCreate,
     ReleasePublic,
     ReleasesPublic,

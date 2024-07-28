@@ -4,7 +4,7 @@ from sqlalchemy import func, select
 from sqlmodel import Session
 
 from app.api.deps import SessionDep
-from app.models.release import Release
+from app.models.database_models import Release
 from app.tests.utils.release import build_random_release
 from scripts.seed_db import seed_db, seed_db_from_file
 

@@ -1,12 +1,13 @@
 import json
 import os
 
-from app.models.release import ReleaseCreate, Release
 from sqlalchemy import MetaData, Table, delete
 from sqlmodel import Session, select
 
 from app.backend_pre_start import logger
 from app.core.db import engine
+from app.models.database_models import Release
+from app.models.release import ReleaseCreate
 
 
 def clean_db(session: Session):

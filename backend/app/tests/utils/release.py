@@ -2,7 +2,8 @@ from faker import Faker
 from sqlmodel import Session
 
 from app import crud
-from app.models.release import Release, ReleaseCreate
+from app.models.database_models import Release
+from app.models.release import ReleaseCreate
 
 fake = Faker()
 
