@@ -1,17 +1,17 @@
+from faker import Faker
 from sqlmodel import Session
 
 from app import crud
 from app.models.release import Release, ReleaseCreate
 
-from faker import Faker
 fake = Faker()
 
 
-def create_random_release(db: Session) -> Release:
-    title = fake.sentence(nb_words=4).title().rstrip('.')
+def build_random_release() -> ReleaseCreate:
+    title = fake.sentence(nb_words=4).title().rstrip(".")
     discogs_url = fake.url()
-    discogs_title = fake.sentence(nb_words=4).title().rstrip('.')
-    title_long = fake.sentence(nb_words=4).title().rstrip('.')
+    discogs_title = fake.sentence(nb_words=4).title().rstrip(".")
+    title_long = fake.sentence(nb_words=4).title().rstrip(".")
     matrix = fake.word()
     sealed = fake.boolean()
     spreadsheet_id = fake.random_int(min=1, max=999)
@@ -19,7 +19,7 @@ def create_random_release(db: Session) -> Release:
     sort_date = fake.date()
     release_date = fake.date()
 
-    release_in = ReleaseCreate(
+    return ReleaseCreate(
         discogs_url=discogs_url,
         discogs_title=discogs_title,
         title=title,
@@ -32,4 +32,7 @@ def create_random_release(db: Session) -> Release:
         release_date=release_date,
     )
 
+
+def create_random_release(db: Session) -> Release:
+    release_in = build_random_release()
     return crud.create_release(session=db, release_in=release_in)
