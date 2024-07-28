@@ -1,3 +1,4 @@
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
@@ -42,7 +43,7 @@ def read_releases(
 
 
 @router.get("/{id}", response_model=ReleasePublic)
-def read_release(session: SessionDep, current_user: CurrentUser, id: int) -> Any:
+def read_release(session: SessionDep, current_user: CurrentUser, id: uuid.UUID) -> Any:
     """
     Get release by ID.
     """
@@ -61,7 +62,7 @@ def create_release(
     """
     Create new release.
     """
-    release = Release.model_validate(release_in, update={"owner_id": current_user.id})
+    release = Release.model_validate(release_in)
     session.add(release)
     session.commit()
     session.refresh(release)
@@ -70,7 +71,7 @@ def create_release(
 
 @router.put("/{id}", response_model=ReleasePublic)
 def update_release(
-    *, session: SessionDep, current_user: CurrentUser, id: int, release_in: ReleaseUpdate
+    *, session: SessionDep, current_user: CurrentUser, id: uuid.UUID, release_in: ReleaseUpdate
 ) -> Any:
     """
     Update an release.
@@ -89,7 +90,7 @@ def update_release(
 
 
 @router.delete("/{id}")
-def delete_release(session: SessionDep, current_user: CurrentUser, id: int) -> Message:
+def delete_release(session: SessionDep, current_user: CurrentUser, id: uuid.UUID) -> Message:
     """
     Delete an release.
     """

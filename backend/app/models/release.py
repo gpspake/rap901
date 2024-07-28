@@ -1,3 +1,4 @@
+import uuid
 from datetime import date
 
 from sqlmodel import Field, SQLModel
@@ -5,7 +6,7 @@ from sqlmodel import Field, SQLModel
 
 # Shared properties
 class ReleaseBase(SQLModel):
-    title: str = Field(min_length=1, max_length=255)
+    title: str | None = Field(default=None, min_length=1, max_length=255)
 
 
 # Properties to receive on item creation
@@ -38,8 +39,7 @@ class ReleaseUpdate(ReleaseBase):
 
 # Database model, database table inferred from class name
 class Release(ReleaseBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     discogs_url: str | None = Field(default=None, max_length=255)
     discogs_title: str | None = Field(default=None, max_length=255)
     title: str | None = Field(default=None, max_length=255)
@@ -54,7 +54,7 @@ class Release(ReleaseBase, table=True):
 
 # Properties to return via API, id is always required
 class ReleasePublic(ReleaseBase):
-    id: int
+    id: uuid.UUID
     discogs_url: str | None
     discogs_title: str | None
     title: str | None
