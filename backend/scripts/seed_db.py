@@ -1,21 +1,27 @@
 import json
 import os
 
-from app.models.release import ReleaseCreate, Release
 from sqlalchemy import MetaData, Table, delete
 from sqlmodel import Session, select
 
 from app.backend_pre_start import logger
 from app.core.db import engine
+from app.crud import orm_create_release
+from app.models.release import ReleaseCreate
 
 
 def clean_db(session: Session):
     # Clean DB
     metadata = MetaData()
     metadata.reflect(bind=engine)
+
     releases_table = Table("release", metadata, autoload_with=engine)
-    delete_stmt = delete(releases_table)
-    session.execute(delete_stmt)
+    delete_releases_stmt = delete(releases_table)
+    session.execute(delete_releases_stmt)
+
+    storage_locations_table = Table("storage_location", metadata, autoload_with=engine)
+    delete_storage_location_stmt = delete(storage_locations_table)
+    session.execute(delete_storage_location_stmt)
 
 
 def seed_db(session: Session, releases: list[ReleaseCreate], clean: bool = False):
@@ -23,10 +29,7 @@ def seed_db(session: Session, releases: list[ReleaseCreate], clean: bool = False
         clean_db(session)
 
     for release_in in releases:
-        release = Release.model_validate(release_in)
-        session.add(release)
-        session.commit()
-        session.refresh(release)
+        release = orm_create_release(session=session, release_in=release_in)
         print(f"Created release: {release.id}")
 
 

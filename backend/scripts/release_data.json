@@ -9,7 +9,13 @@
         "spreadsheet_id": 2,
         "year": 1995,
         "sort_date": "1995-02-01",
-        "release_date": "1995-02-01"
+        "release_date": "1995-02-01",
+        "storage_location": {
+            "spreadsheet_id": 2,
+            "container":"Case",
+            "row": "1",
+            "position":"2"
+        }
   },
   {
         "discogs_url": "https://discogs_url.com/hello",
@@ -21,6 +27,12 @@
         "spreadsheet_id": 3,
         "year": 1997,
         "sort_date": "1997-02-01",
-        "release_date": "1997-02-01"
+        "release_date": "1997-02-01",
+        "storage_location": {
+            "spreadsheet_id": 3,
+            "container":"Case",
+            "row": "1",
+            "position":"3"
+        }
     }
 ]

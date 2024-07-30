@@ -5,6 +5,7 @@ from sqlmodel import Session
 
 from app.core.config import settings
 from app.tests.utils.release import create_random_release
+from app.tests.utils.storage_location import create_random_storage_location
 
 
 def test_create_release(
@@ -78,19 +79,6 @@ def test_read_release_not_found(
     assert response.status_code == 404
     content = response.json()
     assert content["detail"] == "Release not found"
-
-
-def test_read_release_not_enough_permissions(
-    client: TestClient, normal_user_token_headers: dict[str, str], db: Session
-) -> None:
-    release = create_random_release(db)
-    response = client.get(
-        f"{settings.API_V1_STR}/releases/{release.id}",
-        headers=normal_user_token_headers,
-    )
-    assert response.status_code == 400
-    content = response.json()
-    assert content["detail"] == "Not enough permissions"
 
 
 def test_read_releases(
@@ -188,3 +176,22 @@ def test_delete_release_not_enough_permissions(
     assert response.status_code == 400
     content = response.json()
     assert content["detail"] == "Not enough permissions"
+
+
+def test_release_storage_location_relationship(
+    client: TestClient, normal_user_token_headers: dict[str, str], db: Session
+) -> None:
+    release = create_random_release(db)
+    storage_location = create_random_storage_location(db)
+    release.storage_location = storage_location
+    db.add(release)
+    db.commit()
+    db.refresh(release)
+
+    response = client.get(
+        f"{settings.API_V1_STR}/releases/{release.id}",
+        headers=normal_user_token_headers,
+    )
+    content = response.json()
+    assert content["storage_location"]["id"] == str(storage_location.id)
+    assert content["storage_location"]["row"] == storage_location.row
