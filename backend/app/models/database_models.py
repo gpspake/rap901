@@ -53,3 +53,25 @@ class StorageLocation(StorageLocationBase, table=True):
     release: Release | None = Relationship(
         sa_relationship_kwargs={"uselist": False}, back_populates="storage_location"
     )
+
+
+# Shared properties
+class ImageBase(SQLModel):
+    date_taken: date | None = Field(default=None)
+    image_type: str | None = Field(default=None)
+    original_path: str | None = Field(default=None)
+    new_path: str | None = Field(default=None)
+    alt_text: str | None = Field(default=None)
+    cloudflare_id: str | None = Field(default=None)
+
+
+# Database model, database table inferred from class name
+class Image(ImageBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    date_taken: date | None = Field(default=None)
+    image_type: str | None = Field(default=None)
+    original_path: str | None = Field(default=None)
+    new_path: str | None = Field(default=None)
+    alt_text: str | None = Field(default=None)
+    cloudflare_id: str | None = Field(default=None)
+    release_id: uuid.UUID | None = Field(default=None)
