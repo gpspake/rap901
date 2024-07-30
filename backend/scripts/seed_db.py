@@ -6,7 +6,7 @@ from sqlmodel import Session, select
 
 from app.backend_pre_start import logger
 from app.core.db import engine
-from app.models.database_models import Release, StorageLocation
+from app.crud import orm_create_release
 from app.models.release import ReleaseCreate
 
 
@@ -29,22 +29,7 @@ def seed_db(session: Session, releases: list[ReleaseCreate], clean: bool = False
         clean_db(session)
 
     for release_in in releases:
-        # add storage location id
-        if (
-            "storage_location" in release_in
-            and release_in["storage_location"] is not None
-        ):
-            storage_location_in = release_in.pop("storage_location")
-            storage_location = StorageLocation.model_validate(storage_location_in)
-            session.add(storage_location)
-            session.commit()
-            session.refresh(storage_location)
-            release_in["storage_location_id"] = storage_location.id
-
-        release = Release.model_validate(release_in)
-        session.add(release)
-        session.commit()
-        session.refresh(release)
+        release = orm_create_release(session=session, release_in=release_in)
         print(f"Created release: {release.id}")
 
 

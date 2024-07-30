@@ -4,7 +4,7 @@ from datetime import date
 from sqlmodel import Field, SQLModel
 
 from app.models.database_models import ReleaseBase
-from app.models.storage_location import StorageLocationPublic
+from app.models.storage_location import StorageLocationCreate, StorageLocationPublic
 
 
 # Properties to receive on item creation
@@ -20,6 +20,7 @@ class ReleaseCreate(ReleaseBase):
     sort_date: date | None = Field(default=None)
     release_date: date | None = Field(default=None)
     storage_location_id: uuid.UUID | None = Field(default=None)
+    storage_location: StorageLocationCreate | None = Field(default=None)
 
 
 # Properties to receive on item update
