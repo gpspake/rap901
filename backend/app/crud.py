@@ -60,15 +60,17 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
 def orm_create_release(*, session: Session, release_in: ReleaseCreate) -> Release:
     release_in = ReleaseCreate.model_validate(release_in)
 
-    if release_in.storage_location is not None:
+    if release_in.storage_location_id is not None:
+        storage_location = session.get(StorageLocation, release_in.storage_location_id)
+        release_in.storage_location = storage_location
+    elif release_in.storage_location is not None:
         storage_location_in = StorageLocationCreate.model_validate(
             release_in.storage_location
         )
         storage_location = create_storage_location(
             session=session, storage_location_in=storage_location_in
         )
-        release_in.storage_location_id = storage_location.id
-        release_in.storage_location = None
+        release_in.storage_location = storage_location
 
     db_release = Release.model_validate(release_in)
     session.add(db_release)
