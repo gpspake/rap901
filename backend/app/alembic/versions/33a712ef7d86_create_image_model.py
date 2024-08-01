@@ -21,15 +21,19 @@ def upgrade():
     op.create_table(
         "image",
         sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False, default=sa.text('uuid_generate_v4()')),
-        sa.Column('release_id', postgresql.UUID(as_uuid=True), nullable=False, default=sa.text('uuid_generate_v4()')),
+        sa.Column('release_id', postgresql.UUID(as_uuid=True)),
         sa.Column('date_taken', sa.Date()),
-        sa.Column('image_type', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column('original_path', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column('new_path', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column('alt_text', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column('image_type', sqlmodel.sql.sqltypes.AutoString()),
+        sa.Column('original_path', sqlmodel.sql.sqltypes.AutoString()),
+        sa.Column('new_path', sqlmodel.sql.sqltypes.AutoString()),
+        sa.Column('alt_text', sqlmodel.sql.sqltypes.AutoString()),
         sa.Column('cloudflare_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
 
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id'),
+        sa.ForeignKeyConstraint(
+            ["release_id"],
+            ["release.id"],
+        )
     )
 
 

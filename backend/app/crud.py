@@ -4,7 +4,8 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models.database_models import Release, StorageLocation
+from app.models.database_models import Image, Release, StorageLocation
+from app.models.image import ImageCreate
 from app.models.models import Item, ItemCreate, User, UserCreate, UserUpdate
 from app.models.release import ReleaseCreate
 from app.models.storage_location import StorageLocationCreate
@@ -87,3 +88,11 @@ def create_storage_location(
     session.commit()
     session.refresh(db_storage_location)
     return db_storage_location
+
+
+def create_image(*, session: Session, image_in: ImageCreate) -> Image:
+    db_image = Image.model_validate(image_in)
+    session.add(db_image)
+    session.commit()
+    session.refresh(db_image)
+    return db_image

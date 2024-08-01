@@ -1,11 +1,13 @@
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
-from app.api.deps import SessionDep
+from app.api.deps import CurrentUser, SessionDep
 from app.models.database_models import Image
-from app.models.image import ImagePublic, ImagesPublic, ImageCreate
+from app.models.image import ImageCreate, ImagePublic, ImagesPublic, ImageUpdate
+from app.models.models import Message
 
 router = APIRouter()
 
@@ -25,7 +27,7 @@ def read_images(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
 
 
 @router.get("/{id}", response_model=ImagePublic)
-def read_image(session: SessionDep, id: int) -> Any:
+def read_image(session: SessionDep, id: uuid.UUID) -> Any:
     """
     Get image by ID.
     """
@@ -36,9 +38,7 @@ def read_image(session: SessionDep, id: int) -> Any:
 
 
 @router.post("/", response_model=ImagePublic)
-def create_image(
-    *, session: SessionDep, image_in: ImageCreate
-) -> Any:
+def create_image(*, session: SessionDep, image_in: ImageCreate) -> Any:
     """
     Create new image.
     """
@@ -48,3 +48,43 @@ def create_image(
     session.refresh(image)
     return image
 
+
+@router.put("/{id}", response_model=ImagePublic)
+def update_image(
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    id: uuid.UUID,
+    image_in: ImageUpdate,
+) -> Any:
+    """
+    Update an image.
+    """
+    image = session.get(Image, id)
+    if not image:
+        raise HTTPException(status_code=404, detail="Image not found")
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    update_dict = image_in.model_dump(exclude_unset=True)
+    image.sqlmodel_update(update_dict)
+    session.add(image)
+    session.commit()
+    session.refresh(image)
+    return image
+
+
+@router.delete("/{id}")
+def delete_image(
+    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
+) -> Message:
+    """
+    Delete an image.
+    """
+    image = session.get(Image, id)
+    if not image:
+        raise HTTPException(status_code=404, detail="Image not found")
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    session.delete(image)
+    session.commit()
+    return Message(message="Image deleted successfully")
