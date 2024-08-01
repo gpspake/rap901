@@ -31,6 +31,9 @@ class Release(ReleaseBase, table=True):
         back_populates="release"
     )
 
+    # many images to one release
+    images: list["Image"] = Relationship(back_populates="release")
+
 
 # Shared properties
 class StorageLocationBase(SQLModel):
@@ -53,3 +56,48 @@ class StorageLocation(StorageLocationBase, table=True):
     release: Release | None = Relationship(
         sa_relationship_kwargs={"uselist": False}, back_populates="storage_location"
     )
+
+
+# Shared properties
+class ImageBase(SQLModel):
+    date_taken: date | None = Field(default=None)
+    image_type: str | None = Field(default=None)
+    original_path: str | None = Field(default=None)
+    new_path: str | None = Field(default=None)
+    alt_text: str | None = Field(default=None)
+    cloudflare_id: str | None = Field(default=None)
+
+
+# Database model, database table inferred from class name
+class Image(ImageBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    date_taken: date | None = Field(default=None)
+    image_type: str | None = Field(default=None)
+    original_path: str | None = Field(default=None)
+    new_path: str | None = Field(default=None)
+    alt_text: str | None = Field(default=None)
+    cloudflare_id: str | None = Field(default=None)
+    release_id: uuid.UUID | None = Field(default=None, foreign_key="release.id")
+    release: Release | None = Relationship(back_populates="images")
+
+
+class ReleaseImage(ImageBase):
+    id: uuid.UUID | None
+    date_taken: date | None
+    image_type: str | None
+    alt_text: str | None
+    cloudflare_id: str | None
+
+
+class ImageRelease(ReleaseBase):
+    id: uuid.UUID | None
+    discogs_url: str | None
+    discogs_title: str | None
+    title: str | None
+    title_long: str | None
+    matrix: str | None
+    sealed: bool | None
+    spreadsheet_id: int | None
+    year: int | None
+    sort_date: date | None
+    release_date: date | None

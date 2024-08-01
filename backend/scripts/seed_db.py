@@ -15,6 +15,10 @@ def clean_db(session: Session):
     metadata = MetaData()
     metadata.reflect(bind=engine)
 
+    images_table = Table("image", metadata, autoload_with=engine)
+    delete_images_stmt = delete(images_table)
+    session.execute(delete_images_stmt)
+
     releases_table = Table("release", metadata, autoload_with=engine)
     delete_releases_stmt = delete(releases_table)
     session.execute(delete_releases_stmt)

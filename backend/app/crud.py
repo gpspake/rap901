@@ -4,7 +4,8 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models.database_models import Release, StorageLocation
+from app.models.database_models import Image, Release, StorageLocation
+from app.models.image import ImageCreate
 from app.models.models import Item, ItemCreate, User, UserCreate, UserUpdate
 from app.models.release import ReleaseCreate
 from app.models.storage_location import StorageLocationCreate
@@ -60,15 +61,17 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
 def orm_create_release(*, session: Session, release_in: ReleaseCreate) -> Release:
     release_in = ReleaseCreate.model_validate(release_in)
 
-    if release_in.storage_location is not None:
+    if release_in.storage_location_id is not None:
+        storage_location = session.get(StorageLocation, release_in.storage_location_id)
+        release_in.storage_location = storage_location
+    elif release_in.storage_location is not None:
         storage_location_in = StorageLocationCreate.model_validate(
             release_in.storage_location
         )
         storage_location = create_storage_location(
             session=session, storage_location_in=storage_location_in
         )
-        release_in.storage_location_id = storage_location.id
-        release_in.storage_location = None
+        release_in.storage_location = storage_location
 
     db_release = Release.model_validate(release_in)
     session.add(db_release)
@@ -85,3 +88,11 @@ def create_storage_location(
     session.commit()
     session.refresh(db_storage_location)
     return db_storage_location
+
+
+def create_image(*, session: Session, image_in: ImageCreate) -> Image:
+    db_image = Image.model_validate(image_in)
+    session.add(db_image)
+    session.commit()
+    session.refresh(db_image)
+    return db_image
