@@ -29,7 +29,7 @@ def upgrade():
         sa.Column('alt_text', sqlmodel.sql.sqltypes.AutoString()),
         sa.Column('cloudflare_id', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
 
-        sa.PrimaryKeyConstraint('id'),
+        sa.PrimaryKeyConstraint('id', name='image_pkey'),
         sa.ForeignKeyConstraint(
             ["release_id"],
             ["release.id"],
