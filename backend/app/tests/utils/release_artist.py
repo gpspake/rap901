@@ -41,16 +41,16 @@ def get_or_create_role_by_name(
     name: str | None = None,
 ) -> Role:
     statement = select(Role).where(Role.name == name)
-    result = db.execute(statement).first()
-    role = result[0] if result else None
+    result: Role | None = db.exec(statement).first()
 
-    if not role:
+    if result:
+        return result
+    else:
         role = Role(name=name)
         db.add(role)
         db.commit()
         db.refresh(role)
-
-    return role
+        return role
 
 
 def create_random_release_artist(
