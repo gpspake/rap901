@@ -2,12 +2,13 @@ import uuid
 
 from sqlmodel import Field, SQLModel
 
-from app.models.database_models import ArtistBase, ReleaseArtist
+from app.models.database_models import ArtistBase
+from app.models.release_artist import ArtistReleaseLink
 
 
 # Properties to receive on Artist creation
 class ArtistCreate(ArtistBase):
-    name: str | None = Field(default=None)
+    name: str
     profile: str | None = Field(default=None)
     discogs_id: int | None = Field(default=None)
     discogs_resource_url: str | None = Field(default=None, max_length=255)
@@ -29,7 +30,7 @@ class ArtistPublic(ArtistBase):
     discogs_id: int
     discogs_resource_url: str
 
-    release_links: list["ReleaseArtist"]
+    release_links: list["ArtistReleaseLink"]
 
 
 class ArtistsPublic(SQLModel):

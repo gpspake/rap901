@@ -8,6 +8,15 @@ from sqlmodel import Field, Relationship, SQLModel
 # Shared properties
 class ReleaseBase(SQLModel):
     title: str | None = Field(default=None, min_length=1, max_length=255)
+    discogs_url: str | None = Field(default=None, min_length=1, max_length=255)
+    discogs_title: str | None = Field(default=None, min_length=1, max_length=255)
+    title_long: str | None = Field(default=None, min_length=1, max_length=255)
+    matrix: str | None = Field(default=None, min_length=1, max_length=255)
+    sealed: bool | None = Field(default=False)
+    spreadsheet_id: int | None = Field(default=None)
+    year: int | None = Field(default=None)
+    sort_date: date | None = Field(default=None)
+    release_date: date | None = Field(default=None)
 
 
 # Database model, database table inferred from class name
@@ -124,6 +133,13 @@ class Artist(ArtistBase, table=True):
     release_links: list["ReleaseArtist"] = Relationship(back_populates="artist")
 
 
+# Shared properties
+class ReleaseArtistBase(SQLModel):
+    release_id: uuid.UUID | None = Field(default=None)
+    artist_id: uuid.UUID | None = Field(default=None)
+    role_id: uuid.UUID | None = Field(default=None)
+
+
 class ReleaseArtist(SQLModel, table=True):
     __tablename__ = "release_artist"
 
@@ -133,7 +149,9 @@ class ReleaseArtist(SQLModel, table=True):
     artist_id: uuid.UUID | None = Field(
         default=None, foreign_key="artist.id", primary_key=True
     )
-    role_id: uuid.UUID = Field(foreign_key="role.id")
+    role_id: uuid.UUID | None = Field(foreign_key="role.id")
+    anv: str | None = Field(default=None)
+    sort_order: int = Field(default=0)
 
     role: "Role" = Relationship(back_populates="release_artist")
     artist: "Artist" = Relationship(back_populates="release_links")

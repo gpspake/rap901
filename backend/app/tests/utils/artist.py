@@ -1,11 +1,9 @@
-import random
-
 from faker import Faker
 from sqlmodel import Session
 
 from app import crud
-from app.models.database_models import Artist
 from app.models.artist import ArtistCreate
+from app.models.database_models import Artist
 
 fake = Faker()
 
