@@ -19,4 +19,5 @@ def build_random_artist() -> ArtistCreate:
 
 def create_random_artist(db: Session) -> Artist:
     artist_in = build_random_artist()
-    return crud.create_artist(session=db, artist_in=artist_in)
+    artist = crud.create_artist(session=db, artist_in=artist_in)
+    return artist
