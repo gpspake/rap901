@@ -43,6 +43,7 @@ def upgrade():
         sa.Column('artist_id', postgresql.UUID(as_uuid=True), nullable=False, default=sa.text('uuid_generate_v4()')),
         sa.Column("sort_order", sa.Integer),
         sa.Column("join", sa.VARCHAR(length=255)),
+        sa.Column("anv", sa.VARCHAR(length=255)),
         sa.Column("role_id", postgresql.UUID(as_uuid=True)),
 
         sa.ForeignKeyConstraint(
