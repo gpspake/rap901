@@ -2,7 +2,7 @@ import uuid
 
 from sqlmodel import Field, SQLModel
 
-from app.models.database_models import ArtistBase, ReleaseArtistBase, ReleaseBase
+from app.models.database_models import ArtistBase, ReleaseArtistBase, ReleaseBase, Role
 
 
 # Properties to receive on ReleaseArtist creation
@@ -25,9 +25,11 @@ class ReleaseArtistUpdate(ReleaseArtistBase):
 
 # Properties to return via API, id is always required
 class ReleaseArtistPublic(ReleaseArtistBase):
+    id: uuid.UUID
     release_id: uuid.UUID
     artist_id: uuid.UUID
     role_id: uuid.UUID | None
+    role: Role | None = Field(default=None)
     anv: str | None
     sort_order: int
 

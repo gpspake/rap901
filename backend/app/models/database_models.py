@@ -142,13 +142,9 @@ class ReleaseArtistBase(SQLModel):
 
 class ReleaseArtist(SQLModel, table=True):
     __tablename__ = "release_artist"
-
-    release_id: uuid.UUID | None = Field(
-        default=None, foreign_key="release.id", primary_key=True
-    )
-    artist_id: uuid.UUID | None = Field(
-        default=None, foreign_key="artist.id", primary_key=True
-    )
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    release_id: uuid.UUID = Field(foreign_key="release.id")
+    artist_id: uuid.UUID = Field(foreign_key="artist.id")
     role_id: uuid.UUID | None = Field(foreign_key="role.id")
     anv: str | None = Field(default=None)
     sort_order: int = Field(default=0)

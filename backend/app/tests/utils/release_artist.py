@@ -15,7 +15,7 @@ fake = Faker()
 def build_random_release_artist(
     artist_id: uuid.UUID | None = None,
     release_id: uuid.UUID | None = None,
-    # role: str | None = None,
+    role_id: uuid.UUID | None = None,
     sort_order: int | None = 0,
     anv: str | None = None,
     db: Session | None = None,
@@ -30,7 +30,7 @@ def build_random_release_artist(
     return ReleaseArtistCreate(
         release_id=release_id,
         artist_id=artist_id,
-        role_id=None,
+        role_id=role_id,
         anv=anv,
         sort_order=sort_order,
     )

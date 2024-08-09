@@ -39,9 +39,10 @@ def upgrade():
 
     op.create_table(
         "release_artist",
-        sa.Column('release_id', postgresql.UUID(as_uuid=True), nullable=False, default=sa.text('uuid_generate_v4()')),
-        sa.Column('artist_id', postgresql.UUID(as_uuid=True), nullable=False, default=sa.text('uuid_generate_v4()')),
-        sa.Column("sort_order", sa.Integer),
+        sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False, default=sa.text('uuid_generate_v4()')),
+        sa.Column('release_id', postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column('artist_id', postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column("sort_order", sa.Integer, default=0),
         sa.Column("join", sa.VARCHAR(length=255)),
         sa.Column("anv", sa.VARCHAR(length=255)),
         sa.Column("role_id", postgresql.UUID(as_uuid=True)),
@@ -64,8 +65,7 @@ def upgrade():
             name='release_artist_artist_id_fkey'
         ),
 
-        sa.PrimaryKeyConstraint('release_id', 'artist_id',
-                             name='release_artist_pkey')
+        sa.PrimaryKeyConstraint('id', name='release_artist_pkey')
     )
 
 
