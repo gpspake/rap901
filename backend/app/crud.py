@@ -4,10 +4,18 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models.database_models import Image, Release, StorageLocation
+from app.models.artist import ArtistCreate
+from app.models.database_models import (
+    Artist,
+    Image,
+    Release,
+    ReleaseArtist,
+    StorageLocation,
+)
 from app.models.image import ImageCreate
 from app.models.models import Item, ItemCreate, User, UserCreate, UserUpdate
 from app.models.release import ReleaseCreate
+from app.models.release_artist import ReleaseArtistCreate
 from app.models.storage_location import StorageLocationCreate
 
 
@@ -96,3 +104,21 @@ def create_image(*, session: Session, image_in: ImageCreate) -> Image:
     session.commit()
     session.refresh(db_image)
     return db_image
+
+
+def create_artist(*, session: Session, artist_in: ArtistCreate) -> Artist:
+    db_artist = Artist.model_validate(artist_in)
+    session.add(db_artist)
+    session.commit()
+    session.refresh(db_artist)
+    return db_artist
+
+
+def create_release_artist(
+    *, session: Session, release_artist_in: ReleaseArtistCreate
+) -> ReleaseArtist:
+    db_release_artist = ReleaseArtist.model_validate(release_artist_in)
+    session.add(db_release_artist)
+    session.commit()
+    session.refresh(db_release_artist)
+    return db_release_artist

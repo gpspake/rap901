@@ -28,7 +28,7 @@ def upgrade():
         sa.Column('row', sa.Integer(), nullable=False),
         sa.Column('position', sa.Integer(), nullable=False),
 
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id', name='storage_location_pkey')
     )
 
     with op.batch_alter_table("release") as batch_op:

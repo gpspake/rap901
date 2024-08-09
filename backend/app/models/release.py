@@ -3,7 +3,12 @@ from datetime import date
 
 from sqlmodel import Field, SQLModel
 
-from app.models.database_models import ReleaseBase, ReleaseImage, StorageLocation
+from app.models.database_models import (
+    ReleaseBase,
+    ReleaseImage,
+    StorageLocation,
+)
+from app.models.release_artist import ReleaseArtistLink
 from app.models.storage_location import StorageLocationCreate, StorageLocationPublic
 
 
@@ -20,6 +25,8 @@ class ReleaseCreate(ReleaseBase):
     sort_date: date | None = Field(default=None)
     release_date: date | None = Field(default=None)
     storage_location_id: uuid.UUID | None = Field(default=None)
+
+    # todo: this needs to go:
     storage_location: StorageLocationCreate | StorageLocation | None = Field(
         default=None
     )
@@ -54,6 +61,7 @@ class ReleasePublic(ReleaseBase):
     release_date: date | None
     storage_location: StorageLocationPublic | None
     images: list[ReleaseImage] | None
+    artist_links: list["ReleaseArtistLink"] | None
 
 
 class ReleasesPublic(SQLModel):
