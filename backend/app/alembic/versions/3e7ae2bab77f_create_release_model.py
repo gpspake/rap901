@@ -33,7 +33,7 @@ def upgrade():
         sa.Column('sort_date', sa.Date()),
         sa.Column('release_date', sa.Date()),
 
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id', name='release_pkey')
     )
 
 

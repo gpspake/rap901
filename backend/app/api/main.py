@@ -1,9 +1,11 @@
 from fastapi import APIRouter
 
 from app.api.routes import (
+    artists,
     images,
     items,
     login,
+    release_artists,
     releases,
     storage_locations,
     users,
@@ -20,3 +22,7 @@ api_router.include_router(
     storage_locations.router, prefix="/storage_locations", tags=["storage_locations"]
 )
 api_router.include_router(images.router, prefix="/images", tags=["images"])
+api_router.include_router(artists.router, prefix="/artists", tags=["artists"])
+api_router.include_router(
+    release_artists.router, prefix="/release_artists", tags=["release_artists"]
+)
