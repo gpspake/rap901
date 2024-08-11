@@ -19,6 +19,14 @@ def clean_db(session: Session):
     delete_images_stmt = delete(images_table)
     session.execute(delete_images_stmt)
 
+    releases_table = Table("release_label", metadata, autoload_with=engine)
+    delete_releases_stmt = delete(releases_table)
+    session.execute(delete_releases_stmt)
+
+    releases_table = Table("label", metadata, autoload_with=engine)
+    delete_releases_stmt = delete(releases_table)
+    session.execute(delete_releases_stmt)
+
     releases_table = Table("release_artist", metadata, autoload_with=engine)
     delete_releases_stmt = delete(releases_table)
     session.execute(delete_releases_stmt)

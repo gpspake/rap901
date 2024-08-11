@@ -8,14 +8,18 @@ from app.models.artist import ArtistCreate
 from app.models.database_models import (
     Artist,
     Image,
+    Label,
     Release,
     ReleaseArtist,
+    ReleaseLabel,
     StorageLocation,
 )
 from app.models.image import ImageCreate
+from app.models.label import LabelCreate
 from app.models.models import Item, ItemCreate, User, UserCreate, UserUpdate
 from app.models.release import ReleaseCreate
 from app.models.release_artist import ReleaseArtistCreate
+from app.models.release_label import ReleaseLabelCreate
 from app.models.storage_location import StorageLocationCreate
 
 
@@ -122,3 +126,21 @@ def create_release_artist(
     session.commit()
     session.refresh(db_release_artist)
     return db_release_artist
+
+
+def create_label(*, session: Session, label_in: LabelCreate) -> Label:
+    db_label = Label.model_validate(label_in)
+    session.add(db_label)
+    session.commit()
+    session.refresh(db_label)
+    return db_label
+
+
+def create_release_label(
+    *, session: Session, release_label_in: ReleaseLabelCreate
+) -> ReleaseLabel:
+    db_release_label = ReleaseLabel.model_validate(release_label_in)
+    session.add(db_release_label)
+    session.commit()
+    session.refresh(db_release_label)
+    return db_release_label
