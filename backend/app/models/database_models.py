@@ -4,6 +4,10 @@ from typing import Optional
 
 from sqlmodel import Field, Relationship, SQLModel
 
+###################
+# Release
+###################
+
 
 # Shared properties
 class ReleaseBase(SQLModel):
@@ -43,6 +47,12 @@ class Release(ReleaseBase, table=True):
     # many images to one release
     images: list["Image"] = Relationship(back_populates="release")
     artist_links: list["ReleaseArtist"] = Relationship(back_populates="release")
+    label_links: list["ReleaseLabel"] = Relationship(back_populates="release")
+
+
+###################
+# Storage Location
+###################
 
 
 # Shared properties
@@ -66,6 +76,11 @@ class StorageLocation(StorageLocationBase, table=True):
     release: Release | None = Relationship(
         sa_relationship_kwargs={"uselist": False}, back_populates="storage_location"
     )
+
+
+###################
+# Image
+###################
 
 
 # Shared properties
@@ -111,6 +126,11 @@ class ImageRelease(ReleaseBase):
     year: int | None
     sort_date: date | None
     release_date: date | None
+
+
+###################
+# Artist
+###################
 
 
 # Shared properties
@@ -169,4 +189,70 @@ class Role(RoleBase, table=True):
     name: str | None = Field(default=None, max_length=255)
     release_artist: Optional["ReleaseArtist"] = Relationship(
         sa_relationship_kwargs={"uselist": False}, back_populates="role"
+    )
+
+
+###################
+# Label
+###################
+
+
+# Shared properties
+class LabelBase(SQLModel):
+    name: str | None = Field(default=None)
+    profile: str | None = Field(default=None)
+    discogs_id: int | None = Field(default=None)
+    discogs_resource_url: str | None = Field(default=None)
+
+
+# Database model, database table inferred from class name
+class Label(LabelBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    name: str | None = Field(default=None)
+    profile: str | None = Field(default=None)
+    discogs_id: int | None = Field(default=None)
+    discogs_resource_url: str | None = Field(default=None)
+
+    # one artist to many releases
+    release_links: list["ReleaseLabel"] = Relationship(back_populates="label")
+
+
+class LabelBaseWithId(LabelBase):
+    id: uuid.UUID
+
+
+# Shared properties
+class ReleaseLabelBase(SQLModel):
+    release_id: uuid.UUID | None = Field(default=None)
+    artist_id: uuid.UUID | None = Field(default=None)
+    entity_type_id: uuid.UUID | None = Field(default=None)
+
+
+class ReleaseLabel(SQLModel, table=True):
+    __tablename__ = "release_label"
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    release_id: uuid.UUID = Field(foreign_key="release.id")
+    label_id: uuid.UUID = Field(foreign_key="label.id")
+    entity_type_id: uuid.UUID | None = Field(foreign_key="entity_type.id")
+    catalog_number: str | None = Field(default=None)
+    sort_order: int = Field(default=0)
+
+    entity_type: "EntityType" = Relationship(back_populates="release_label")
+    label: "Label" = Relationship(back_populates="release_links")
+    release: "Release" = Relationship(back_populates="label_links")
+
+
+# Shared properties
+class EntityTypeBase(SQLModel):
+    name: str | None = Field(default=None, max_length=255)
+
+
+# Database model, database table inferred from class name
+class EntityType(EntityTypeBase, table=True):
+    __tablename__ = "entity_type"
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    name: str | None = Field(default=None, max_length=255)
+    release_label: ReleaseLabel | None = Relationship(
+        sa_relationship_kwargs={"uselist": False}, back_populates="entity_type"
     )

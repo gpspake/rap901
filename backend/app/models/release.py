@@ -9,6 +9,7 @@ from app.models.database_models import (
     StorageLocation,
 )
 from app.models.release_artist import ReleaseArtistLink
+from app.models.release_label import ReleaseLabelLink
 from app.models.storage_location import StorageLocationCreate, StorageLocationPublic
 
 
@@ -62,6 +63,7 @@ class ReleasePublic(ReleaseBase):
     storage_location: StorageLocationPublic | None
     images: list[ReleaseImage] | None
     artist_links: list["ReleaseArtistLink"] | None
+    label_links: list["ReleaseLabelLink"] | None
 
 
 class ReleasesPublic(SQLModel):
