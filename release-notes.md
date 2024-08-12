@@ -2,6 +2,7 @@
 
 ## Latest Changes
 
+* Images. PR [#4](https://github.com/gpspake/rap901/pull/4) by [@gpspake](https://github.com/gpspake).
 * Storage Locations. PR [#3](https://github.com/gpspake/rap901/pull/3) by [@gpspake](https://github.com/gpspake).
 * Use main branch for Github workflows. PR [#2](https://github.com/gpspake/rap901/pull/2) by [@gpspake](https://github.com/gpspake).
 * Add Releases. PR [#1](https://github.com/gpspake/rap901/pull/1) by [@gpspake](https://github.com/gpspake).
