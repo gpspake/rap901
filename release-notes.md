@@ -2,6 +2,7 @@
 
 ## Latest Changes
 
+* Identifiers. PR [#8](https://github.com/gpspake/rap901/pull/8) by [@gpspake](https://github.com/gpspake).
 * Labels. PR [#7](https://github.com/gpspake/rap901/pull/7) by [@gpspake](https://github.com/gpspake).
 * Artists. PR [#5](https://github.com/gpspake/rap901/pull/5) by [@gpspake](https://github.com/gpspake).
 * Images. PR [#4](https://github.com/gpspake/rap901/pull/4) by [@gpspake](https://github.com/gpspake).
