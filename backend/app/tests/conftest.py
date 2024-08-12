@@ -9,6 +9,7 @@ from app.core.db import engine, init_db
 from app.main import app
 from app.models.database_models import (
     Artist,
+    Identifier,
     Label,
     Release,
     ReleaseArtist,
@@ -25,6 +26,8 @@ def db() -> Generator[Session, None, None]:
         init_db(session)
         yield session
         statement = delete(Item)
+        session.execute(statement)
+        statement = delete(Identifier)
         session.execute(statement)
         statement = delete(ReleaseLabel)
         session.execute(statement)

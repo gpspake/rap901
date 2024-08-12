@@ -7,6 +7,7 @@ from app.core.security import get_password_hash, verify_password
 from app.models.artist import ArtistCreate
 from app.models.database_models import (
     Artist,
+    Identifier,
     Image,
     Label,
     Release,
@@ -14,6 +15,7 @@ from app.models.database_models import (
     ReleaseLabel,
     StorageLocation,
 )
+from app.models.identifier import IdentifierCreate
 from app.models.image import ImageCreate
 from app.models.label import LabelCreate
 from app.models.models import Item, ItemCreate, User, UserCreate, UserUpdate
@@ -144,3 +146,13 @@ def create_release_label(
     session.commit()
     session.refresh(db_release_label)
     return db_release_label
+
+
+def create_identifier(
+    *, session: Session, identifier_in: IdentifierCreate
+) -> Identifier:
+    db_identifier = Identifier.model_validate(identifier_in)
+    session.add(db_identifier)
+    session.commit()
+    session.refresh(db_identifier)
+    return db_identifier

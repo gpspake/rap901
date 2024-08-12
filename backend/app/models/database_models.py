@@ -46,6 +46,7 @@ class Release(ReleaseBase, table=True):
 
     # many images to one release
     images: list["Image"] = Relationship(back_populates="release")
+    identifiers: list["Identifier"] = Relationship(back_populates="release")
     artist_links: list["ReleaseArtist"] = Relationship(back_populates="release")
     label_links: list["ReleaseLabel"] = Relationship(back_populates="release")
 
@@ -256,3 +257,25 @@ class EntityType(EntityTypeBase, table=True):
     release_label: ReleaseLabel | None = Relationship(
         sa_relationship_kwargs={"uselist": False}, back_populates="entity_type"
     )
+
+
+###################
+# Identifier
+###################
+
+
+# Shared properties
+class IdentifierBase(SQLModel):
+    type: str | None = Field(default=None, max_length=255)
+    description: str | None = Field(default=None, max_length=255)
+    value: str | None = Field(default=None, max_length=255)
+
+
+# Database model, database table inferred from class name
+class Identifier(IdentifierBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    type: str
+    description: str | None = Field(default=None, max_length=255)
+    value: str
+    release_id: uuid.UUID = Field(default=None, foreign_key="release.id")
+    release: Release | None = Relationship(back_populates="identifiers")
