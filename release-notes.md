@@ -2,6 +2,7 @@
 
 ## Latest Changes
 
+* Use main branch for Github workflows. PR [#2](https://github.com/gpspake/rap901/pull/2) by [@gpspake](https://github.com/gpspake).
 * Add Releases. PR [#1](https://github.com/gpspake/rap901/pull/1) by [@gpspake](https://github.com/gpspake).
 
 ### Features
