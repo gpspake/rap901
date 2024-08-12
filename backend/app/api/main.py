@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from app.api.routes import (
     artists,
+    identifiers,
     images,
     items,
     labels,
@@ -31,4 +32,7 @@ api_router.include_router(
 api_router.include_router(labels.router, prefix="/labels", tags=["labels"])
 api_router.include_router(
     release_labels.router, prefix="/release_labels", tags=["release_labels"]
+)
+api_router.include_router(
+    identifiers.router, prefix="/identifiers", tags=["identifiers"]
 )
