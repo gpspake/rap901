@@ -2,6 +2,8 @@
 
 ## Latest Changes
 
+* Add Releases. PR [#1](https://github.com/gpspake/rap901/pull/1) by [@gpspake](https://github.com/gpspake).
+
 ### Features
 
 * ✨ Add Sign Up and make `OPEN_USER_REGISTRATION=True` by default. PR [#1265](https://github.com/tiangolo/full-stack-fastapi-template/pull/1265) by [@alejsdev](https://github.com/alejsdev).
