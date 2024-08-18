@@ -4,6 +4,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
+from app import crud
 from app.api.deps import CurrentUser, SessionDep
 from app.models.database_models import ReleaseArtist
 from app.models.models import Message
@@ -49,11 +50,9 @@ def create_release_artist(
     """
     Create new release_artist.
     """
-    release_artist = ReleaseArtist.model_validate(release_artist_in)
-    session.add(release_artist)
-    session.commit()
-    session.refresh(release_artist)
-    return release_artist
+    return crud.create_release_artist(
+        session=session, release_artist_in=release_artist_in
+    )
 
 
 @router.put("/{id}", response_model=ReleaseArtistPublic)

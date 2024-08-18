@@ -3,7 +3,7 @@ import uuid
 from faker import Faker
 from sqlmodel import Session
 
-from app.crud import orm_create_release
+from app.crud import create_release
 from app.models.database_models import Release
 from app.models.release import ReleaseCreate
 from app.models.storage_location import StorageLocationCreate
@@ -41,4 +41,4 @@ def create_random_release(
         new_storage_location=new_storage_location,
     )
 
-    return orm_create_release(session=db, release_in=release_in)
+    return create_release(session=db, release_in=release_in)

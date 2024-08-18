@@ -4,8 +4,8 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
+from app import crud
 from app.api.deps import CurrentUser, SessionDep
-from app.crud import orm_create_release
 from app.models.database_models import Release
 from app.models.models import Message
 from app.models.release import (
@@ -48,7 +48,7 @@ def create_release(*, session: SessionDep, release_in: ReleaseCreate) -> Any:
     """
     Create new release.
     """
-    return orm_create_release(session=session, release_in=release_in)
+    return crud.create_release(session=session, release_in=release_in)
 
 
 @router.put("/{id}", response_model=ReleasePublic)

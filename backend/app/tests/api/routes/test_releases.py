@@ -1,5 +1,4 @@
 import uuid
-from typing import Any
 
 from fastapi.testclient import TestClient
 from sqlmodel import Session
@@ -8,44 +7,45 @@ from app.core.config import settings
 from app.tests.utils.release import create_random_release
 from app.tests.utils.storage_location import create_random_storage_location
 
-
-def test_create_release_with_storage_location(
-    client: TestClient, superuser_token_headers: dict[str, str]
-) -> None:
-    data: dict[str, Any] = {
-        "discogs_url": "https://discogs_url.com/fake",
-        "discogs_title": "Discogs Title",
-        "title": "Title",
-        "title_long": "Title Long",
-        "matrix": "ABC123",
-        "sealed": True,
-        "spreadsheet_id": 2,
-        "year": 1995,
-        "sort_date": "1995-02-01",
-        "release_date": "1995-02-01",
-        "storage_location": {
-            "container": "Case",
-            "spreadsheet_id": 3,
-            "row": 1,
-            "position": 2,
-        },
-    }
-    response = client.post(
-        f"{settings.API_V1_STR}/releases/",
-        headers=superuser_token_headers,
-        json=data,
-    )
-
-    assert response.status_code == 200
-    content = response.json()
-
-    assert content["title"] == data["title"]
-    assert (
-        content["storage_location"]["container"]
-        == data["storage_location"]["container"]
-    )
-    assert content["storage_location"]["row"] == data["storage_location"]["row"]
-    assert "id" in content
+# Todo: This functionality should be tested for imports
+# Use storage_location_id instead
+# def test_create_release_with_storage_location(
+#     client: TestClient, superuser_token_headers: dict[str, str]
+# ) -> None:
+#     data: dict[str, Any] = {
+#         "discogs_url": "https://discogs_url.com/fake",
+#         "discogs_title": "Discogs Title",
+#         "title": "Title",
+#         "title_long": "Title Long",
+#         "matrix": "ABC123",
+#         "sealed": True,
+#         "spreadsheet_id": 2,
+#         "year": 1995,
+#         "sort_date": "1995-02-01",
+#         "release_date": "1995-02-01",
+#         "storage_location": {
+#             "container": "Case",
+#             "spreadsheet_id": 3,
+#             "row": 1,
+#             "position": 2,
+#         },
+#     }
+#     response = client.post(
+#         f"{settings.API_V1_STR}/releases/",
+#         headers=superuser_token_headers,
+#         json=data,
+#     )
+#
+#     assert response.status_code == 200
+#     content = response.json()
+#
+#     assert content["title"] == data["title"]
+#     assert (
+#         content["storage_location"]["container"]
+#         == data["storage_location"]["container"]
+#     )
+#     assert content["storage_location"]["row"] == data["storage_location"]["row"]
+#     assert "id" in content
 
 
 def test_create_release_with_storage_location_id(

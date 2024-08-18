@@ -6,11 +6,10 @@ from sqlmodel import Field, SQLModel
 from app.models.database_models import (
     ReleaseBase,
     ReleaseImage,
-    StorageLocation,
 )
 from app.models.release_artist import ReleaseArtistLink
 from app.models.release_label import ReleaseLabelLink
-from app.models.storage_location import StorageLocationCreate, StorageLocationPublic
+from app.models.storage_location import StorageLocationPublic
 
 
 # Properties to receive on item creation
@@ -26,11 +25,6 @@ class ReleaseCreate(ReleaseBase):
     sort_date: date | None = Field(default=None)
     release_date: date | None = Field(default=None)
     storage_location_id: uuid.UUID | None = Field(default=None)
-
-    # todo: this needs to go:
-    storage_location: StorageLocationCreate | StorageLocation | None = Field(
-        default=None
-    )
 
 
 # Properties to receive on item update

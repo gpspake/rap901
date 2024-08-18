@@ -172,6 +172,7 @@ class ReleaseArtist(SQLModel, table=True):
     artist_id: uuid.UUID = Field(foreign_key="artist.id")
     role_id: uuid.UUID | None = Field(foreign_key="role.id")
     anv: str | None = Field(default=None)
+    join: str | None = Field(default=None)
     sort_order: int = Field(default=0)
 
     role: "Role" = Relationship(back_populates="release_artist")

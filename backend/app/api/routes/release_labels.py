@@ -4,6 +4,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
+from app import crud
 from app.api.deps import CurrentUser, SessionDep
 from app.models.database_models import ReleaseLabel
 from app.models.models import Message
@@ -49,11 +50,7 @@ def create_release_label(
     """
     Create new release_label.
     """
-    release_label = ReleaseLabel.model_validate(release_label_in)
-    session.add(release_label)
-    session.commit()
-    session.refresh(release_label)
-    return release_label
+    return crud.create_release_label(session=session, release_label_in=release_label_in)
 
 
 @router.put("/{id}", response_model=ReleaseLabelPublic)
