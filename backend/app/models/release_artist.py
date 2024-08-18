@@ -16,6 +16,7 @@ class ReleaseArtistCreate(ReleaseArtistBase):
     artist_id: uuid.UUID
     role_id: uuid.UUID | None = Field(default=None)
     anv: str | None = Field(default=None, max_length=255)
+    join: str | None = Field(default=None)
     sort_order: int | None = Field(default=0)
 
 
@@ -25,6 +26,7 @@ class ReleaseArtistUpdate(ReleaseArtistBase):
     artist_id: uuid.UUID | None = Field(default=None)
     role_id: uuid.UUID | None = Field(default=None)
     anv: str | None = Field(default=None, max_length=255)
+    join: str | None = Field(default=None)
     sort_order: int | None = Field(default=0)
 
 
@@ -36,6 +38,7 @@ class ReleaseArtistPublic(ReleaseArtistBase):
     role_id: uuid.UUID | None
     role: Role | None = Field(default=None)
     anv: str | None
+    join: str | None
     sort_order: int
 
 

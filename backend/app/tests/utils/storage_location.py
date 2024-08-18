@@ -5,6 +5,7 @@ from sqlmodel import Session
 
 from app import crud
 from app.models.database_models import StorageLocation
+from app.models.import_models import StorageLocationImport
 from app.models.storage_location import StorageLocationCreate
 
 fake = Faker()
@@ -13,6 +14,14 @@ fake = Faker()
 def build_random_storage_location() -> StorageLocationCreate:
     return StorageLocationCreate(
         spreadsheet_id=fake.random_int(min=1, max=999),
+        container=random.choice(["Case", "Overflow"]),
+        row=fake.random_int(min=1, max=6),
+        position=fake.random_int(min=1, max=50),
+    )
+
+
+def build_random_storage_location_import() -> StorageLocationImport:
+    return StorageLocationImport(
         container=random.choice(["Case", "Overflow"]),
         row=fake.random_int(min=1, max=6),
         position=fake.random_int(min=1, max=50),

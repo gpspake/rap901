@@ -6,6 +6,7 @@ from sqlmodel import Session, select
 from app import crud
 from app.models.database_models import ReleaseArtist, Role
 from app.models.release_artist import ReleaseArtistCreate
+from app.models.role import RoleCreate
 from app.tests.utils.artist import create_random_artist
 from app.tests.utils.release import create_random_release
 
@@ -22,11 +23,7 @@ def get_or_create_role_by_name(
     if result:
         return result
     else:
-        role = Role(name=name)
-        db.add(role)
-        db.commit()
-        db.refresh(role)
-        return role
+        return crud.create_role(session=db, role_in=RoleCreate(name=name))
 
 
 def create_random_release_artist(
@@ -35,6 +32,7 @@ def create_random_release_artist(
     release_id: uuid.UUID | None = None,
     role_name: str | None = None,
     anv: str | None = None,
+    join: str | None = None,
     sort_order: int = 0,
 ) -> ReleaseArtist:
     if artist_id is None:
@@ -54,6 +52,7 @@ def create_random_release_artist(
         artist_id=artist_id,
         role_id=role_id,
         anv=anv,
+        join=join,
         sort_order=sort_order,
     )
 

@@ -4,6 +4,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
+from app import crud
 from app.api.deps import CurrentUser, SessionDep
 from app.models.database_models import Identifier
 from app.models.identifier import (
@@ -47,11 +48,7 @@ def create_identifier(*, session: SessionDep, identifier_in: IdentifierCreate) -
     """
     Create new identifier.
     """
-    identifier = Identifier.model_validate(identifier_in)
-    session.add(identifier)
-    session.commit()
-    session.refresh(identifier)
-    return identifier
+    return crud.create_identifier(session=session, identifier_in=identifier_in)
 
 
 @router.put("/{id}", response_model=IdentifierPublic)

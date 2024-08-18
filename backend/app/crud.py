@@ -7,14 +7,17 @@ from app.core.security import get_password_hash, verify_password
 from app.models.artist import ArtistCreate
 from app.models.database_models import (
     Artist,
+    EntityType,
     Identifier,
     Image,
     Label,
     Release,
     ReleaseArtist,
     ReleaseLabel,
+    Role,
     StorageLocation,
 )
+from app.models.entity_type import EntityTypeCreate
 from app.models.identifier import IdentifierCreate
 from app.models.image import ImageCreate
 from app.models.label import LabelCreate
@@ -22,6 +25,7 @@ from app.models.models import Item, ItemCreate, User, UserCreate, UserUpdate
 from app.models.release import ReleaseCreate
 from app.models.release_artist import ReleaseArtistCreate
 from app.models.release_label import ReleaseLabelCreate
+from app.models.role import RoleCreate
 from app.models.storage_location import StorageLocationCreate
 
 
@@ -72,26 +76,23 @@ def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -
     return db_item
 
 
-def orm_create_release(*, session: Session, release_in: ReleaseCreate) -> Release:
+def create_release(*, session: Session, release_in: ReleaseCreate) -> Release:
     release_in = ReleaseCreate.model_validate(release_in)
-
-    if release_in.storage_location_id is not None:
-        storage_location = session.get(StorageLocation, release_in.storage_location_id)
-        release_in.storage_location = storage_location
-    elif release_in.storage_location is not None:
-        storage_location_in = StorageLocationCreate.model_validate(
-            release_in.storage_location
-        )
-        storage_location = create_storage_location(
-            session=session, storage_location_in=storage_location_in
-        )
-        release_in.storage_location = storage_location
-
     db_release = Release.model_validate(release_in)
     session.add(db_release)
     session.commit()
     session.refresh(db_release)
     return db_release
+
+
+def create_entity_type(
+    *, session: Session, entity_type_in: EntityTypeCreate
+) -> EntityType:
+    entity_type = EntityType.model_validate(entity_type_in)
+    session.add(entity_type)
+    session.commit()
+    session.refresh(entity_type)
+    return entity_type
 
 
 def create_storage_location(
@@ -156,3 +157,11 @@ def create_identifier(
     session.commit()
     session.refresh(db_identifier)
     return db_identifier
+
+
+def create_role(*, session: Session, role_in: RoleCreate) -> Role:
+    db_role = Role.model_validate(role_in)
+    session.add(db_role)
+    session.commit()
+    session.refresh(db_role)
+    return db_role

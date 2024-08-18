@@ -4,6 +4,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
+from app import crud
 from app.api.deps import CurrentUser, SessionDep
 from app.models.database_models import Image
 from app.models.image import ImageCreate, ImagePublic, ImagesPublic, ImageUpdate
@@ -42,11 +43,7 @@ def create_image(*, session: SessionDep, image_in: ImageCreate) -> Any:
     """
     Create new image.
     """
-    image = Image.model_validate(image_in)
-    session.add(image)
-    session.commit()
-    session.refresh(image)
-    return image
+    return crud.create_image(session=session, image_in=image_in)
 
 
 @router.put("/{id}", response_model=ImagePublic)
