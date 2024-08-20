@@ -5,29 +5,29 @@ from sqlmodel import Session
 
 from app import crud
 from app.api.routes.utils import get_role_by_name
-from app.models.database_models import ReleaseArtist
-from app.models.release_artist import ReleaseArtistCreate
+from app.models.database_models import TrackArtist
+from app.models.track_artist import TrackArtistCreate
 from app.tests.utils.artist import create_random_artist
-from app.tests.utils.release import create_random_release
+from app.tests.utils.track import create_random_track
 
 fake = Faker()
 
 
-def create_random_release_artist(
+def create_random_track_artist(
     db: Session,
     artist_id: uuid.UUID | None = None,
-    release_id: uuid.UUID | None = None,
+    track_id: uuid.UUID | None = None,
     role_name: str | None = None,
     anv: str | None = None,
     join: str | None = None,
     sort_order: int = 0,
-) -> ReleaseArtist:
+) -> TrackArtist:
     if artist_id is None:
         artist = create_random_artist(db=db)
         artist_id = artist.id
-    if release_id is None:
-        release = create_random_release(db=db)
-        release_id = release.id
+    if track_id is None:
+        track = create_random_track(db=db)
+        track_id = track.id
     if role_name is None:
         role_name = fake.word()
 
@@ -35,8 +35,8 @@ def create_random_release_artist(
     assert role is not None
     role_id = role.id
 
-    release_artist_in = ReleaseArtistCreate(
-        release_id=release_id,
+    track_artist_in = TrackArtistCreate(
+        track_id=track_id,
         artist_id=artist_id,
         role_id=role_id,
         anv=anv,
@@ -44,4 +44,4 @@ def create_random_release_artist(
         sort_order=sort_order,
     )
 
-    return crud.create_release_artist(session=db, release_artist_in=release_artist_in)
+    return crud.create_track_artist(session=db, track_artist_in=track_artist_in)

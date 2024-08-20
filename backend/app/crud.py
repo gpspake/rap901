@@ -16,6 +16,8 @@ from app.models.database_models import (
     ReleaseLabel,
     Role,
     StorageLocation,
+    Track,
+    TrackArtist,
 )
 from app.models.entity_type import EntityTypeCreate
 from app.models.identifier import IdentifierCreate
@@ -27,6 +29,8 @@ from app.models.release_artist import ReleaseArtistCreate
 from app.models.release_label import ReleaseLabelCreate
 from app.models.role import RoleCreate
 from app.models.storage_location import StorageLocationCreate
+from app.models.track import TrackCreate
+from app.models.track_artist import TrackArtistCreate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -121,6 +125,16 @@ def create_artist(*, session: Session, artist_in: ArtistCreate) -> Artist:
     return db_artist
 
 
+def create_track_artist(
+    *, session: Session, track_artist_in: TrackArtistCreate
+) -> TrackArtist:
+    db_track_artist = TrackArtist.model_validate(track_artist_in)
+    session.add(db_track_artist)
+    session.commit()
+    session.refresh(db_track_artist)
+    return db_track_artist
+
+
 def create_release_artist(
     *, session: Session, release_artist_in: ReleaseArtistCreate
 ) -> ReleaseArtist:
@@ -165,3 +179,11 @@ def create_role(*, session: Session, role_in: RoleCreate) -> Role:
     session.commit()
     session.refresh(db_role)
     return db_role
+
+
+def create_track(*, session: Session, track_in: TrackCreate) -> Track:
+    db_track = Track.model_validate(track_in)
+    session.add(db_track)
+    session.commit()
+    session.refresh(db_track)
+    return db_track

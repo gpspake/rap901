@@ -4,69 +4,72 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session
 
 from app.core.config import settings
-from app.tests.utils.image import create_random_image
+from app.tests.utils.release import create_random_release
+from app.tests.utils.track import create_random_track
 
 
-def test_create_image(
-    client: TestClient, superuser_token_headers: dict[str, str]
+def test_create_track(
+    client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
+    release = create_random_release(db=db)
+
     data = {
-        "date_taken": "1995-02-01",
-        "image_type": "jewel_back",
-        "original_path": "/abc/test.jpg",
-        "new_path": "/new/test.jpg",
-        "alt_text": "Album - Jewel Back",
-        "cloudflare_id": "abcdef",
+        "position": "1",
+        "type": "track",
+        "title": "Track Title",
+        "duration": "3:22",
+        "release_id": str(release.id),
     }
 
     response = client.post(
-        f"{settings.API_V1_STR}/images/",
+        f"{settings.API_V1_STR}/tracks/",
         headers=superuser_token_headers,
         json=data,
     )
     assert response.status_code == 200
+
     content = response.json()
-    assert content["date_taken"] == data["date_taken"]
-    assert content["image_type"] == data["image_type"]
-    assert content["cloudflare_id"] == data["cloudflare_id"]
-    assert "id" in content
+    assert content["release_id"] == str(release.id)
+
+    db.refresh(release)
+    assert len(release.tracks) == 1
 
 
-def test_read_image(
+def test_read_track(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    image = create_random_image(db=db)
+    track = create_random_track(db=db)
     response = client.get(
-        f"{settings.API_V1_STR}/images/{image.id}",
+        f"{settings.API_V1_STR}/tracks/{track.id}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 200
 
     content = response.json()
-    assert content["date_taken"] == str(image.date_taken)
-    assert content["image_type"] == image.image_type
-    assert content["cloudflare_id"] == image.cloudflare_id
+    assert content["release_id"] == str(track.release_id)
+    assert content["type"] == track.type
+    assert content["duration"] == track.duration
 
 
-def test_read_image_not_found(
+def test_read_track_not_found(
     client: TestClient, superuser_token_headers: dict[str, str]
 ) -> None:
     response = client.get(
-        f"{settings.API_V1_STR}/images/{uuid.uuid4()}",
+        f"{settings.API_V1_STR}/tracks/{uuid.uuid4()}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 404
     content = response.json()
-    assert content["detail"] == "Image not found"
+    assert content["detail"] == "Track not found"
 
 
-def test_read_images(
+def test_read_tracks(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    create_random_image(db=db)
-    create_random_image(db=db)
+    create_random_track(db)
+    create_random_track(db)
     response = client.get(
-        f"{settings.API_V1_STR}/images/",
+        f"{settings.API_V1_STR}/tracks/",
         headers=superuser_token_headers,
     )
     assert response.status_code == 200
@@ -74,43 +77,43 @@ def test_read_images(
     assert len(content["data"]) >= 2
 
 
-def test_update_image(
+def test_update_track(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    image = create_random_image(db=db)
-    data = {"alt_text": "Updated Alt Text"}
+    track = create_random_track(db)
+    data = {"duration": "1:23"}
     response = client.put(
-        f"{settings.API_V1_STR}/images/{image.id}",
+        f"{settings.API_V1_STR}/tracks/{track.id}",
         headers=superuser_token_headers,
         json=data,
     )
     assert response.status_code == 200
     content = response.json()
-    assert content["alt_text"] == data["alt_text"]
-    assert content["id"] == str(image.id)
+    assert content["duration"] == data["duration"]
+    assert content["id"] == str(track.id)
 
 
-def test_update_image_not_found(
+def test_update_track_not_found(
     client: TestClient, superuser_token_headers: dict[str, str]
 ) -> None:
     data = {"container": "Updated container"}
     response = client.put(
-        f"{settings.API_V1_STR}/images/{uuid.uuid4()}",
+        f"{settings.API_V1_STR}/tracks/{uuid.uuid4()}",
         headers=superuser_token_headers,
         json=data,
     )
     assert response.status_code == 404
     content = response.json()
-    assert content["detail"] == "Image not found"
+    assert content["detail"] == "Track not found"
 
 
-def test_update_image_not_enough_permissions(
+def test_update_track_not_enough_permissions(
     client: TestClient, normal_user_token_headers: dict[str, str], db: Session
 ) -> None:
-    image = create_random_image(db=db)
+    track = create_random_track(db)
     data = {"container": "Updated container"}
     response = client.put(
-        f"{settings.API_V1_STR}/images/{image.id}",
+        f"{settings.API_V1_STR}/tracks/{track.id}",
         headers=normal_user_token_headers,
         json=data,
     )
@@ -119,37 +122,37 @@ def test_update_image_not_enough_permissions(
     assert content["detail"] == "Not enough permissions"
 
 
-def test_delete_image(
+def test_delete_track(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    image = create_random_image(db=db)
+    track = create_random_track(db)
     response = client.delete(
-        f"{settings.API_V1_STR}/images/{image.id}",
+        f"{settings.API_V1_STR}/tracks/{track.id}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 200
     content = response.json()
-    assert content["message"] == "Image deleted successfully"
+    assert content["message"] == "Track deleted successfully"
 
 
-def test_delete_image_not_found(
+def test_delete_track_not_found(
     client: TestClient, superuser_token_headers: dict[str, str]
 ) -> None:
     response = client.delete(
-        f"{settings.API_V1_STR}/images/{uuid.uuid4()}",
+        f"{settings.API_V1_STR}/tracks/{uuid.uuid4()}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 404
     content = response.json()
-    assert content["detail"] == "Image not found"
+    assert content["detail"] == "Track not found"
 
 
-def test_delete_image_not_enough_permissions(
+def test_delete_track_not_enough_permissions(
     client: TestClient, normal_user_token_headers: dict[str, str], db: Session
 ) -> None:
-    image = create_random_image(db=db)
+    track = create_random_track(db)
     response = client.delete(
-        f"{settings.API_V1_STR}/images/{image.id}",
+        f"{settings.API_V1_STR}/tracks/{track.id}",
         headers=normal_user_token_headers,
     )
     assert response.status_code == 400

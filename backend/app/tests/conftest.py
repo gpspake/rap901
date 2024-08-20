@@ -15,6 +15,8 @@ from app.models.database_models import (
     ReleaseArtist,
     ReleaseLabel,
     Role,
+    Track,
+    TrackArtist,
 )
 from app.models.models import Item, User
 from app.tests.utils.user import authentication_token_from_email
@@ -26,24 +28,17 @@ def db() -> Generator[Session, None, None]:
     with Session(engine) as session:
         init_db(session)
         yield session
-        statement = delete(Item)
-        session.execute(statement)
-        statement = delete(Identifier)
-        session.execute(statement)
-        statement = delete(ReleaseLabel)
-        session.execute(statement)
-        statement = delete(Label)
-        session.execute(statement)
-        statement = delete(ReleaseArtist)
-        session.execute(statement)
-        statement = delete(Artist)
-        session.execute(statement)
-        statement = delete(Role)
-        session.execute(statement)
-        statement = delete(Release)
-        session.execute(statement)
-        statement = delete(User)
-        session.execute(statement)
+        session.execute(delete(Item))
+        session.execute(delete(Identifier))
+        session.execute(delete(ReleaseLabel))
+        session.execute(delete(Label))
+        session.execute(delete(ReleaseArtist))
+        session.execute(delete(TrackArtist))
+        session.execute(delete(Artist))
+        session.execute(delete(Track))
+        session.execute(delete(Role))
+        session.execute(delete(Release))
+        session.execute(delete(User))
         session.commit()
 
 

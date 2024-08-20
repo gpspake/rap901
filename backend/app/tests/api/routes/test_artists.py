@@ -54,7 +54,7 @@ def test_create_artist_not_enough_permissions(
 def test_read_artist(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    artist = create_random_artist(db)
+    artist = create_random_artist(db=db)
     response = client.get(
         f"{settings.API_V1_STR}/artists/{artist.id}",
         headers=superuser_token_headers,
@@ -83,8 +83,8 @@ def test_read_artist_not_found(
 def test_read_artists(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    create_random_artist(db)
-    create_random_artist(db)
+    create_random_artist(db=db)
+    create_random_artist(db=db)
     response = client.get(
         f"{settings.API_V1_STR}/artists/",
         headers=superuser_token_headers,
@@ -97,7 +97,7 @@ def test_read_artists(
 def test_update_artist(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    artist = create_random_artist(db)
+    artist = create_random_artist(db=db)
     data = {"name": "Updated Name"}
     response = client.put(
         f"{settings.API_V1_STR}/artists/{artist.id}",
@@ -127,7 +127,7 @@ def test_update_artist_not_found(
 def test_update_artist_not_enough_permissions(
     client: TestClient, normal_user_token_headers: dict[str, str], db: Session
 ) -> None:
-    artist = create_random_artist(db)
+    artist = create_random_artist(db=db)
     data = {"container": "Updated container"}
     response = client.put(
         f"{settings.API_V1_STR}/artists/{artist.id}",
@@ -142,7 +142,7 @@ def test_update_artist_not_enough_permissions(
 def test_delete_artist(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    artist = create_random_artist(db)
+    artist = create_random_artist(db=db)
     response = client.delete(
         f"{settings.API_V1_STR}/artists/{artist.id}",
         headers=superuser_token_headers,
@@ -167,7 +167,7 @@ def test_delete_artist_not_found(
 def test_delete_artist_not_enough_permissions(
     client: TestClient, normal_user_token_headers: dict[str, str], db: Session
 ) -> None:
-    artist = create_random_artist(db)
+    artist = create_random_artist(db=db)
     response = client.delete(
         f"{settings.API_V1_STR}/artists/{artist.id}",
         headers=normal_user_token_headers,

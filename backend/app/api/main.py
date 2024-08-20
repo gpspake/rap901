@@ -11,6 +11,8 @@ from app.api.routes import (
     release_labels,
     releases,
     storage_locations,
+    track_artists,
+    tracks,
     users,
     utils,
 )
@@ -35,4 +37,8 @@ api_router.include_router(
 )
 api_router.include_router(
     identifiers.router, prefix="/identifiers", tags=["identifiers"]
+)
+api_router.include_router(tracks.router, prefix="/tracks", tags=["tracks"])
+api_router.include_router(
+    track_artists.router, prefix="/track_artists", tags=["track_artists"]
 )

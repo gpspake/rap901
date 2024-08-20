@@ -30,6 +30,15 @@ class DiscogsIdentifier(SQLModel):
     description: str | None = Field(default=None)
 
 
+class DiscogsTrack(SQLModel):
+    position: str
+    type_: str
+    title: str
+    artists: list[DiscogsArtist] | None = Field(default=None)
+    extraartists: list[DiscogsArtist] | None = Field(default=None)
+    duration: str | None = Field(default=None)
+
+
 class DiscogsRelease(SQLModel):
     id: int | None = Field(default=None)
     year: int | None = Field(default=None)
@@ -48,7 +57,7 @@ class DiscogsRelease(SQLModel):
     notes: str | None = Field(default=None)
     released_formatted: str | None = Field(default=None)
     identifiers: list[DiscogsIdentifier] | None = Field(default=None)
-    # tracklist: DiscogsTracklist | None = Field(default=None)
+    tracklist: list[DiscogsTrack] | None = Field(default=None)
     extraartists: list[DiscogsArtist] | None = Field(default=None)
 
 
