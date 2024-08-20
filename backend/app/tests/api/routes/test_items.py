@@ -27,7 +27,7 @@ def test_create_item(
 def test_read_item(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    item = create_random_item(db)
+    item = create_random_item(db=db)
     response = client.get(
         f"{settings.API_V1_STR}/items/{item.id}",
         headers=superuser_token_headers,
@@ -55,7 +55,7 @@ def test_read_item_not_found(
 def test_read_item_not_enough_permissions(
     client: TestClient, normal_user_token_headers: dict[str, str], db: Session
 ) -> None:
-    item = create_random_item(db)
+    item = create_random_item(db=db)
     response = client.get(
         f"{settings.API_V1_STR}/items/{item.id}",
         headers=normal_user_token_headers,

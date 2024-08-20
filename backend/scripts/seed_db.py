@@ -1,10 +1,12 @@
 import json
 import os
 import uuid
+from typing import Union, Literal
 
 from sqlalchemy import MetaData, Table, delete
 from sqlmodel import Session, select
 
+from app.api.routes.utils import get_role_by_name
 from app.backend_pre_start import logger
 from app.core.db import engine
 from app import crud
@@ -12,13 +14,14 @@ from app.models.artist import ArtistCreate
 from app.models.database_models import Release, Artist, Role, Label, EntityType
 from app.models.entity_type import EntityTypeCreate
 from app.models.identifier import IdentifierCreate
-from app.models.import_models import ReleaseImport, DiscogsArtist, DiscogsLabel, DiscogsIdentifier
+from app.models.import_models import ReleaseImport, DiscogsArtist, DiscogsLabel, DiscogsIdentifier, DiscogsTrack
 from app.models.label import LabelCreate
 from app.models.release import ReleaseCreate
 from app.models.release_artist import ReleaseArtistCreate
 from app.models.release_label import ReleaseLabelCreate
-from app.models.role import RoleCreate
 from app.models.storage_location import StorageLocationCreate
+from app.models.track import TrackCreate
+from app.models.track_artist import TrackArtistCreate
 
 
 def clean_db(session: Session):
@@ -26,32 +29,19 @@ def clean_db(session: Session):
     metadata = MetaData()
     metadata.reflect(bind=engine)
 
-    delete_identifiers_stmt = delete(Table("identifier", metadata, autoload_with=engine))
-    session.execute(delete_identifiers_stmt)
-
-    delete_images_stmt = delete(Table("image", metadata, autoload_with=engine))
-    session.execute(delete_images_stmt)
-
-    delete_releases_stmt = delete(Table("release_label", metadata, autoload_with=engine))
-    session.execute(delete_releases_stmt)
-
-    delete_releases_stmt = delete(Table("label", metadata, autoload_with=engine))
-    session.execute(delete_releases_stmt)
-
-    delete_releases_stmt = delete(Table("release_artist", metadata, autoload_with=engine))
-    session.execute(delete_releases_stmt)
-
-    delete_releases_stmt = delete(Table("artist", metadata, autoload_with=engine))
-    session.execute(delete_releases_stmt)
-
-    delete_identifiers_stmt = delete(Table("role", metadata, autoload_with=engine))
-    session.execute(delete_identifiers_stmt)
-
-    delete_releases_stmt = delete(Table("release", metadata, autoload_with=engine))
-    session.execute(delete_releases_stmt)
-
-    delete_storage_location_stmt = delete(Table("storage_location", metadata, autoload_with=engine))
-    session.execute(delete_storage_location_stmt)
+    session.execute(delete(Table("identifier", metadata, autoload_with=engine)))
+    session.execute(delete(Table("image", metadata, autoload_with=engine)))
+    session.execute(delete(Table("track_artist", metadata, autoload_with=engine)))
+    session.execute(delete(Table("track", metadata, autoload_with=engine)))
+    session.execute(delete(Table("release_label", metadata, autoload_with=engine)))
+    session.execute(delete(Table("label", metadata, autoload_with=engine)))
+    session.execute(delete(Table("release_artist", metadata, autoload_with=engine)))
+    session.execute(delete(Table("artist", metadata, autoload_with=engine)))
+    session.execute(delete(Table("release_label", metadata, autoload_with=engine)))
+    session.execute(delete(Table("role", metadata, autoload_with=engine)))
+    session.execute(delete(Table("release", metadata, autoload_with=engine)))
+    session.execute(delete(Table("storage_location", metadata, autoload_with=engine)))
+    session.execute(delete(Table("entity_type", metadata, autoload_with=engine)))
 
 
 def validate_import_file() -> list[ReleaseImport]:
@@ -73,20 +63,6 @@ def validate_import_file() -> list[ReleaseImport]:
         raise e
 
 
-def get_role_by_name(role_name: str, create_if_missing: bool = False, session: Session | None = None) -> Role | None:
-    existing_role = session.exec(
-        select(Role).where(Role.name == role_name)
-    ).first()
-
-    if not existing_role and create_if_missing and session is not None:
-        return crud.create_role(
-            session=session,
-            role_in=RoleCreate(name=role_name)
-        )
-    else:
-        return existing_role
-
-
 def get_entity_type_by_name(entity_type_name: str, create_if_missing: bool = False,
                             session: Session | None = None) -> EntityType | None:
     existing_entity_type = session.exec(
@@ -102,7 +78,12 @@ def get_entity_type_by_name(entity_type_name: str, create_if_missing: bool = Fal
         return existing_entity_type
 
 
-def load_release_artists(session: Session, release_id: uuid.uuid4(), artists: list[DiscogsArtist]) -> None:
+def load_artists(
+        session: Session,
+        parent_id: uuid.uuid4(),
+        artists: list[DiscogsArtist],
+        relationship: Literal["release_artist", "track_artist"]
+) -> None:
     artist_sort_order_count = 0
 
     for discogs_artist in artists:
@@ -124,22 +105,37 @@ def load_release_artists(session: Session, release_id: uuid.uuid4(), artists: li
             )
 
         import_role = getattr(discogs_artist, "role")
+        role_name = import_role if import_role else ""
 
         sort_order = artist_sort_order_count if not import_role else 0
 
-        role = get_role_by_name(role_name=import_role, create_if_missing=True, session=session)
+        role = get_role_by_name(role_name=role_name, create_if_missing=True, session=session)
 
-        crud.create_release_artist(
-            session=session,
-            release_artist_in=ReleaseArtistCreate(
-                release_id=release_id,
-                artist_id=artist.id,
-                role_id=role.id,
-                anv=getattr(discogs_artist, "anv"),
-                join=getattr(discogs_artist, "join"),
-                sort_order=sort_order,
+        if relationship == "release_artist":
+            crud.create_release_artist(
+                session=session,
+                release_artist_in=ReleaseArtistCreate(
+                    release_id=parent_id,
+                    artist_id=artist.id,
+                    role_id=role.id,
+                    anv=getattr(discogs_artist, "anv"),
+                    join=getattr(discogs_artist, "join"),
+                    sort_order=sort_order,
+                )
             )
-        )
+
+        if relationship == "track_artist":
+            crud.create_track_artist(
+                session=session,
+                track_artist_in=TrackArtistCreate(
+                    track_id=parent_id,
+                    artist_id=artist.id,
+                    role_id=role.id,
+                    anv=getattr(discogs_artist, "anv"),
+                    join=getattr(discogs_artist, "join"),
+                    sort_order=sort_order,
+                )
+            )
 
         if import_role:
             artist_sort_order_count += 1
@@ -188,6 +184,36 @@ def load_release_labels(session: Session, release_id: uuid.uuid4(), labels: list
         )
 
         print("created label {}".format(label))
+
+
+def load_release_tracks(session: Session, release_id: uuid.uuid4(), tracks: list[DiscogsTrack]) -> None:
+    for discogs_track in tracks:
+        track = crud.create_track(
+            session=session,
+            track_in=TrackCreate(
+                position=discogs_track.position,
+                type=discogs_track.type_,
+                title=discogs_track.title,
+                duration=discogs_track.duration,
+                release_id=release_id,
+            )
+        )
+
+        artists = []
+        extraartists = []
+        if discogs_track.artists:
+            artists = discogs_track.artists
+        if discogs_track.extraartists:
+            extraartists = discogs_track.extraartists
+
+        load_artists(
+            session=session,
+            parent_id=track.id,
+            artists=artists + extraartists,
+            relationship="track_artist"
+        )
+
+        print("created track {}".format(track))
 
 
 def load_release_identifiers(session: Session, release_id: uuid.uuid4(), identifiers: list[DiscogsIdentifier]) -> None:
@@ -253,9 +279,10 @@ def seed_db(session: Session, releases_in: list[ReleaseImport], clean: bool = Fa
 
         db_release = load_release(session=session, release=_release)
 
-        load_release_artists(session=session,
-                             artists=release_import.discogs.artists + release_import.discogs.extraartists,
-                             release_id=db_release.id)
+        load_artists(session=session,
+                     artists=release_import.discogs.artists + release_import.discogs.extraartists,
+                     parent_id=db_release.id,
+                     relationship="release_artist")
 
         load_release_labels(session=session,
                             labels=release_import.discogs.labels + release_import.discogs.companies,
@@ -264,6 +291,10 @@ def seed_db(session: Session, releases_in: list[ReleaseImport], clean: bool = Fa
         load_release_identifiers(session=session,
                                  identifiers=release_import.discogs.identifiers,
                                  release_id=db_release.id)
+
+        load_release_tracks(session=session,
+                            tracks=release_import.discogs.tracklist,
+                            release_id=db_release.id)
 
         releases.append(db_release)
 

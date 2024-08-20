@@ -46,6 +46,7 @@ class Release(ReleaseBase, table=True):
 
     # many images to one release
     images: list["Image"] = Relationship(back_populates="release")
+    tracks: list["Track"] = Relationship(back_populates="release")
     identifiers: list["Identifier"] = Relationship(back_populates="release")
     artist_links: list["ReleaseArtist"] = Relationship(back_populates="release")
     label_links: list["ReleaseLabel"] = Relationship(back_populates="release")
@@ -153,6 +154,8 @@ class Artist(ArtistBase, table=True):
     # one artist to many releases
     release_links: list["ReleaseArtist"] = Relationship(back_populates="artist")
 
+    track_links: list["TrackArtist"] = Relationship(back_populates="artist")
+
 
 class ArtistBaseWithId(ArtistBase):
     id: uuid.UUID
@@ -180,6 +183,54 @@ class ReleaseArtist(SQLModel, table=True):
     release: "Release" = Relationship(back_populates="artist_links")
 
 
+###################
+# Track
+###################
+
+
+# Shared properties
+class TrackBase(SQLModel):
+    position: str | None = Field(default=None)
+    type: str | None = Field(default=None)
+    title: str | None = Field(default=None)
+    duration: str | None = Field(default=None)
+
+
+# Database model, database table inferred from class name
+class Track(TrackBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    position: str
+    type: str
+    title: str
+    artist_links: list["TrackArtist"] = Relationship(back_populates="track")
+    duration: str | None = Field(default=None)
+
+    release_id: uuid.UUID | None = Field(default=None, foreign_key="release.id")
+    release: Release | None = Relationship(back_populates="tracks")
+
+
+# Shared properties
+class TrackArtistBase(SQLModel):
+    release_id: uuid.UUID | None = Field(default=None)
+    artist_id: uuid.UUID | None = Field(default=None)
+    role_id: uuid.UUID | None = Field(default=None)
+
+
+class TrackArtist(SQLModel, table=True):
+    __tablename__ = "track_artist"
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    track_id: uuid.UUID = Field(foreign_key="track.id")
+    artist_id: uuid.UUID = Field(foreign_key="artist.id")
+    role_id: uuid.UUID | None = Field(foreign_key="role.id")
+    anv: str | None = Field(default=None)
+    join: str | None = Field(default=None)
+    sort_order: int = Field(default=0)
+
+    role: "Role" = Relationship(back_populates="track_artist")
+    artist: "Artist" = Relationship(back_populates="track_links")
+    track: "Track" = Relationship(back_populates="artist_links")
+
+
 # Shared properties
 class RoleBase(SQLModel):
     name: str | None = Field(default=None, max_length=255)
@@ -190,6 +241,9 @@ class Role(RoleBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str | None = Field(default=None, max_length=255)
     release_artist: Optional["ReleaseArtist"] = Relationship(
+        sa_relationship_kwargs={"uselist": False}, back_populates="role"
+    )
+    track_artist: Optional["TrackArtist"] = Relationship(
         sa_relationship_kwargs={"uselist": False}, back_populates="role"
     )
 
