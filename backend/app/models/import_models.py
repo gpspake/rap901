@@ -31,7 +31,7 @@ class DiscogsIdentifier(SQLModel):
 
 
 class DiscogsTrack(SQLModel):
-    position: str
+    position: str | None = Field(default=None)
     type_: str
     title: str
     artists: list[DiscogsArtist] | None = Field(default=None)
@@ -67,6 +67,16 @@ class StorageLocationImport(SQLModel):
     position: int | None = Field(default=0)
 
 
+class ImageImport(SQLModel):
+    image_type: str
+    date_taken: date
+    display_type: str | None = Field(default=None)
+    cloudflare_id: str
+    original_path: str
+    new_path: str
+    alt_text: str
+
+
 class ReleaseImport(SQLModel):
     # rip: Rip | None = Field() | None = Field(default=None)
     # order: Order | None = Field() | None = Field(default=None)
@@ -86,6 +96,7 @@ class ReleaseImport(SQLModel):
     release_date: date | None = Field(default=None)
     sealed: bool = Field(default=False)
     spreadsheet_id: int | None = Field(default=None)
+    images: list[ImageImport] | None = Field(default=[])
 
     location: StorageLocationImport | None = Field(default=None)
     discogs: DiscogsRelease | None = Field(default=None)

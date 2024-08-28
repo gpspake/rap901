@@ -7,7 +7,7 @@ from app.models.database_models import TrackArtistBase, TrackBase
 
 # Properties to receive on Track creation
 class TrackCreate(TrackBase):
-    position: str
+    position: str | None = Field(default=None)
     type: str
     title: str
     duration: str | None = Field(default=None)

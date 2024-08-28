@@ -199,7 +199,7 @@ class TrackBase(SQLModel):
 # Database model, database table inferred from class name
 class Track(TrackBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    position: str
+    position: str | None = Field(default=None)
     type: str
     title: str
     artist_links: list["TrackArtist"] = Relationship(back_populates="track")
