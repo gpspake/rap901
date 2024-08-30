@@ -8,7 +8,7 @@ const tabs = ["My profile", "Password", "Appearance"]
 // User Information
 
 test("My profile tab is active by default", async ({ page }) => {
-  await page.goto("/settings")
+  await page.goto("/dashboard/settings")
   await expect(page.getByRole("tab", { name: "My profile" })).toHaveAttribute(
     "aria-selected",
     "true",
@@ -16,7 +16,7 @@ test("My profile tab is active by default", async ({ page }) => {
 })
 
 test("All tabs are visible", async ({ page }) => {
-  await page.goto("/settings")
+  await page.goto("/dashboard/settings")
   for (const tab of tabs) {
     await expect(page.getByRole("tab", { name: tab })).toBeVisible()
   }
@@ -37,7 +37,7 @@ test.describe("Edit user full name and email successfully", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
+    await page.goto("/dashboard/settings")
     await page.getByRole("tab", { name: "My profile" }).click()
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Full name").fill(updatedName)
@@ -61,7 +61,7 @@ test.describe("Edit user full name and email successfully", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
+    await page.goto("/dashboard/settings")
     await page.getByRole("tab", { name: "My profile" }).click()
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Email").fill(updatedEmail)
@@ -88,7 +88,7 @@ test.describe("Edit user with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
+    await page.goto("/dashboard/settings")
     await page.getByRole("tab", { name: "My profile" }).click()
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Email").fill(invalidEmail)
@@ -108,7 +108,7 @@ test.describe("Edit user with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
+    await page.goto("/dashboard/settings")
     await page.getByRole("tab", { name: "My profile" }).click()
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Full name").fill(updatedName)
@@ -130,7 +130,7 @@ test.describe("Edit user with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
+    await page.goto("/dashboard/settings")
     await page.getByRole("tab", { name: "My profile" }).click()
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Email").fill(updatedEmail)
@@ -158,7 +158,7 @@ test.describe("Change password successfully", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
+    await page.goto("/dashboard/settings")
     await page.getByRole("tab", { name: "Password" }).click()
     await page.getByLabel("Current Password*").fill(password)
     await page.getByLabel("Set Password*").fill(NewPassword)
@@ -188,7 +188,7 @@ test.describe("Change password with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
+    await page.goto("/dashboard/settings")
     await page.getByRole("tab", { name: "Password" }).click()
     await page.getByLabel("Current Password*").fill(password)
     await page.getByLabel("Set Password*").fill(weakPassword)
@@ -213,7 +213,7 @@ test.describe("Change password with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
+    await page.goto("/dashboard/settings")
     await page.getByRole("tab", { name: "Password" }).click()
     await page.getByLabel("Current Password*").fill(password)
     await page.getByLabel("Set Password*").fill(newPassword)
@@ -233,7 +233,7 @@ test.describe("Change password with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
+    await page.goto("/dashboard/settings")
     await page.getByRole("tab", { name: "Password" }).click()
     await page.getByLabel("Current Password*").fill(password)
     await page.getByLabel("Set Password*").fill(password)
@@ -248,13 +248,13 @@ test.describe("Change password with invalid data", () => {
 // Appearance
 
 test("Appearance tab is visible", async ({ page }) => {
-  await page.goto("/settings")
+  await page.goto("/dashboard/settings")
   await page.getByRole("tab", { name: "Appearance" }).click()
   await expect(page.getByLabel("Appearance")).toBeVisible()
 })
 
 test("User can switch from light mode to dark mode", async ({ page }) => {
-  await page.goto("/settings")
+  await page.goto("/dashboard/settings")
   await page.getByRole("tab", { name: "Appearance" }).click()
   await page.getByLabel("Appearance").locator("span").nth(3).click()
   const isDarkMode = await page.evaluate(() =>
@@ -264,7 +264,7 @@ test("User can switch from light mode to dark mode", async ({ page }) => {
 })
 
 test("User can switch from dark mode to light mode", async ({ page }) => {
-  await page.goto("/settings")
+  await page.goto("/dashboard/settings")
   await page.getByRole("tab", { name: "Appearance" }).click()
   await page.getByLabel("Appearance").locator("span").first().click()
   const isLightMode = await page.evaluate(() =>
@@ -274,7 +274,7 @@ test("User can switch from dark mode to light mode", async ({ page }) => {
 })
 
 test("Selected mode is preserved across sessions", async ({ page }) => {
-  await page.goto("/settings")
+  await page.goto("/dashboard/settings")
   await page.getByRole("tab", { name: "Appearance" }).click()
   await page.getByLabel("Appearance").locator("span").nth(3).click()
 

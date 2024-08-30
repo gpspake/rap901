@@ -17,16 +17,16 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useEffect } from "react"
 import { z } from "zod"
 
-import { ReleasesService } from "../../client"
-import ActionsMenu from "../../components/Common/ActionsMenu"
-import Navbar from "../../components/Common/Navbar"
-import AddRelease from "../../components/Releases/AddRelease"
+import { ReleasesService } from "../../../../client"
+import ActionsMenu from "../../../../components/Common/ActionsMenu.tsx"
+import Navbar from "../../../../components/Common/Navbar.tsx"
+import AddRelease from "../../../../components/Releases/AddRelease.tsx"
 
 const releasesSearchSchema = z.object({
   page: z.number().catch(1),
 })
 
-export const Route = createFileRoute("/_layout/releases")({
+export const Route = createFileRoute("/_admin/_dashboard/dashboard/releases")({
   component: Releases,
   validateSearch: (search) => releasesSearchSchema.parse(search),
 })

@@ -18,11 +18,11 @@ import {
 import { type SubmitHandler, useForm } from "react-hook-form"
 
 import Logo from "/assets/images/fastapi-logo.svg"
-import type { UserRegister } from "../client"
-import useAuth, { isLoggedIn } from "../hooks/useAuth"
-import { confirmPasswordRules, emailPattern, passwordRules } from "../utils"
+import type { UserRegister } from "../../client"
+import useAuth, { isLoggedIn } from "../../hooks/useAuth.ts"
+import { confirmPasswordRules, emailPattern, passwordRules } from "../../utils.ts"
 
-export const Route = createFileRoute("/signup")({
+export const Route = createFileRoute("/_admin/signup")({
   component: SignUp,
   beforeLoad: async () => {
     if (isLoggedIn()) {
