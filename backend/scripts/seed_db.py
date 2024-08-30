@@ -189,7 +189,6 @@ def load_release_labels(session: Session, release_id: uuid.uuid4(), labels: list
 
 
 def load_release_tracks(session: Session, release_id: uuid.uuid4(), tracks: list[DiscogsTrack]) -> None:
-    print('****', release_id, tracks)
     for discogs_track in tracks:
         track = crud.create_track(
             session=session,
@@ -330,7 +329,7 @@ def seed_db_from_file(clean: bool = False) -> list[Release]:
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Construct a path relative to the script directory
-    file_path = os.path.join(script_dir, "cds_combined.json")
+    file_path = os.path.join(script_dir, "data.json")
 
     try:
         with open(file_path) as file:
