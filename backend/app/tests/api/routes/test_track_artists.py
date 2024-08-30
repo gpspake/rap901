@@ -108,7 +108,7 @@ def test_read_track_artists(
     assert response.status_code == 200
     content = response.json()
     assert len(content["data"]) >= 1
-    assert str(artist.id) in (result["artist_id"] for result in content["data"])
+    assert str(artist.id) in (str(result["artist_id"]) for result in content["data"])
 
 
 def test_update_track_artist(

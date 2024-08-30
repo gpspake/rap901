@@ -14,7 +14,9 @@ from app.models.artist import ArtistCreate
 from app.models.database_models import Release, Artist, Role, Label, EntityType
 from app.models.entity_type import EntityTypeCreate
 from app.models.identifier import IdentifierCreate
-from app.models.import_models import ReleaseImport, DiscogsArtist, DiscogsLabel, DiscogsIdentifier, DiscogsTrack
+from app.models.image import ImageCreate
+from app.models.import_models import ReleaseImport, DiscogsArtist, DiscogsLabel, DiscogsIdentifier, DiscogsTrack, \
+    ImageImport
 from app.models.label import LabelCreate
 from app.models.release import ReleaseCreate
 from app.models.release_artist import ReleaseArtistCreate
@@ -209,7 +211,7 @@ def load_release_tracks(session: Session, release_id: uuid.uuid4(), tracks: list
         load_artists(
             session=session,
             parent_id=track.id,
-            artists=artists + extraartists,
+            artists=(artists or []) + (extraartists or []),
             relationship="track_artist"
         )
 
@@ -229,6 +231,23 @@ def load_release_identifiers(session: Session, release_id: uuid.uuid4(), identif
         )
 
         print("created identifier {}".format(identifier))
+
+
+def load_images(session: Session, release_id: uuid.uuid4(), images: list[ImageImport]) -> None:
+    for image in images:
+        db_image = crud.create_image(
+            session=session,
+            image_in=ImageCreate(
+                date_taken=image.date_taken,
+                image_type=image.image_type,
+                original_path=image.original_path,
+                new_path=image.new_path,
+                alt_text=image.alt_text,
+                cloudflare_id=image.cloudflare_id,
+                release_id=release_id,
+            )
+        )
+        print("created image {}".format(db_image))
 
 
 def load_release(session: Session, release: ReleaseImport) -> Release:
@@ -280,21 +299,25 @@ def seed_db(session: Session, releases_in: list[ReleaseImport], clean: bool = Fa
         db_release = load_release(session=session, release=_release)
 
         load_artists(session=session,
-                     artists=release_import.discogs.artists + release_import.discogs.extraartists,
+                     artists=(release_import.discogs.artists or []) + (release_import.discogs.extraartists or []),
                      parent_id=db_release.id,
                      relationship="release_artist")
 
         load_release_labels(session=session,
-                            labels=release_import.discogs.labels + release_import.discogs.companies,
+                            labels=(release_import.discogs.labels or []) + (release_import.discogs.companies or []),
                             release_id=db_release.id)
 
         load_release_identifiers(session=session,
-                                 identifiers=release_import.discogs.identifiers,
+                                 identifiers=(release_import.discogs.identifiers or []),
                                  release_id=db_release.id)
 
         load_release_tracks(session=session,
                             tracks=release_import.discogs.tracklist,
                             release_id=db_release.id)
+
+        load_images(session=session,
+                    images=release_import.images,
+                    release_id=db_release.id)
 
         releases.append(db_release)
 
