@@ -1,6 +1,6 @@
 import { Box, Container, Text } from "@chakra-ui/react"
 import { createFileRoute } from "@tanstack/react-router"
-
+import '../../../index.css'
 export const Route = createFileRoute("/_layout/")({
   component: Dashboard,
 })
