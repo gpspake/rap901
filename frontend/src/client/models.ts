@@ -122,6 +122,7 @@ export type ImageCreate = {
 	new_path?: string | null;
 	alt_text?: string | null;
 	cloudflare_id?: string | null;
+	display_type?: string | null;
 	release_id?: string | null;
 };
 
@@ -135,6 +136,7 @@ export type ImagePublic = {
 	alt_text: string;
 	cloudflare_id: string;
 	id: string;
+	display_type?: string | null;
 	release: ImageRelease | null;
 };
 
@@ -163,6 +165,7 @@ export type ImageUpdate = {
 	new_path?: string | null;
 	alt_text?: string | null;
 	cloudflare_id?: string | null;
+	display_type?: string | null;
 };
 
 
@@ -372,6 +375,7 @@ export type ReleaseImage = {
 	alt_text: string | null;
 	cloudflare_id: string | null;
 	id: string | null;
+	display_type: string | null;
 };
 
 

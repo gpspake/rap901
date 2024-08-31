@@ -14,11 +14,13 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
 import { Route as AdminImport } from './routes/_admin'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
+import { Route as LayoutReleasesImport } from './routes/_layout/releases'
 import { Route as AdminSignupImport } from './routes/_admin/signup'
 import { Route as AdminResetPasswordImport } from './routes/_admin/reset-password'
 import { Route as AdminRecoverPasswordImport } from './routes/_admin/recover-password'
 import { Route as AdminLoginImport } from './routes/_admin/login'
 import { Route as AdminDashboardImport } from './routes/_admin/_dashboard'
+import { Route as LayoutReleasesReleaseIdImport } from './routes/_layout/releases_.$releaseId'
 import { Route as AdminDashboardDashboardIndexImport } from './routes/_admin/_dashboard/dashboard/index'
 import { Route as AdminDashboardDashboardSettingsImport } from './routes/_admin/_dashboard/dashboard/settings'
 import { Route as AdminDashboardDashboardReleasesImport } from './routes/_admin/_dashboard/dashboard/releases'
@@ -39,6 +41,11 @@ const AdminRoute = AdminImport.update({
 
 const LayoutIndexRoute = LayoutIndexImport.update({
   path: '/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutReleasesRoute = LayoutReleasesImport.update({
+  path: '/releases',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -65,6 +72,11 @@ const AdminLoginRoute = AdminLoginImport.update({
 const AdminDashboardRoute = AdminDashboardImport.update({
   id: '/_dashboard',
   getParentRoute: () => AdminRoute,
+} as any)
+
+const LayoutReleasesReleaseIdRoute = LayoutReleasesReleaseIdImport.update({
+  path: '/releases/$releaseId',
+  getParentRoute: () => LayoutRoute,
 } as any)
 
 const AdminDashboardDashboardIndexRoute =
@@ -129,8 +141,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSignupImport
       parentRoute: typeof AdminImport
     }
+    '/_layout/releases': {
+      preLoaderRoute: typeof LayoutReleasesImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/': {
       preLoaderRoute: typeof LayoutIndexImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/releases/$releaseId': {
+      preLoaderRoute: typeof LayoutReleasesReleaseIdImport
       parentRoute: typeof LayoutImport
     }
     '/_admin/_dashboard/dashboard/admin': {
@@ -172,7 +192,11 @@ export const routeTree = rootRoute.addChildren([
     AdminResetPasswordRoute,
     AdminSignupRoute,
   ]),
-  LayoutRoute.addChildren([LayoutIndexRoute]),
+  LayoutRoute.addChildren([
+    LayoutReleasesRoute,
+    LayoutIndexRoute,
+    LayoutReleasesReleaseIdRoute,
+  ]),
 ])
 
 /* prettier-ignore-end */

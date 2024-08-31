@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const typographyStyles = require('./typography')
 export default {
   content: [
     "./index.html",
@@ -6,7 +7,10 @@ export default {
   ],
   theme: {
     extend: {},
+    typography: typographyStyles,
   },
-  plugins: [],
+  plugins: [
+      require('@tailwindcss/aspect-ratio'),
+  ],
 }
 

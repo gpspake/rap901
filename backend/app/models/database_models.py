@@ -100,6 +100,7 @@ class Image(ImageBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_taken: date | None = Field(default=None)
     image_type: str | None = Field(default=None)
+    display_type: str | None = Field(default=None)
     original_path: str | None = Field(default=None)
     new_path: str | None = Field(default=None)
     alt_text: str | None = Field(default=None)
@@ -112,6 +113,7 @@ class ReleaseImage(ImageBase):
     id: uuid.UUID | None
     date_taken: date | None
     image_type: str | None
+    display_type: str | None
     alt_text: str | None
     cloudflare_id: str | None
 

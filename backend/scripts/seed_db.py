@@ -239,6 +239,7 @@ def load_images(session: Session, release_id: uuid.uuid4(), images: list[ImageIm
             session=session,
             image_in=ImageCreate(
                 date_taken=image.date_taken,
+                display_type=image.display_type,
                 image_type=image.image_type,
                 original_path=image.original_path,
                 new_path=image.new_path,

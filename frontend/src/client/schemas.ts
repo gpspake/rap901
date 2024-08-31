@@ -456,6 +456,15 @@ export const $ImageCreate = {
 	type: 'null',
 }],
 },
+		display_type: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+}, {
+	type: 'null',
+}],
+},
 		release_id: {
 	type: 'any-of',
 	contains: [{
@@ -507,6 +516,14 @@ export const $ImagePublic = {
 	type: 'string',
 	isRequired: true,
 	format: 'uuid',
+},
+		display_type: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
 },
 		release: {
 	type: 'any-of',
@@ -677,6 +694,14 @@ export const $ImageUpdate = {
 	contains: [{
 	type: 'string',
 	maxLength: 255,
+}, {
+	type: 'null',
+}],
+},
+		display_type: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
 }, {
 	type: 'null',
 }],
@@ -1560,6 +1585,15 @@ export const $ReleaseImage = {
 	contains: [{
 	type: 'string',
 	format: 'uuid',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		display_type: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
 }, {
 	type: 'null',
 }],
