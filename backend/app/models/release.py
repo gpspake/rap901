@@ -10,6 +10,7 @@ from app.models.database_models import (
 from app.models.release_artist import ReleaseArtistLink
 from app.models.release_label import ReleaseLabelLink
 from app.models.storage_location import StorageLocationPublic
+from app.models.track import TrackPublic
 
 
 # Properties to receive on item creation
@@ -58,6 +59,7 @@ class ReleasePublic(ReleaseBase):
     images: list[ReleaseImage] | None
     artist_links: list["ReleaseArtistLink"] | None
     label_links: list["ReleaseLabelLink"] | None
+    tracks: list["TrackPublic"] | None
 
 
 class ReleasesPublic(SQLModel):
