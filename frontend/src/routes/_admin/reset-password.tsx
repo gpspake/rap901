@@ -62,6 +62,7 @@ function ResetPassword() {
     onSuccess: () => {
       showToast("Success!", "Password updated successfully.", "success")
       reset()
+      // @ts-ignore
       navigate({ to: "/login" })
     },
     onError: (err: ApiError) => {

@@ -10,6 +10,7 @@ export const Route = createFileRoute("/_admin/_dashboard")({
   beforeLoad: async () => {
     if (!isLoggedIn()) {
       throw redirect({
+        // @ts-ignore
         to: "/login",
       })
     }
