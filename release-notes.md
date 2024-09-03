@@ -2,6 +2,7 @@
 
 ## Latest Changes
 
+* Bring in frontend changes from main project. PR [#13](https://github.com/gpspake/rap901/pull/13) by [@gpspake](https://github.com/gpspake).
 * Seed DB script. PR [#12](https://github.com/gpspake/rap901/pull/12) by [@gpspake](https://github.com/gpspake).
 * tracks. PR [#10](https://github.com/gpspake/rap901/pull/10) by [@gpspake](https://github.com/gpspake).
 * Import Script. PR [#9](https://github.com/gpspake/rap901/pull/9) by [@gpspake](https://github.com/gpspake).
