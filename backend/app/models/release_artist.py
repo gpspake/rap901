@@ -5,8 +5,7 @@ from sqlmodel import Field, SQLModel
 from app.models.database_models import (
     ArtistBaseWithId,
     ReleaseArtistBase,
-    ReleaseBase,
-    Role,
+    Role, ArtistRelease,
 )
 
 
@@ -42,8 +41,29 @@ class ReleaseArtistPublic(ReleaseArtistBase):
     sort_order: int
 
 
+# Properties to return via API, id is always required
+class ReleaseArtistOut(ReleaseArtistBase):
+    id: uuid.UUID
+    release_id: uuid.UUID
+    artist_id: uuid.UUID
+    role: Role | None = Field(default=None)
+    anv: str | None
+    join: str | None
+    sort_order: int
+    name: str | None
+    slug: str
+    profile: str | None
+    discogs_id: int | None
+    discogs_resource_url: str | None
+
+
+class ReleaseArtistsOut(SQLModel):
+    data: list[ReleaseArtistOut]
+    count: int
+
+
 class ArtistReleaseLink(ReleaseArtistPublic):
-    release: ReleaseBase | None
+    release: ArtistRelease | None
 
 
 class ReleaseArtistLink(ReleaseArtistPublic):

@@ -7,6 +7,7 @@ from app.models.database_models import (
     ReleaseBase,
     Role,
     TrackArtistBase,
+    Track, TrackBase, Image,
 )
 
 
@@ -30,7 +31,14 @@ class TrackArtistUpdate(TrackArtistBase):
     sort_order: int | None = Field(default=0)
 
 
-# Properties to return via API, id is always required
+class TrackReleaseOut(ReleaseBase):
+    images: list[Image]
+
+
+class TrackOut(TrackBase):
+    release: TrackReleaseOut
+
+
 class TrackArtistPublic(TrackArtistBase):
     id: uuid.UUID
     track_id: uuid.UUID
@@ -39,11 +47,9 @@ class TrackArtistPublic(TrackArtistBase):
     role: Role | None = Field(default=None)
     anv: str | None
     join: str | None
-    sort_order: int
-
-
-class ArtistReleaseLink(TrackArtistPublic):
-    track: ReleaseBase | None
+    sort_order: int | None
+    track: TrackOut | None
+    artist: ArtistBaseWithId | None
 
 
 class TrackArtistLink(TrackArtistPublic):

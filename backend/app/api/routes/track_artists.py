@@ -8,6 +8,7 @@ from app import crud
 from app.api.deps import CurrentUser, SessionDep
 from app.models.database_models import TrackArtist
 from app.models.models import Message
+from app.models.release import AppearanceReleasePublic
 from app.models.track_artist import (
     TrackArtistCreate,
     TrackArtistPublic,
@@ -32,6 +33,27 @@ def read_track_artists(session: SessionDep, skip: int = 0, limit: int = 100) -> 
     return TrackArtistsPublic(data=track_artists, count=count)
 
 
+@router.get("/artist_appearances", response_model=list[AppearanceReleasePublic])
+def read_artist_appearances(session: SessionDep, artist_id: uuid.UUID) -> Any:
+    """
+    Retrieve releases an artist has track credits on
+    """
+
+    statement = select(TrackArtist).where(TrackArtist.artist_id == artist_id)
+    track_artists = session.exec(statement).all()
+
+    release_ids = []
+    releases = []
+
+    print("STARTING LOOP")
+    for track_artist in track_artists:
+        if track_artist.track.release_id not in release_ids:
+            releases.append(track_artist.track.release)
+            release_ids.append(track_artist.track.release_id)
+    print("FINISHED LOOP")
+    return releases
+
+
 @router.get("/{id}", response_model=TrackArtistPublic)
 def read_track_artist(session: SessionDep, id: uuid.UUID) -> Any:
     """
@@ -45,7 +67,7 @@ def read_track_artist(session: SessionDep, id: uuid.UUID) -> Any:
 
 @router.post("/", response_model=TrackArtistPublic)
 def create_track_artist(
-    *, session: SessionDep, track_artist_in: TrackArtistCreate
+        *, session: SessionDep, track_artist_in: TrackArtistCreate
 ) -> Any:
     """
     Create new track_artist.
@@ -55,11 +77,11 @@ def create_track_artist(
 
 @router.put("/{id}", response_model=TrackArtistPublic)
 def update_track_artist(
-    *,
-    session: SessionDep,
-    current_user: CurrentUser,
-    id: uuid.UUID,
-    track_artist_in: TrackArtistUpdate,
+        *,
+        session: SessionDep,
+        current_user: CurrentUser,
+        id: uuid.UUID,
+        track_artist_in: TrackArtistUpdate,
 ) -> Any:
     """
     Update an track_artist.
@@ -79,7 +101,7 @@ def update_track_artist(
 
 @router.delete("/{id}")
 def delete_track_artist(
-    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
+        session: SessionDep, current_user: CurrentUser, id: uuid.UUID
 ) -> Message:
     """
     Delete an track_artist.

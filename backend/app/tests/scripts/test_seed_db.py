@@ -1,3 +1,5 @@
+import copy
+
 from sqlalchemy import func
 from sqlmodel import Session, select
 from starlette.testclient import TestClient
@@ -60,6 +62,8 @@ def test_seed_db_from_import(
     # todo: add identifiers to release output (TDD)
     identifier = build_random_discogs_identifier()
 
+    print("exart", extra_artist)
+
     discogs_release_one = build_random_discogs_release(
         artists=[artist],
         extraartists=[extra_artist],
@@ -69,10 +73,10 @@ def test_seed_db_from_import(
     )
 
     # create a second release with the artist roles swapped
-    release_two_artist = extra_artist
+    release_two_artist = copy.deepcopy(extra_artist)
     release_two_artist.role = ""
 
-    release_two_extra_artist = artist
+    release_two_extra_artist = copy.deepcopy(artist)
     release_two_extra_artist.role = extra_artist.role
 
     release_two_identifier = build_random_discogs_identifier()
@@ -95,6 +99,10 @@ def test_seed_db_from_import(
         discogs_release=discogs_release_two, storage_location=storage_location_two
     )
 
+    print("$$$$$$$$$$$")
+    print("release_import_one", release_import_one)
+    print("$$$$$$$$$$$")
+
     seed_db(
         session=db,
         releases_in=[release_import_one, release_import_two],
@@ -103,13 +111,14 @@ def test_seed_db_from_import(
 
     # Check database
     releases = db.exec(select(Release)).all()
+    print("releases", releases)
     assert len(releases) == 2
     artists = db.exec(select(Artist)).all()
     assert len(artists) == 2
     labels = db.exec(select(Label)).all()
     assert len(labels) == 2
     roles = db.exec(select(Role)).all()
-    assert len(roles) == 1
+    assert len(roles) == 2
     storage_locations = db.exec(select(StorageLocation)).all()
     assert len(storage_locations) == 2
     entity_types = db.exec(select(EntityType)).all()
@@ -144,11 +153,18 @@ def test_seed_db_from_import(
     assert release_one_result is not None
     assert release_two_result is not None
 
-    assert len(release_one_result["artist_links"]) == 2
-    assert len(release_one_result["label_links"]) == 2
+    # print("&&&", release_one_result)
+    # print("%%%", release_two_result)
 
-    assert len(release_two_result["artist_links"]) == 2
-    assert len(release_two_result["label_links"]) == 2
+    assert len(release_one_result["artists"]) == 1
+    assert len(release_one_result["extra_artists"]) == 1
+    assert len(release_one_result["labels"]) == 1
+    assert len(release_one_result["companies"]) == 1
+
+    assert len(release_two_result["artists"]) == 1
+    assert len(release_two_result["extra_artists"]) == 1
+    assert len(release_two_result["labels"]) == 1
+    assert len(release_two_result["companies"]) == 1
 
 
 def test_validate_import_file() -> None:

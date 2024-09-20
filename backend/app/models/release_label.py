@@ -39,6 +39,26 @@ class ReleaseLabelPublic(ReleaseLabelBase):
     sort_order: int
 
 
+# Properties to return via API, id is always required
+class ReleaseLabelOut(ReleaseLabelBase):
+    id: uuid.UUID
+    entity_type_id: uuid.UUID | None
+    entity_type_name: str | None
+    catalog_number: str | None
+    sort_order: int | None
+    label_id: uuid.UUID
+    name: str | None = Field(default=None)
+    slug: str
+    profile: str | None = Field(default=None)
+    discogs_id: int | None = Field(default=None)
+    discogs_resource_url: str | None = Field(default=None)
+
+
+class ReleaseLabelsOut(SQLModel):
+    data: list[ReleaseLabelOut]
+    count: int
+
+
 class LabelReleaseLink(ReleaseLabelPublic):
     release: ReleaseBase | None
 

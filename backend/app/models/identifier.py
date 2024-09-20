@@ -11,6 +11,7 @@ class IdentifierCreate(IdentifierBase):
     description: str | None
     value: str
     release_id: uuid.UUID
+    sort_order: int
 
 
 # Properties to receive on Identifier update

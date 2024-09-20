@@ -3,6 +3,7 @@ import os
 import uuid
 from typing import Union, Literal
 
+from psycopg import errors
 from sqlalchemy import MetaData, Table, delete
 from sqlmodel import Session, select
 
@@ -24,6 +25,32 @@ from app.models.release_label import ReleaseLabelCreate
 from app.models.storage_location import StorageLocationCreate
 from app.models.track import TrackCreate
 from app.models.track_artist import TrackArtistCreate
+import re
+import unicodedata
+
+
+def string_to_slug(text):
+    # Normalize the string (handle accented characters)
+    text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('utf-8')
+
+    # Convert to lowercase
+    text = text.lower()
+
+    # Replace any non-alphanumeric characters with hyphens
+    text = re.sub(r'[^a-z0-9]+', '-', text)
+
+    # Remove leading and trailing hyphens
+    text = text.strip('-')
+
+    return text
+
+
+def unique_slug(session: Session, slug: str, i: int = 0) -> str:
+    suffixed_slug = slug + f"-{i}" if i > 0 else slug
+    existing_slug = session.exec(select(Release).where(Release.slug == suffixed_slug)).first()
+    if existing_slug:
+        return unique_slug(session=session, slug=slug, i=i + 1)
+    return suffixed_slug
 
 
 def clean_db(session: Session):
@@ -80,17 +107,24 @@ def get_entity_type_by_name(entity_type_name: str, create_if_missing: bool = Fal
         return existing_entity_type
 
 
+def clean_discogs_name(s):
+    # Use regex to remove space followed by parentheses and digits inside
+    return re.sub(r'\s*\(\d+\)', '', s)
+
+
 def load_artists(
         session: Session,
         parent_id: uuid.uuid4(),
         artists: list[DiscogsArtist],
         relationship: Literal["release_artist", "track_artist"]
 ) -> None:
-    artist_sort_order_count = 0
+    for index, discogs_artist in enumerate(artists):
+        name = clean_discogs_name(discogs_artist.name)
 
-    for discogs_artist in artists:
+        slug = string_to_slug(name)
+
         existing_artist = session.exec(
-            select(Artist).where(Artist.name == discogs_artist.name)
+            select(Artist).where(Artist.slug == slug)
         ).first()
 
         if existing_artist:
@@ -99,7 +133,8 @@ def load_artists(
             artist = crud.create_artist(
                 session=session,
                 artist_in=ArtistCreate(
-                    name=discogs_artist.name,
+                    name=name,
+                    slug=slug,
                     profile="",
                     discogs_id=discogs_artist.id,
                     discogs_resource_url=discogs_artist.resource_url,
@@ -108,8 +143,6 @@ def load_artists(
 
         import_role = getattr(discogs_artist, "role")
         role_name = import_role if import_role else ""
-
-        sort_order = artist_sort_order_count if not import_role else 0
 
         role = get_role_by_name(role_name=role_name, create_if_missing=True, session=session)
 
@@ -122,7 +155,7 @@ def load_artists(
                     role_id=role.id,
                     anv=getattr(discogs_artist, "anv"),
                     join=getattr(discogs_artist, "join"),
-                    sort_order=sort_order,
+                    sort_order=index,
                 )
             )
 
@@ -135,22 +168,21 @@ def load_artists(
                     role_id=role.id,
                     anv=getattr(discogs_artist, "anv"),
                     join=getattr(discogs_artist, "join"),
-                    sort_order=sort_order,
+                    sort_order=index,
                 )
             )
-
-        if import_role:
-            artist_sort_order_count += 1
 
         print("created artist {}".format(artist))
 
 
 def load_release_labels(session: Session, release_id: uuid.uuid4(), labels: list[DiscogsLabel]) -> None:
-    label_sort_order_count = 0
-
-    for discogs_label in labels:
+    for index, discogs_label in enumerate(labels):
+        
+        label_name = clean_discogs_name(discogs_label.name)
+        slug = string_to_slug(text=label_name)
+        
         existing_label = session.exec(
-            select(Label).where(Label.name == discogs_label.name)
+            select(Label).where(Label.slug == slug)
         ).first()
 
         if existing_label:
@@ -159,7 +191,8 @@ def load_release_labels(session: Session, release_id: uuid.uuid4(), labels: list
             label = crud.create_label(
                 session=session,
                 label_in=LabelCreate(
-                    name=discogs_label.name,
+                    name=label_name,
+                    slug=slug,
                     profile="",
                     discogs_id=discogs_label.id,
                     discogs_resource_url=discogs_label.resource_url,
@@ -168,32 +201,30 @@ def load_release_labels(session: Session, release_id: uuid.uuid4(), labels: list
 
         import_entity_type = getattr(discogs_label, "entity_type_name")
 
-        sort_order = label_sort_order_count if not import_entity_type else 0
-
-        entity_type = get_entity_type_by_name(entity_type_name=import_entity_type,
-                                              create_if_missing=True,
-                                              session=session)
+        entity_type = get_entity_type_by_name(
+            entity_type_name=import_entity_type,
+            create_if_missing=True,
+            session=session)
 
         crud.create_release_label(
             session=session,
             release_label_in=ReleaseLabelCreate(
                 release_id=release_id,
                 label_id=label.id,
-                entitiy_type_id=entity_type.id,
+                sort_order=index,
+                entity_type_id=entity_type.id,
                 catalog_number=getattr(discogs_label, "catno"),
-                sort_order=sort_order,
             )
         )
 
-        print("created label {}".format(label))
-
 
 def load_release_tracks(session: Session, release_id: uuid.uuid4(), tracks: list[DiscogsTrack]) -> None:
-    for discogs_track in tracks:
+    for index, discogs_track in enumerate(tracks):
         track = crud.create_track(
             session=session,
             track_in=TrackCreate(
                 position=discogs_track.position,
+                sort_order=index,
                 type=discogs_track.type_,
                 title=discogs_track.title,
                 duration=discogs_track.duration,
@@ -219,7 +250,7 @@ def load_release_tracks(session: Session, release_id: uuid.uuid4(), tracks: list
 
 
 def load_release_identifiers(session: Session, release_id: uuid.uuid4(), identifiers: list[DiscogsIdentifier]) -> None:
-    for discogs_identifier in identifiers:
+    for index, discogs_identifier in enumerate(identifiers):
         identifier = crud.create_identifier(
             session=session,
             identifier_in=IdentifierCreate(
@@ -227,6 +258,7 @@ def load_release_identifiers(session: Session, release_id: uuid.uuid4(), identif
                 description=discogs_identifier.description,
                 value=discogs_identifier.value,
                 release_id=release_id,
+                sort_order=index,
             )
         )
 
@@ -258,6 +290,8 @@ def load_release(session: Session, release: ReleaseImport) -> Release:
 
     storage_location_id = None
 
+    slug = unique_slug(session=session, slug=string_to_slug(discogs_title))
+
     # StorageLocation
     if hasattr(release, 'location') and getattr(release, 'location'):
         storage_location = crud.create_storage_location(
@@ -271,27 +305,38 @@ def load_release(session: Session, release: ReleaseImport) -> Release:
         )
         storage_location_id = storage_location.id
 
+    release_date = release.release if release.release else None
+
     # Release
     release_in = ReleaseCreate(
-        discogs_url=release.discogs_url,
+        discogs_url=release.discogsUrl,
         discogs_title=discogs_title,
-        title=release.album_title,
+        title=discogs_title,
+        slug=slug,
         title_long=release.album_title_long,
         matrix=release.matrix,
         sealed=release.sealed,
         spreadsheet_id=release.spreadsheet_id,
         year=release.year,
-        sort_date=release.sort_date,
-        release_date=release.release_date,
+        sort_date=release.sortDate,
+        release_date=release_date,
         storage_location_id=storage_location_id,
     )
 
     return crud.create_release(session=session, release_in=release_in)
 
 
+    return release_out
+
+
 def seed_db(session: Session, releases_in: list[ReleaseImport], clean: bool = False) -> list[Release]:
     if clean:
         clean_db(session)
+
+    print("**************", "\n")
+    print("releases_in[0]", releases_in[0], "\n")
+    print("**************", "\n")
+    print("releases_in[1]", releases_in[1], "\n")
 
     releases = []
     for _release in releases_in:
