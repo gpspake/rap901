@@ -1,6 +1,136 @@
+export const $AppearanceReleasePublic = {
+	properties: {
+		title: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		discogs_url: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		discogs_title: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		title_long: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		matrix: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		sealed: {
+	type: 'any-of',
+	contains: [{
+	type: 'boolean',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		spreadsheet_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+},
+		year: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		sort_date: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		release_date: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		images: {
+	type: 'any-of',
+	contains: [{
+	type: 'array',
+	contains: {
+		type: 'ReleaseImage',
+	},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+	},
+} as const;
+
 export const $ArtistBaseWithId = {
 	properties: {
 		name: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		slug: {
 	type: 'any-of',
 	contains: [{
 	type: 'string',
@@ -46,6 +176,10 @@ export const $ArtistCreate = {
 	type: 'string',
 	isRequired: true,
 },
+		slug: {
+	type: 'string',
+	isRequired: true,
+},
 		profile: {
 	type: 'any-of',
 	contains: [{
@@ -74,9 +208,57 @@ export const $ArtistCreate = {
 	},
 } as const;
 
+export const $ArtistOut = {
+	properties: {
+		name: {
+	type: 'string',
+	isRequired: true,
+},
+		slug: {
+	type: 'string',
+	isRequired: true,
+},
+		profile: {
+	type: 'string',
+	isRequired: true,
+},
+		discogs_id: {
+	type: 'number',
+	isRequired: true,
+},
+		discogs_resource_url: {
+	type: 'string',
+	isRequired: true,
+},
+		id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		releases: {
+	type: 'array',
+	contains: {
+		type: 'ReleaseOut',
+	},
+	isRequired: true,
+},
+		credits: {
+	type: 'array',
+	contains: {
+		type: 'ReleaseOut',
+	},
+	isRequired: true,
+},
+	},
+} as const;
+
 export const $ArtistPublic = {
 	properties: {
 		name: {
+	type: 'string',
+	isRequired: true,
+},
+		slug: {
 	type: 'string',
 	isRequired: true,
 },
@@ -103,6 +285,127 @@ export const $ArtistPublic = {
 		type: 'ArtistReleaseLink',
 	},
 	isRequired: true,
+},
+	},
+} as const;
+
+export const $ArtistRelease = {
+	properties: {
+		title: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		discogs_url: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		discogs_title: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		title_long: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		matrix: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		sealed: {
+	type: 'any-of',
+	contains: [{
+	type: 'boolean',
+}, {
+	type: 'null',
+}],
+},
+		spreadsheet_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+},
+		year: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+},
+		sort_date: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date',
+}, {
+	type: 'null',
+}],
+},
+		release_date: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date',
+}, {
+	type: 'null',
+}],
+},
+		images: {
+	type: 'array',
+	contains: {
+		type: 'Image',
+	},
+	default: [],
+},
+		artist_links: {
+	type: 'array',
+	contains: {
+		type: 'ReleaseArtist',
+	},
+	default: [],
 },
 	},
 } as const;
@@ -167,7 +470,7 @@ export const $ArtistReleaseLink = {
 		release: {
 	type: 'any-of',
 	contains: [{
-	type: 'ReleaseBase',
+	type: 'ArtistRelease',
 }, {
 	type: 'null',
 }],
@@ -179,6 +482,14 @@ export const $ArtistReleaseLink = {
 export const $ArtistUpdate = {
 	properties: {
 		name: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		slug: {
 	type: 'any-of',
 	contains: [{
 	type: 'string',
@@ -325,6 +636,10 @@ export const $IdentifierCreate = {
 	isRequired: true,
 	format: 'uuid',
 },
+		sort_order: {
+	type: 'number',
+	isRequired: true,
+},
 	},
 } as const;
 
@@ -396,6 +711,81 @@ export const $IdentifiersPublic = {
 		count: {
 	type: 'number',
 	isRequired: true,
+},
+	},
+} as const;
+
+export const $Image = {
+	properties: {
+		date_taken: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date',
+}, {
+	type: 'null',
+}],
+},
+		image_type: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		original_path: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		new_path: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		alt_text: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		cloudflare_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		id: {
+	type: 'string',
+	format: 'uuid',
+},
+		display_type: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		release_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'uuid',
+}, {
+	type: 'null',
+}],
 },
 	},
 } as const;
@@ -583,6 +973,16 @@ export const $ImageRelease = {
 	type: 'null',
 }],
 	isRequired: true,
+},
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
 },
 		sealed: {
 	type: 'any-of',
@@ -825,6 +1225,14 @@ export const $LabelBaseWithId = {
 	type: 'null',
 }],
 },
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
 		profile: {
 	type: 'any-of',
 	contains: [{
@@ -863,6 +1271,10 @@ export const $LabelCreate = {
 	type: 'string',
 	isRequired: true,
 },
+		slug: {
+	type: 'string',
+	isRequired: true,
+},
 		profile: {
 	type: 'any-of',
 	contains: [{
@@ -891,11 +1303,63 @@ export const $LabelCreate = {
 	},
 } as const;
 
+export const $LabelOut = {
+	properties: {
+		name: {
+	type: 'string',
+	isRequired: true,
+},
+		slug: {
+	type: 'string',
+	isRequired: true,
+},
+		profile: {
+	type: 'string',
+	isRequired: true,
+},
+		discogs_id: {
+	type: 'number',
+	isRequired: true,
+},
+		discogs_resource_url: {
+	type: 'string',
+	isRequired: true,
+},
+		id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		releases: {
+	type: 'array',
+	contains: {
+		type: 'ReleaseOut',
+	},
+	isRequired: true,
+},
+		credits: {
+	type: 'array',
+	contains: {
+		type: 'ReleaseOut',
+	},
+	isRequired: true,
+},
+	},
+} as const;
+
 export const $LabelPublic = {
 	properties: {
 		name: {
 	type: 'string',
 	isRequired: true,
+},
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
 },
 		profile: {
 	type: 'string',
@@ -1003,6 +1467,14 @@ export const $LabelUpdate = {
 	type: 'null',
 }],
 },
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
 		profile: {
 	type: 'any-of',
 	contains: [{
@@ -1067,6 +1539,55 @@ export const $NewPassword = {
 	isRequired: true,
 	maxLength: 40,
 	minLength: 8,
+},
+	},
+} as const;
+
+export const $ReleaseArtist = {
+	properties: {
+		id: {
+	type: 'string',
+	format: 'uuid',
+},
+		release_id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		artist_id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		role_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'uuid',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		anv: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		join: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		sort_order: {
+	type: 'number',
+	default: 0,
 },
 	},
 } as const;
@@ -1181,6 +1702,105 @@ export const $ReleaseArtistLink = {
 	type: 'any-of',
 	contains: [{
 	type: 'ArtistBaseWithId',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+	},
+} as const;
+
+export const $ReleaseArtistOut = {
+	properties: {
+		release_id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		artist_id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		role_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'uuid',
+}, {
+	type: 'null',
+}],
+},
+		id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		role: {
+	type: 'any-of',
+	contains: [{
+	type: 'Role',
+}, {
+	type: 'null',
+}],
+},
+		anv: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		join: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		sort_order: {
+	type: 'number',
+	isRequired: true,
+},
+		name: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		slug: {
+	type: 'string',
+	isRequired: true,
+},
+		profile: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		discogs_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		discogs_resource_url: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
 }, {
 	type: 'null',
 }],
@@ -1374,6 +1994,16 @@ export const $ReleaseBase = {
 	type: 'null',
 }],
 },
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
 		sealed: {
 	type: 'any-of',
 	contains: [{
@@ -1462,6 +2092,16 @@ export const $ReleaseCreate = {
 }],
 },
 		matrix: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		slug: {
 	type: 'any-of',
 	contains: [{
 	type: 'string',
@@ -1721,6 +2361,112 @@ export const $ReleaseLabelLink = {
 	},
 } as const;
 
+export const $ReleaseLabelOut = {
+	properties: {
+		release_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'uuid',
+}, {
+	type: 'null',
+}],
+},
+		artist_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'uuid',
+}, {
+	type: 'null',
+}],
+},
+		entity_type_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'uuid',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		entity_type_name: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		catalog_number: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		sort_order: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		label_id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		name: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		slug: {
+	type: 'string',
+	isRequired: true,
+},
+		profile: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		discogs_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+},
+		discogs_resource_url: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+	},
+} as const;
+
 export const $ReleaseLabelPublic = {
 	properties: {
 		release_id: {
@@ -1855,6 +2601,198 @@ export const $ReleaseLabelsPublic = {
 	},
 } as const;
 
+export const $ReleaseOut = {
+	properties: {
+		title: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		discogs_url: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		discogs_title: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		title_long: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		matrix: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		sealed: {
+	type: 'any-of',
+	contains: [{
+	type: 'boolean',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		spreadsheet_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		year: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		sort_date: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		release_date: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		id: {
+	type: 'string',
+	isRequired: true,
+	format: 'uuid',
+},
+		storage_location: {
+	type: 'any-of',
+	contains: [{
+	type: 'StorageLocationPublic',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		images: {
+	type: 'any-of',
+	contains: [{
+	type: 'array',
+	contains: {
+		type: 'ReleaseImage',
+	},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		artists: {
+	type: 'any-of',
+	contains: [{
+	type: 'array',
+	contains: {
+		type: 'ReleaseArtistOut',
+	},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		extra_artists: {
+	type: 'any-of',
+	contains: [{
+	type: 'array',
+	contains: {
+		type: 'ReleaseArtistOut',
+	},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		labels: {
+	type: 'any-of',
+	contains: [{
+	type: 'array',
+	contains: {
+		type: 'ReleaseLabelOut',
+	},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		companies: {
+	type: 'any-of',
+	contains: [{
+	type: 'array',
+	contains: {
+		type: 'ReleaseLabelOut',
+	},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		tracks: {
+	type: 'any-of',
+	contains: [{
+	type: 'array',
+	contains: {
+		type: 'TrackPublic',
+	},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+	},
+} as const;
+
 export const $ReleasePublic = {
 	properties: {
 		title: {
@@ -1894,6 +2832,15 @@ export const $ReleasePublic = {
 	isRequired: true,
 },
 		matrix: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		slug: {
 	type: 'any-of',
 	contains: [{
 	type: 'string',
@@ -1999,6 +2946,18 @@ export const $ReleasePublic = {
 }],
 	isRequired: true,
 },
+		tracks: {
+	type: 'any-of',
+	contains: [{
+	type: 'array',
+	contains: {
+		type: 'TrackPublic',
+	},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
 	},
 } as const;
 
@@ -2054,6 +3013,16 @@ export const $ReleaseUpdate = {
 	type: 'null',
 }],
 },
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
 		sealed: {
 	type: 'any-of',
 	contains: [{
@@ -2099,12 +3068,12 @@ export const $ReleaseUpdate = {
 	},
 } as const;
 
-export const $ReleasesPublic = {
+export const $ReleasesOut = {
 	properties: {
 		data: {
 	type: 'array',
 	contains: {
-		type: 'ReleasePublic',
+		type: 'ReleaseOut',
 	},
 	isRequired: true,
 },
@@ -2281,38 +3250,6 @@ export const $Token = {
 	},
 } as const;
 
-export const $TrackArtistBase = {
-	properties: {
-		release_id: {
-	type: 'any-of',
-	contains: [{
-	type: 'string',
-	format: 'uuid',
-}, {
-	type: 'null',
-}],
-},
-		artist_id: {
-	type: 'any-of',
-	contains: [{
-	type: 'string',
-	format: 'uuid',
-}, {
-	type: 'null',
-}],
-},
-		role_id: {
-	type: 'any-of',
-	contains: [{
-	type: 'string',
-	format: 'uuid',
-}, {
-	type: 'null',
-}],
-},
-	},
-} as const;
-
 export const $TrackArtistCreate = {
 	properties: {
 		release_id: {
@@ -2434,7 +3371,30 @@ export const $TrackArtistPublic = {
 	isRequired: true,
 },
 		sort_order: {
+	type: 'any-of',
+	contains: [{
 	type: 'number',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		track: {
+	type: 'any-of',
+	contains: [{
+	type: 'TrackOut',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		artist: {
+	type: 'any-of',
+	contains: [{
+	type: 'ArtistBaseWithId',
+}, {
+	type: 'null',
+}],
 	isRequired: true,
 },
 	},
@@ -2548,6 +3508,10 @@ export const $TrackCreate = {
 	type: 'null',
 }],
 },
+		sort_order: {
+	type: 'number',
+	isRequired: true,
+},
 		release_id: {
 	type: 'string',
 	isRequired: true,
@@ -2556,10 +3520,56 @@ export const $TrackCreate = {
 	},
 } as const;
 
+export const $TrackOut = {
+	properties: {
+		position: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		type: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		title: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		duration: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		release: {
+	type: 'TrackReleaseOut',
+	isRequired: true,
+},
+	},
+} as const;
+
 export const $TrackPublic = {
 	properties: {
 		position: {
+	type: 'any-of',
+	contains: [{
 	type: 'string',
+}, {
+	type: 'null',
+}],
 	isRequired: true,
 },
 		type: {
@@ -2583,6 +3593,10 @@ export const $TrackPublic = {
 	isRequired: true,
 	format: 'uuid',
 },
+		sort_order: {
+	type: 'number',
+	isRequired: true,
+},
 		release_id: {
 	type: 'string',
 	isRequired: true,
@@ -2593,11 +3607,125 @@ export const $TrackPublic = {
 	contains: [{
 	type: 'array',
 	contains: {
-		type: 'TrackArtistBase',
+		type: 'TrackArtistPublic',
 	},
 }, {
 	type: 'null',
 }],
+},
+	},
+} as const;
+
+export const $TrackReleaseOut = {
+	properties: {
+		title: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		discogs_url: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		discogs_title: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		title_long: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		matrix: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		slug: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	maxLength: 255,
+	minLength: 1,
+}, {
+	type: 'null',
+}],
+},
+		sealed: {
+	type: 'any-of',
+	contains: [{
+	type: 'boolean',
+}, {
+	type: 'null',
+}],
+},
+		spreadsheet_id: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+},
+		year: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+},
+		sort_date: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date',
+}, {
+	type: 'null',
+}],
+},
+		release_date: {
+	type: 'any-of',
+	contains: [{
+	type: 'string',
+	format: 'date',
+}, {
+	type: 'null',
+}],
+},
+		images: {
+	type: 'array',
+	contains: {
+		type: 'Image',
+	},
+	isRequired: true,
 },
 	},
 } as const;
@@ -2632,6 +3760,14 @@ export const $TrackUpdate = {
 	type: 'any-of',
 	contains: [{
 	type: 'string',
+}, {
+	type: 'null',
+}],
+},
+		sort_order: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
 }, {
 	type: 'null',
 }],

@@ -1,34 +1,38 @@
-import {ReleaseArtistLink} from "../client";
+import {ReleaseArtistOut} from "../client";
+import {Link} from "@tanstack/react-router";
 
 export const getReleaseArtists = (
-  artists: ReleaseArtistLink[]
-): ReleaseArtistLink[] => (
+  artists: ReleaseArtistOut[]
+): ReleaseArtistOut[] => (
   artists
     .filter(artist => !artist.role || !artist.role.name)
     .sort((a, b) => a.sort_order - b.sort_order)
 )
 
-interface ReleaseArtistLinkProps {
-  releaseArtists: ReleaseArtistLink[]
-  className: string
+interface ReleaseArtistsLinkProps {
+  releaseArtists: ReleaseArtistOut[]
+  className?: string
 }
 
-export const ReleaseArtistsLink = (props: ReleaseArtistLinkProps) => {
+export const ReleaseArtistsLink = (props: ReleaseArtistsLinkProps) => {
   const {releaseArtists, className} = props
-  const getArtistName = (releaseArtist: ReleaseArtistLink): string => {
-    const artistName = releaseArtist.anv ? releaseArtist.anv : releaseArtist.artist?.name
+  const getArtistName = (releaseArtist: ReleaseArtistOut): string => {
+    const artistName = releaseArtist.anv ? releaseArtist.anv : releaseArtist.name
     return artistName || ""
   }
 
-
   return (
     <span className={className}>
-      {releaseArtists.map(artist => (
+      {releaseArtists.map(releaseArtist => (
         <>
-          <a className="hover:underline font-semibold" href={`/artists/${artist.artist_id}`}>
-            {getArtistName(artist)}
-          </a>
-          {artist.join && ` ${artist.join} `}
+          <Link
+            className="hover:underline font-semibold"
+            to={'/artists/$slug'}
+            params={{slug: releaseArtist.slug}}
+          >
+            {getArtistName(releaseArtist)}
+          </Link>
+          {releaseArtist.join && ` ${releaseArtist.join} `}
         </>
       ))}
     </span>

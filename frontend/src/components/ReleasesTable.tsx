@@ -1,36 +1,12 @@
-import {ReleaseArtistLink, ReleasesPublic} from "../client"
+import {ReleasesOut} from "../client"
 import ActionsMenu from "../components/Common/ActionsMenu.tsx"
 import clsx from "clsx";
 import {Link} from "@tanstack/react-router"
-
-interface ReleaseArtistProps {
-  releaseArtists: ReleaseArtistLink[]
-}
-
-const ReleaseArtistsLink = (props: ReleaseArtistProps) => {
-  const {releaseArtists} = props
-
-
-  const getArtistName = (releaseArtist: ReleaseArtistLink): string => {
-    const artistName = releaseArtist.anv ? releaseArtist.anv : releaseArtist.artist?.name
-    return artistName || ""
-  }
-
-  return releaseArtists.map(artist => {
-    return (
-      <>
-        <a className="hover:underline font-semibold" href={`/artists/${artist.artist_id}`}>
-          {getArtistName(artist)}
-        </a>
-        {artist.join && ` ${artist.join} `}
-      </>
-    )
-  })
-}
+import {ReleaseArtistsLink} from "./ReleaseArtistsLink.tsx";
 
 interface ReleasesTableProps {
   releasesCount: number
-  releases: ReleasesPublic | undefined
+  releases: ReleasesOut | undefined
   hasNextPage: boolean
   hasPreviousPage: boolean
   pageFirst: number
@@ -53,15 +29,6 @@ export const ReleasesTable = (props: ReleasesTableProps) => {
     page,
     isPending
   } = props
-
-  const getReleaseArtists = (
-    artists: ReleaseArtistLink[]
-  ): ReleaseArtistLink[] => {
-    const releaseArtists = artists
-      .filter(artist => !artist.role || !artist.role.name)
-      .sort((a, b) => a.sort_order - b.sort_order)
-    return releaseArtists
-  }
 
   return (
     <>
@@ -107,16 +74,18 @@ export const ReleasesTable = (props: ReleasesTableProps) => {
                                   alt={frontImage?.alt_text || ""}/>}
                             </td>
                             <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-300">
-                              {release.artist_links &&
-                                  <ReleaseArtistsLink releaseArtists={getReleaseArtists(release.artist_links)}/>}
+                              {release.artists &&
+                                  <ReleaseArtistsLink releaseArtists={release.artists}/>}
                             </td>
                             <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-300">
-                              <Link
-                                to="/releases/$releaseId/"
-                                params={{ releaseId: release.id }}
-                              >
-                                {release.discogs_title}
-                              </Link>
+                              {!!release.slug && (
+                                <Link
+                                  to="/releases/$slug/"
+                                  params={{ slug: release.slug }}
+                                >
+                                  {release.discogs_title}
+                                </Link>
+                              )}
                             </td>
                             <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-300">
                               {release.year || "N/A"}

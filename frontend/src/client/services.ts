@@ -2,7 +2,7 @@ import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
 
-import type { Body_login_login_access_token,Message,NewPassword,Token,UserPublic,UpdatePassword,UserCreate,UserRegister,UsersPublic,UserUpdate,UserUpdateMe,ItemCreate,ItemPublic,ItemsPublic,ItemUpdate,ReleaseCreate,ReleasePublic,ReleasesPublic,ReleaseUpdate,StorageLocationCreate,StorageLocationPublic,StorageLocationsPublic,StorageLocationUpdate,ImageCreate,ImagePublic,ImagesPublic,ImageUpdate,ArtistCreate,ArtistPublic,ArtistsPublic,ArtistUpdate,ReleaseArtistCreate,ReleaseArtistPublic,ReleaseArtistsPublic,ReleaseArtistUpdate,LabelCreate,LabelPublic,LabelsPublic,LabelUpdate,ReleaseLabelCreate,ReleaseLabelPublic,ReleaseLabelsPublic,ReleaseLabelUpdate,IdentifierCreate,IdentifierPublic,IdentifiersPublic,IdentifierUpdate,TrackCreate,TrackPublic,TracksPublic,TrackUpdate,TrackArtistCreate,TrackArtistPublic,TrackArtistsPublic,TrackArtistUpdate } from './models';
+import type { Body_login_login_access_token,Message,NewPassword,Token,UserPublic,UpdatePassword,UserCreate,UserRegister,UsersPublic,UserUpdate,UserUpdateMe,ItemCreate,ItemPublic,ItemsPublic,ItemUpdate,ReleaseCreate,ReleaseOut,ReleasePublic,ReleasesOut,ReleaseUpdate,StorageLocationCreate,StorageLocationPublic,StorageLocationsPublic,StorageLocationUpdate,ImageCreate,ImagePublic,ImagesPublic,ImageUpdate,ArtistCreate,ArtistOut,ArtistPublic,ArtistsPublic,ArtistUpdate,ReleaseArtistCreate,ReleaseArtistPublic,ReleaseArtistsPublic,ReleaseArtistUpdate,LabelCreate,LabelOut,LabelPublic,LabelsPublic,LabelUpdate,ReleaseLabelCreate,ReleaseLabelPublic,ReleaseLabelsPublic,ReleaseLabelUpdate,IdentifierCreate,IdentifierPublic,IdentifiersPublic,IdentifierUpdate,TrackCreate,TrackPublic,TracksPublic,TrackUpdate,AppearanceReleasePublic,TrackArtistCreate,TrackArtistPublic,TrackArtistsPublic,TrackArtistUpdate } from './models';
 
 export type TDataLoginAccessToken = {
                 formData: Body_login_login_access_token
@@ -546,7 +546,7 @@ export type TDataCreateRelease = {
                 
             }
 export type TDataReadRelease = {
-                id: string
+                slug: string
                 
             }
 export type TDataUpdateRelease = {
@@ -564,10 +564,10 @@ export class ReleasesService {
 	/**
 	 * Read Releases
 	 * Retrieve releases.
-	 * @returns ReleasesPublic Successful Response
+	 * @returns ReleasesOut Successful Response
 	 * @throws ApiError
 	 */
-	public static readReleases(data: TDataReadReleases = {}): CancelablePromise<ReleasesPublic> {
+	public static readReleases(data: TDataReadReleases = {}): CancelablePromise<ReleasesOut> {
 		const {
 limit = 100,
 skip = 0,
@@ -608,18 +608,18 @@ requestBody,
 	/**
 	 * Read Release
 	 * Get release by ID.
-	 * @returns ReleasePublic Successful Response
+	 * @returns ReleaseOut Successful Response
 	 * @throws ApiError
 	 */
-	public static readRelease(data: TDataReadRelease): CancelablePromise<ReleasePublic> {
+	public static readRelease(data: TDataReadRelease): CancelablePromise<ReleaseOut> {
 		const {
-id,
+slug,
 } = data;
 		return __request(OpenAPI, {
 			method: 'GET',
-			url: '/api/v1/releases/{id}',
+			url: '/api/v1/releases/{slug}',
 			path: {
-				id
+				slug
 			},
 			errors: {
 				422: `Validation Error`,
@@ -966,7 +966,7 @@ export type TDataCreateArtist = {
                 
             }
 export type TDataReadArtist = {
-                id: string
+                slug: string
                 
             }
 export type TDataUpdateArtist = {
@@ -1027,19 +1027,19 @@ requestBody,
 
 	/**
 	 * Read Artist
-	 * Get artist by ID.
-	 * @returns ArtistPublic Successful Response
+	 * Get artist by slug.
+	 * @returns ArtistOut Successful Response
 	 * @throws ApiError
 	 */
-	public static readArtist(data: TDataReadArtist): CancelablePromise<ArtistPublic> {
+	public static readArtist(data: TDataReadArtist): CancelablePromise<ArtistOut> {
 		const {
-id,
+slug,
 } = data;
 		return __request(OpenAPI, {
 			method: 'GET',
-			url: '/api/v1/artists/{id}',
+			url: '/api/v1/artists/{slug}',
 			path: {
-				id
+				slug
 			},
 			errors: {
 				422: `Validation Error`,
@@ -1246,7 +1246,7 @@ export type TDataCreateLabel = {
                 
             }
 export type TDataReadLabel = {
-                id: string
+                slug: string
                 
             }
 export type TDataUpdateLabel = {
@@ -1307,19 +1307,19 @@ requestBody,
 
 	/**
 	 * Read Label
-	 * Get label by ID.
-	 * @returns LabelPublic Successful Response
+	 * Get label by slug.
+	 * @returns LabelOut Successful Response
 	 * @throws ApiError
 	 */
-	public static readLabel(data: TDataReadLabel): CancelablePromise<LabelPublic> {
+	public static readLabel(data: TDataReadLabel): CancelablePromise<LabelOut> {
 		const {
-id,
+slug,
 } = data;
 		return __request(OpenAPI, {
 			method: 'GET',
-			url: '/api/v1/labels/{id}',
+			url: '/api/v1/labels/{slug}',
 			path: {
-				id
+				slug
 			},
 			errors: {
 				422: `Validation Error`,
@@ -1805,6 +1805,10 @@ export type TDataCreateTrackArtist = {
                 requestBody: TrackArtistCreate
                 
             }
+export type TDataReadArtistAppearances = {
+                artistId: string
+                
+            }
 export type TDataReadTrackArtist = {
                 id: string
                 
@@ -1859,6 +1863,28 @@ requestBody,
 			url: '/api/v1/track_artists/',
 			body: requestBody,
 			mediaType: 'application/json',
+			errors: {
+				422: `Validation Error`,
+			},
+		});
+	}
+
+	/**
+	 * Read Artist Appearances
+	 * Retrieve releases an artist has track credits on
+	 * @returns AppearanceReleasePublic Successful Response
+	 * @throws ApiError
+	 */
+	public static readArtistAppearances(data: TDataReadArtistAppearances): CancelablePromise<Array<AppearanceReleasePublic>> {
+		const {
+artistId,
+} = data;
+		return __request(OpenAPI, {
+			method: 'GET',
+			url: '/api/v1/track_artists/artist_appearances',
+			query: {
+				artist_id: artistId
+			},
 			errors: {
 				422: `Validation Error`,
 			},

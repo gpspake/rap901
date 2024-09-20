@@ -15,12 +15,17 @@ import { Route as LayoutImport } from './routes/_layout'
 import { Route as AdminImport } from './routes/_admin'
 import { Route as LayoutIndexImport } from './routes/_layout/index'
 import { Route as LayoutReleasesImport } from './routes/_layout/releases'
+import { Route as LayoutLabelsImport } from './routes/_layout/labels'
+import { Route as LayoutArtistsImport } from './routes/_layout/artists'
+import { Route as LayoutAboutImport } from './routes/_layout/about'
 import { Route as AdminSignupImport } from './routes/_admin/signup'
 import { Route as AdminResetPasswordImport } from './routes/_admin/reset-password'
 import { Route as AdminRecoverPasswordImport } from './routes/_admin/recover-password'
 import { Route as AdminLoginImport } from './routes/_admin/login'
 import { Route as AdminDashboardImport } from './routes/_admin/_dashboard'
-import { Route as LayoutReleasesReleaseIdImport } from './routes/_layout/releases_.$releaseId'
+import { Route as LayoutReleasesSlugImport } from './routes/_layout/releases_.$slug'
+import { Route as LayoutLabelsSlugImport } from './routes/_layout/labels_.$slug'
+import { Route as LayoutArtistsSlugImport } from './routes/_layout/artists_.$slug'
 import { Route as AdminDashboardDashboardIndexImport } from './routes/_admin/_dashboard/dashboard/index'
 import { Route as AdminDashboardDashboardSettingsImport } from './routes/_admin/_dashboard/dashboard/settings'
 import { Route as AdminDashboardDashboardReleasesImport } from './routes/_admin/_dashboard/dashboard/releases'
@@ -49,6 +54,21 @@ const LayoutReleasesRoute = LayoutReleasesImport.update({
   getParentRoute: () => LayoutRoute,
 } as any)
 
+const LayoutLabelsRoute = LayoutLabelsImport.update({
+  path: '/labels',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutArtistsRoute = LayoutArtistsImport.update({
+  path: '/artists',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutAboutRoute = LayoutAboutImport.update({
+  path: '/about',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
 const AdminSignupRoute = AdminSignupImport.update({
   path: '/signup',
   getParentRoute: () => AdminRoute,
@@ -74,8 +94,18 @@ const AdminDashboardRoute = AdminDashboardImport.update({
   getParentRoute: () => AdminRoute,
 } as any)
 
-const LayoutReleasesReleaseIdRoute = LayoutReleasesReleaseIdImport.update({
-  path: '/releases/$releaseId',
+const LayoutReleasesSlugRoute = LayoutReleasesSlugImport.update({
+  path: '/releases/$slug',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutLabelsSlugRoute = LayoutLabelsSlugImport.update({
+  path: '/labels/$slug',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutArtistsSlugRoute = LayoutArtistsSlugImport.update({
+  path: '/artists/$slug',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -141,6 +171,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSignupImport
       parentRoute: typeof AdminImport
     }
+    '/_layout/about': {
+      preLoaderRoute: typeof LayoutAboutImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/artists': {
+      preLoaderRoute: typeof LayoutArtistsImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/labels': {
+      preLoaderRoute: typeof LayoutLabelsImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/releases': {
       preLoaderRoute: typeof LayoutReleasesImport
       parentRoute: typeof LayoutImport
@@ -149,8 +191,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutIndexImport
       parentRoute: typeof LayoutImport
     }
-    '/_layout/releases/$releaseId': {
-      preLoaderRoute: typeof LayoutReleasesReleaseIdImport
+    '/_layout/artists/$slug': {
+      preLoaderRoute: typeof LayoutArtistsSlugImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/labels/$slug': {
+      preLoaderRoute: typeof LayoutLabelsSlugImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/releases/$slug': {
+      preLoaderRoute: typeof LayoutReleasesSlugImport
       parentRoute: typeof LayoutImport
     }
     '/_admin/_dashboard/dashboard/admin': {
@@ -193,9 +243,14 @@ export const routeTree = rootRoute.addChildren([
     AdminSignupRoute,
   ]),
   LayoutRoute.addChildren([
+    LayoutAboutRoute,
+    LayoutArtistsRoute,
+    LayoutLabelsRoute,
     LayoutReleasesRoute,
     LayoutIndexRoute,
-    LayoutReleasesReleaseIdRoute,
+    LayoutArtistsSlugRoute,
+    LayoutLabelsSlugRoute,
+    LayoutReleasesSlugRoute,
   ]),
 ])
 

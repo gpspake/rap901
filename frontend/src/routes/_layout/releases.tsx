@@ -1,10 +1,11 @@
-import {useQuery, useQueryClient} from "@tanstack/react-query"
+import {keepPreviousData, useQuery, useQueryClient} from "@tanstack/react-query"
 import {createFileRoute, useNavigate} from "@tanstack/react-router"
 import {useEffect} from "react"
 import {z} from "zod"
 import {ReleasesService} from "../../client"
 import {Container, RootLayout} from "./index.tsx";
 import {ReleasesGrid} from "../../components/ReleasesGrid.tsx";
+// import {ReleasesTable} from "../../components/ReleasesTable.tsx";
 
 const releasesSearchSchema = z.object({
   page: z.number().catch(1),
@@ -32,13 +33,18 @@ function ShowReleases() {
   const setPage = (page: number) =>
     navigate({search: (prev) => ({...prev, page})})
 
+  // type LayoutType = 'grid' | 'table';
+  // const [layout, setLayout] = useState<LayoutType>('grid')
+  const layout = 'grid'
+
   const {
     data: releases,
     isPending,
+    isLoading,
     isPlaceholderData,
   } = useQuery({
     ...getReleasesQueryOptions({page}),
-    placeholderData: (prevData) => prevData,
+    placeholderData: keepPreviousData,
   })
 
   const releasesCount = releases?.count || 0
@@ -58,17 +64,39 @@ function ShowReleases() {
 
 
   return (
-    <ReleasesGrid
-      releases={releases}
-      releasesCount={releasesCount}
-      hasNextPage={hasNextPage}
-      hasPreviousPage={hasPreviousPage}
-      pageFirst={pageFirst}
-      pageLast={pageLast}
-      setPage={setPage}
-      page={page}
-      isPending={isPending}
-    />
+    <>
+      {/*<span onClick={() => setLayout('table')}>Table</span>*/}
+      {/*<span onClick={() => setLayout('grid')}>Grid</span>*/}
+      {/*<span id="releases-top"></span>*/}
+      {layout === 'grid' && (
+        <ReleasesGrid
+          releases={releases}
+          releasesCount={releasesCount}
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          pageFirst={pageFirst}
+          pageLast={pageLast}
+          setPage={setPage}
+          page={page}
+          isPending={isPending}
+          isLoading={isLoading}
+          perPage={PER_PAGE}
+        />
+      )}
+      {/*{layout === 'table' && (*/}
+      {/*  <ReleasesTable*/}
+      {/*    releases={releases}*/}
+      {/*    releasesCount={releasesCount}*/}
+      {/*    hasNextPage={hasNextPage}*/}
+      {/*    hasPreviousPage={hasPreviousPage}*/}
+      {/*    pageFirst={pageFirst}*/}
+      {/*    pageLast={pageLast}*/}
+      {/*    setPage={setPage}*/}
+      {/*    page={page}*/}
+      {/*    isPending={isPending}*/}
+      {/*  />*/}
+      {/*)}*/}
+    </>
   )
 }
 
