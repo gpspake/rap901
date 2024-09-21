@@ -126,7 +126,7 @@ def build_random_release_import(
         matrix=fake.bothify(text="??#####"),
         label=fake.company(),
         year=fake.year(),
-        sort_date=fake.date_this_century(),
+        sortDate=fake.date_this_century(),
         release_date=fake.date_this_century(),
         sealed=fake.boolean(),
         spreadsheet_id=fake.random_int(min=1, max=10000),

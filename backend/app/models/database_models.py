@@ -16,6 +16,7 @@ class ReleaseBase(SQLModel):
     discogs_title: str | None = Field(default=None, min_length=1, max_length=255)
     title_long: str | None = Field(default=None, min_length=1, max_length=255)
     matrix: str | None = Field(default=None, min_length=1, max_length=255)
+    slug: str | None = Field(default=None, min_length=1, max_length=255)
     sealed: bool | None = Field(default=False)
     spreadsheet_id: int | None = Field(default=None)
     year: int | None = Field(default=None)
@@ -29,12 +30,13 @@ class Release(ReleaseBase, table=True):
     discogs_url: str | None = Field(default=None, max_length=255)
     discogs_title: str | None = Field(default=None, max_length=255)
     title: str | None = Field(default=None, max_length=255)
+    slug: str | None = Field(default=None, min_length=1)
     title_long: str | None = Field(default=None, max_length=255)
     matrix: str | None = Field(default=None, max_length=255)
     sealed: bool | None = Field(default=False)
     spreadsheet_id: int | None = Field(default=None)
     year: int | None = Field(default=None)
-    sort_date: date | None = Field(default=None)
+    sort_date: date
     release_date: date | None = Field(default=None)
 
     storage_location_id: uuid.UUID | None = Field(
@@ -50,6 +52,11 @@ class Release(ReleaseBase, table=True):
     identifiers: list["Identifier"] = Relationship(back_populates="release")
     artist_links: list["ReleaseArtist"] = Relationship(back_populates="release")
     label_links: list["ReleaseLabel"] = Relationship(back_populates="release")
+
+
+class ArtistRelease(ReleaseBase):
+    images: list["Image"] = []
+    artist_links: list["ReleaseArtist"] = []
 
 
 ###################
@@ -100,6 +107,7 @@ class Image(ImageBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_taken: date | None = Field(default=None)
     image_type: str | None = Field(default=None)
+    display_type: str | None = Field(default=None)
     original_path: str | None = Field(default=None)
     new_path: str | None = Field(default=None)
     alt_text: str | None = Field(default=None)
@@ -112,6 +120,7 @@ class ReleaseImage(ImageBase):
     id: uuid.UUID | None
     date_taken: date | None
     image_type: str | None
+    display_type: str | None
     alt_text: str | None
     cloudflare_id: str | None
 
@@ -138,6 +147,7 @@ class ImageRelease(ReleaseBase):
 # Shared properties
 class ArtistBase(SQLModel):
     name: str | None = Field(default=None)
+    slug: str | None = Field(default=None)
     profile: str | None = Field(default=None)
     discogs_id: int | None = Field(default=None)
     discogs_resource_url: str | None = Field(default=None)
@@ -147,6 +157,7 @@ class ArtistBase(SQLModel):
 class Artist(ArtistBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str | None = Field(default=None)
+    slug: str | None = Field(default=None)
     profile: str | None = Field(default=None)
     discogs_id: int | None = Field(default=None)
     discogs_resource_url: str | None = Field(default=None)
@@ -183,6 +194,20 @@ class ReleaseArtist(SQLModel, table=True):
     release: "Release" = Relationship(back_populates="artist_links")
 
 
+class SpecialReleaseArtist(ReleaseArtistBase):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    release_id: uuid.UUID = Field(foreign_key="release.id")
+    artist_id: uuid.UUID = Field(foreign_key="artist.id")
+    role_id: uuid.UUID | None = Field(foreign_key="role.id")
+    anv: str | None = Field(default=None)
+    join: str | None = Field(default=None)
+    sort_order: int = Field(default=0)
+
+    role: "Role" = Relationship(back_populates="release_artist")
+    artist: "Artist" = Relationship(back_populates="release_links")
+    release: "Release" = Relationship(back_populates="artist_links")
+
+
 ###################
 # Track
 ###################
@@ -204,9 +229,14 @@ class Track(TrackBase, table=True):
     title: str
     artist_links: list["TrackArtist"] = Relationship(back_populates="track")
     duration: str | None = Field(default=None)
+    sort_order: int
 
     release_id: uuid.UUID | None = Field(default=None, foreign_key="release.id")
     release: Release | None = Relationship(back_populates="tracks")
+
+
+# class TrackWithRelease(Track):
+#     release: Release
 
 
 # Shared properties
@@ -256,6 +286,7 @@ class Role(RoleBase, table=True):
 # Shared properties
 class LabelBase(SQLModel):
     name: str | None = Field(default=None)
+    slug: str | None = Field(default=None)
     profile: str | None = Field(default=None)
     discogs_id: int | None = Field(default=None)
     discogs_resource_url: str | None = Field(default=None)
@@ -265,6 +296,7 @@ class LabelBase(SQLModel):
 class Label(LabelBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str | None = Field(default=None)
+    slug: str | None = Field(default=None)
     profile: str | None = Field(default=None)
     discogs_id: int | None = Field(default=None)
     discogs_resource_url: str | None = Field(default=None)
@@ -330,6 +362,7 @@ class IdentifierBase(SQLModel):
 class Identifier(IdentifierBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     type: str
+    sort_order: int
     description: str | None = Field(default=None, max_length=255)
     value: str
     release_id: uuid.UUID = Field(default=None, foreign_key="release.id")

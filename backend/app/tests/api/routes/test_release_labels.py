@@ -100,7 +100,7 @@ def test_read_release_labels(
     assert response.status_code == 200
     content = response.json()
     assert len(content["data"]) >= 1
-    assert str(label.id) in (result["label_id"] for result in content["data"])
+    assert str(label.id) in (str(result["label_id"]) for result in content["data"])
 
 
 def test_update_release_label(
@@ -224,7 +224,7 @@ def test_create_random_release_label(
     release_label = create_random_release_label(db=db)
 
     response = client.get(
-        f"{settings.API_V1_STR}/releases/{release_label.release_id}",
+        f"{settings.API_V1_STR}/releases/{release_label.release.slug}",
         headers=normal_user_token_headers,
     )
 
@@ -232,4 +232,4 @@ def test_create_random_release_label(
     content = response.json()
 
     assert content["id"] == str(release_label.release_id)
-    assert content["label_links"][0]["label"]["id"] == str(release_label.label_id)
+    assert content["companies"][0]["label_id"] == str(release_label.label_id)

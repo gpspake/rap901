@@ -33,7 +33,8 @@ const useAuth = () => {
       UsersService.registerUser({ requestBody: data }),
 
     onSuccess: () => {
-      navigate({ to: "/login" })
+      // @ts-ignore
+      navigate({ to: "login" })
       showToast(
         "Account created.",
         "Your account has been created successfully.",
@@ -64,7 +65,7 @@ const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: login,
     onSuccess: () => {
-      navigate({ to: "/" })
+      navigate({ to: "/dashboard" })
     },
     onError: (err: ApiError) => {
       let errDetail = (err.body as any)?.detail
@@ -83,6 +84,7 @@ const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem("access_token")
+    // @ts-ignore
     navigate({ to: "/login" })
   }
 

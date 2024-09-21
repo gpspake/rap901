@@ -11,16 +11,16 @@ import { useMutation } from "@tanstack/react-query"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { type ApiError, LoginService } from "../client"
-import { isLoggedIn } from "../hooks/useAuth"
-import useCustomToast from "../hooks/useCustomToast"
-import { emailPattern, handleError } from "../utils"
+import { type ApiError, LoginService } from "../../client"
+import { isLoggedIn } from "../../hooks/useAuth.ts"
+import useCustomToast from "../../hooks/useCustomToast.ts"
+import { emailPattern, handleError } from "../../utils.ts"
 
 interface FormData {
   email: string
 }
 
-export const Route = createFileRoute("/recover-password")({
+export const Route = createFileRoute("/_admin/recover-password")({
   component: RecoverPassword,
   beforeLoad: async () => {
     if (isLoggedIn()) {

@@ -21,16 +21,16 @@ import {
 import { type SubmitHandler, useForm } from "react-hook-form"
 
 import Logo from "/assets/images/fastapi-logo.svg"
-import type { Body_login_login_access_token as AccessToken } from "../client"
-import useAuth, { isLoggedIn } from "../hooks/useAuth"
-import { emailPattern } from "../utils"
+import type { Body_login_login_access_token as AccessToken } from "../../client"
+import useAuth, { isLoggedIn } from "../../hooks/useAuth.ts"
+import { emailPattern } from "../../utils.ts"
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/_admin/login")({
   component: Login,
   beforeLoad: async () => {
     if (isLoggedIn()) {
       throw redirect({
-        to: "/",
+        to: "/dashboard",
       })
     }
   },

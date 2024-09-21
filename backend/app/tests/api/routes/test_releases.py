@@ -83,7 +83,7 @@ def test_read_release(
 ) -> None:
     release = create_random_release(db)
     response = client.get(
-        f"{settings.API_V1_STR}/releases/{release.id}",
+        f"{settings.API_V1_STR}/releases/{release.slug}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 200
@@ -117,7 +117,7 @@ def test_read_release_not_found(
     client: TestClient, superuser_token_headers: dict[str, str]
 ) -> None:
     response = client.get(
-        f"{settings.API_V1_STR}/releases/{uuid.uuid4()}",
+        f"{settings.API_V1_STR}/releases/fake",
         headers=superuser_token_headers,
     )
     assert response.status_code == 404
@@ -233,7 +233,7 @@ def test_release_storage_location_relationship(
     db.refresh(release)
 
     response = client.get(
-        f"{settings.API_V1_STR}/releases/{release.id}",
+        f"{settings.API_V1_STR}/releases/{release.slug}",
         headers=normal_user_token_headers,
     )
     content = response.json()

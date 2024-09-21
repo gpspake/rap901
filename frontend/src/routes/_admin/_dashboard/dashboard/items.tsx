@@ -17,16 +17,16 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useEffect } from "react"
 import { z } from "zod"
 
-import { ItemsService } from "../../client"
-import ActionsMenu from "../../components/Common/ActionsMenu"
-import Navbar from "../../components/Common/Navbar"
-import AddItem from "../../components/Items/AddItem"
+import { ItemsService } from "../../../../client"
+import ActionsMenu from "../../../../components/Common/ActionsMenu.tsx"
+import Navbar from "../../../../components/Common/Navbar.tsx"
+import AddItem from "../../../../components/Items/AddItem.tsx"
 
 const itemsSearchSchema = z.object({
   page: z.number().catch(1),
 })
 
-export const Route = createFileRoute("/_layout/items")({
+export const Route = createFileRoute("/_admin/_dashboard/dashboard/items")({
   component: Items,
   validateSearch: (search) => itemsSearchSchema.parse(search),
 })

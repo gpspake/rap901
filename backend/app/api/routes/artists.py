@@ -6,14 +6,17 @@ from sqlmodel import func, select
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
+from app.api.routes.releases import release_public_to_release_out
 from app.models.artist import (
     ArtistCreate,
+    ArtistOut,
     ArtistPublic,
     ArtistsPublic,
     ArtistUpdate,
 )
 from app.models.database_models import Artist
 from app.models.models import Message
+from app.models.release import ReleaseOut, ReleasePublic
 
 router = APIRouter()
 
@@ -32,15 +35,66 @@ def read_artists(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     return ArtistsPublic(data=artists, count=count)
 
 
-@router.get("/{id}", response_model=ArtistPublic)
-def read_artist(session: SessionDep, id: uuid.UUID) -> Any:
+@router.get("/{slug}", response_model=ArtistOut)
+def read_artist(session: SessionDep, slug: str) -> Any:
     """
-    Get artist by ID.
+    Get artist by slug.
     """
-    artist = session.get(Artist, id)
+
+    stmt = select(Artist).where(Artist.slug == slug)
+    artist = session.execute(stmt).scalar_one_or_none()
+
     if not artist:
         raise HTTPException(status_code=404, detail="Artist not found")
-    return artist
+
+    unique_release_ids: set[uuid.UUID] = set()
+    unique_credit_ids: set[uuid.UUID] = set()
+
+    # right now, I push artist.release_links objects to these
+    releases: list[ReleaseOut] = []
+    credits: list[ReleaseOut] = []
+
+    # separate album artists from credits
+    for release_link in artist.release_links:
+        # get release out from release link
+        release = release_public_to_release_out(
+            ReleasePublic.model_validate(release_link.release)
+        )
+
+        # these release link objects are
+        if release_link.role.name == "":
+            # add release id to a set
+            unique_release_ids.add(release.id)
+
+            # add release to releases list
+            releases.append(release)
+
+            # if release is in credits, remove it from credits
+            if release.id in unique_credit_ids:
+                credits = [
+                    _release
+                    for _release in credits
+                    if _release.id != release_link.release_id
+                ]
+        else:
+            # add release to credits if it's not already in releases or credits
+            if release_link.release_id not in unique_release_ids.union(
+                unique_credit_ids
+            ):
+                credits.append(release)
+                # add to credit release id to a set
+                unique_credit_ids.add(release.id)
+
+    return ArtistOut(
+        id=artist.id,
+        name=artist.name,
+        slug=artist.slug,
+        profile=artist.profile,
+        discogs_id=artist.discogs_id,
+        discogs_resource_url=artist.discogs_resource_url,
+        releases=releases,
+        credits=credits,
+    )
 
 
 @router.post("/", response_model=ArtistPublic)

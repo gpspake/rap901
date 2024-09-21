@@ -10,6 +10,7 @@ from app.main import app
 from app.models.database_models import (
     Artist,
     Identifier,
+    Image,
     Label,
     Release,
     ReleaseArtist,
@@ -37,6 +38,7 @@ def db() -> Generator[Session, None, None]:
         session.execute(delete(Artist))
         session.execute(delete(Track))
         session.execute(delete(Role))
+        session.execute(delete(Image))
         session.execute(delete(Release))
         session.execute(delete(User))
         session.commit()

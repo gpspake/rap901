@@ -12,6 +12,7 @@ def test_create_label(
 ) -> None:
     data = {
         "name": "Bill",
+        "slug": "bill",
         "profile": "Label from Memphis TN",
         "discogs_id": "1234",
         "discogs_resource_url": "https://new.com/1234",
@@ -25,6 +26,7 @@ def test_create_label(
     assert response.status_code == 200
     content = response.json()
     assert content["name"] == data["name"]
+    assert content["slug"] == data["slug"]
     assert content["profile"] == data["profile"]
     assert content["discogs_id"] == int(data["discogs_id"])
     assert content["discogs_resource_url"] == data["discogs_resource_url"]
@@ -36,6 +38,7 @@ def test_create_label_not_enough_permissions(
 ) -> None:
     data = {
         "name": "Bill",
+        "slug": "bill",
         "profile": "Label from Memphis TN",
         "discogs_id": "1234",
         "discogs_resource_url": "https://new.com/1234",
@@ -56,7 +59,7 @@ def test_read_label(
 ) -> None:
     label = create_random_label(db)
     response = client.get(
-        f"{settings.API_V1_STR}/labels/{label.id}",
+        f"{settings.API_V1_STR}/labels/{label.slug}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 200

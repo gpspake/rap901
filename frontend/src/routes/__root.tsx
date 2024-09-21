@@ -1,4 +1,4 @@
-import { Outlet, createRootRoute } from "@tanstack/react-router"
+import {Outlet, createRootRoute, ScrollRestoration} from "@tanstack/react-router"
 import React, { Suspense } from "react"
 
 import NotFound from "../components/Common/NotFound"
@@ -24,6 +24,7 @@ const TanStackDevtools =
 export const Route = createRootRoute({
   component: () => (
     <>
+      <ScrollRestoration />
       <Outlet />
       <Suspense>
         <TanStackDevtools />

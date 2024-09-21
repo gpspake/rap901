@@ -26,6 +26,7 @@ def build_random_track(
         type="track",
         title=fake.word(),
         duration=f"{duration_minutes}:{duration_seconds:02d}",
+        sort_order=0,
     )
 
 
