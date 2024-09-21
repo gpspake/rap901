@@ -4,10 +4,11 @@ from sqlmodel import Field, SQLModel
 
 from app.models.database_models import (
     ArtistBaseWithId,
+    Image,
     ReleaseBase,
     Role,
     TrackArtistBase,
-    Track, TrackBase, Image,
+    TrackBase,
 )
 
 

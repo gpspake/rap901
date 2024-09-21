@@ -10,6 +10,7 @@ from app.main import app
 from app.models.database_models import (
     Artist,
     Identifier,
+    Image,
     Label,
     Release,
     ReleaseArtist,
@@ -17,7 +18,6 @@ from app.models.database_models import (
     Role,
     Track,
     TrackArtist,
-    Image,
 )
 from app.models.models import Item, User
 from app.tests.utils.user import authentication_token_from_email

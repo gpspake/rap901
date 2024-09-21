@@ -49,7 +49,6 @@ def test_create_track_artist(
     )
     assert track_response.status_code == 200
     track_content = track_response.json()
-    print("***", track_content)
     assert len(track_content["artist_links"]) == 1
 
 

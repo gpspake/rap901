@@ -10,12 +10,13 @@ from app.api.routes.releases import release_public_to_release_out
 from app.models.database_models import Label
 from app.models.label import (
     LabelCreate,
+    LabelOut,
     LabelPublic,
     LabelsPublic,
-    LabelUpdate, LabelOut,
+    LabelUpdate,
 )
 from app.models.models import Message
-from app.models.release import ReleasePublic
+from app.models.release import ReleaseOut, ReleasePublic
 
 router = APIRouter()
 
@@ -46,21 +47,21 @@ def read_label(session: SessionDep, slug: str) -> Any:
     if not label:
         raise HTTPException(status_code=404, detail="Label not found")
 
-    unique_release_ids = set()
-    unique_credit_ids = set()
+    unique_release_ids: set[uuid.UUID] = set()
+    unique_credit_ids: set[uuid.UUID] = set()
 
-    releases = []
-    credits = []
+    releases: list[ReleaseOut] = []
+    credits: list[ReleaseOut] = []
 
     # separate album artists from credits
     for release_link in label.release_links:
-
         # get release out from release link
-        release = release_public_to_release_out(ReleasePublic.model_validate(release_link.release))
+        release = release_public_to_release_out(
+            ReleasePublic.model_validate(release_link.release)
+        )
 
         # these release link objects are
         if release_link.entity_type.name == "Label":
-
             # add release id to a set
             unique_release_ids.add(release.id)
 
@@ -69,10 +70,16 @@ def read_label(session: SessionDep, slug: str) -> Any:
 
             # if release is in credits, remove it from credits
             if release.id in unique_credit_ids:
-                credits = [_release for _release in credits if _release.id != release_link.release_id]
+                credits = [
+                    _release
+                    for _release in credits
+                    if _release.id != release_link.release_id
+                ]
         else:
             # add release to credits if it's not already in releases or credits
-            if release_link.release_id not in unique_release_ids.union(unique_credit_ids):
+            if release_link.release_id not in unique_release_ids.union(
+                unique_credit_ids
+            ):
                 credits.append(release)
                 # add to credit release id to a set
                 unique_credit_ids.add(release.id)
@@ -85,7 +92,7 @@ def read_label(session: SessionDep, slug: str) -> Any:
         discogs_id=label.discogs_id,
         discogs_resource_url=label.discogs_resource_url,
         releases=releases,
-        credits=credits
+        credits=credits,
     )
 
 

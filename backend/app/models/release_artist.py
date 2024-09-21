@@ -4,8 +4,9 @@ from sqlmodel import Field, SQLModel
 
 from app.models.database_models import (
     ArtistBaseWithId,
+    ArtistRelease,
     ReleaseArtistBase,
-    Role, ArtistRelease,
+    Role,
 )
 
 
@@ -67,7 +68,7 @@ class ArtistReleaseLink(ReleaseArtistPublic):
 
 
 class ReleaseArtistLink(ReleaseArtistPublic):
-    artist: ArtistBaseWithId | None
+    artist: ArtistBaseWithId
 
 
 class ReleaseArtistsPublic(SQLModel):

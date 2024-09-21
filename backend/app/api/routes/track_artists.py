@@ -67,7 +67,7 @@ def read_track_artist(session: SessionDep, id: uuid.UUID) -> Any:
 
 @router.post("/", response_model=TrackArtistPublic)
 def create_track_artist(
-        *, session: SessionDep, track_artist_in: TrackArtistCreate
+    *, session: SessionDep, track_artist_in: TrackArtistCreate
 ) -> Any:
     """
     Create new track_artist.
@@ -77,11 +77,11 @@ def create_track_artist(
 
 @router.put("/{id}", response_model=TrackArtistPublic)
 def update_track_artist(
-        *,
-        session: SessionDep,
-        current_user: CurrentUser,
-        id: uuid.UUID,
-        track_artist_in: TrackArtistUpdate,
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    id: uuid.UUID,
+    track_artist_in: TrackArtistUpdate,
 ) -> Any:
     """
     Update an track_artist.
@@ -101,7 +101,7 @@ def update_track_artist(
 
 @router.delete("/{id}")
 def delete_track_artist(
-        session: SessionDep, current_user: CurrentUser, id: uuid.UUID
+    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
 ) -> Message:
     """
     Delete an track_artist.

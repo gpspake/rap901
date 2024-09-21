@@ -216,8 +216,6 @@ def test_create_random_release_artist(
 ) -> None:
     release_artist = create_random_release_artist(db=db)
 
-    print("-----", release_artist)
-
     response = client.get(
         f"{settings.API_V1_STR}/releases/{release_artist.release.slug}",
         headers=normal_user_token_headers,
@@ -227,5 +225,4 @@ def test_create_random_release_artist(
     content = response.json()
 
     assert content["id"] == str(release_artist.release_id)
-    print("-+++--", content)
     assert content["extra_artists"][0]["artist_id"] == str(release_artist.artist_id)

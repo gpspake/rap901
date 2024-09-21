@@ -40,19 +40,3 @@ class TrackPublic(TrackBase):
 class TracksPublic(SQLModel):
     data: list[TrackPublic]
     count: int
-
-# Properties to return via API, id is always required
-class TrackPublic(TrackBase):
-    id: uuid.UUID
-    position: str | None
-    sort_order: int
-    type: str
-    title: str
-    duration: str | None = Field(default=None)
-    release_id: uuid.UUID
-    artist_links: list[TrackArtistPublic] | None = Field(default=None)
-
-
-class TracksPublic(SQLModel):
-    data: list[TrackPublic]
-    count: int

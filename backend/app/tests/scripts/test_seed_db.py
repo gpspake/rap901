@@ -62,8 +62,6 @@ def test_seed_db_from_import(
     # todo: add identifiers to release output (TDD)
     identifier = build_random_discogs_identifier()
 
-    print("exart", extra_artist)
-
     discogs_release_one = build_random_discogs_release(
         artists=[artist],
         extraartists=[extra_artist],
@@ -99,10 +97,6 @@ def test_seed_db_from_import(
         discogs_release=discogs_release_two, storage_location=storage_location_two
     )
 
-    print("$$$$$$$$$$$")
-    print("release_import_one", release_import_one)
-    print("$$$$$$$$$$$")
-
     seed_db(
         session=db,
         releases_in=[release_import_one, release_import_two],
@@ -111,7 +105,6 @@ def test_seed_db_from_import(
 
     # Check database
     releases = db.exec(select(Release)).all()
-    print("releases", releases)
     assert len(releases) == 2
     artists = db.exec(select(Artist)).all()
     assert len(artists) == 2
@@ -152,9 +145,6 @@ def test_seed_db_from_import(
 
     assert release_one_result is not None
     assert release_two_result is not None
-
-    # print("&&&", release_one_result)
-    # print("%%%", release_two_result)
 
     assert len(release_one_result["artists"]) == 1
     assert len(release_one_result["extra_artists"]) == 1

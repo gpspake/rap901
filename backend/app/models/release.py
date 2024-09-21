@@ -7,7 +7,7 @@ from app.models.database_models import (
     ReleaseBase,
     ReleaseImage,
 )
-from app.models.release_artist import ReleaseArtistLink, ReleaseArtistOut, ReleaseArtistsOut
+from app.models.release_artist import ReleaseArtistLink, ReleaseArtistOut
 from app.models.release_label import ReleaseLabelLink, ReleaseLabelOut
 from app.models.storage_location import StorageLocationPublic
 from app.models.track import TrackPublic
@@ -24,7 +24,7 @@ class ReleaseCreate(ReleaseBase):
     sealed: bool | None = Field(default=False)
     spreadsheet_id: int | None = Field(default=None)
     year: int | None = Field(default=None)
-    sort_date: date | None = Field(default=None)
+    sort_date: date
     release_date: date | None = Field(default=None)
     storage_location_id: uuid.UUID | None = Field(default=None)
 
@@ -77,9 +77,9 @@ class ReleasePublic(ReleaseBase):
     release_date: date | None
     storage_location: StorageLocationPublic | None
     images: list[ReleaseImage] | None
-    artist_links: list["ReleaseArtistLink"] | None
-    label_links: list["ReleaseLabelLink"] | None
-    tracks: list["TrackPublic"] | None
+    artist_links: list["ReleaseArtistLink"]
+    label_links: list["ReleaseLabelLink"]
+    tracks: list["TrackPublic"]
 
 
 class ReleasesPublic(SQLModel):
@@ -107,6 +107,7 @@ class ReleaseOut(ReleaseBase):
     labels: list["ReleaseLabelOut"] | None
     companies: list["ReleaseLabelOut"] | None
     tracks: list["TrackPublic"] | None
+
 
 class ReleasesOut(SQLModel):
     data: list[ReleaseOut]

@@ -36,7 +36,7 @@ class Release(ReleaseBase, table=True):
     sealed: bool | None = Field(default=False)
     spreadsheet_id: int | None = Field(default=None)
     year: int | None = Field(default=None)
-    sort_date: date | None = Field(default=None)
+    sort_date: date
     release_date: date | None = Field(default=None)
 
     storage_location_id: uuid.UUID | None = Field(
@@ -193,6 +193,7 @@ class ReleaseArtist(SQLModel, table=True):
     artist: "Artist" = Relationship(back_populates="release_links")
     release: "Release" = Relationship(back_populates="artist_links")
 
+
 class SpecialReleaseArtist(ReleaseArtistBase):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     release_id: uuid.UUID = Field(foreign_key="release.id")
@@ -236,7 +237,6 @@ class Track(TrackBase, table=True):
 
 # class TrackWithRelease(Track):
 #     release: Release
-
 
 
 # Shared properties

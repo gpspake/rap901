@@ -2,7 +2,7 @@ import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from sqlmodel import func, select
+from sqlmodel import asc, func, select
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
@@ -10,10 +10,11 @@ from app.models.database_models import Release
 from app.models.models import Message
 from app.models.release import (
     ReleaseCreate,
-    ReleasePublic,
-    ReleaseUpdate,
     ReleaseOut,
+    ReleasePublic,
     ReleasesOut,
+    ReleasesPublic,
+    ReleaseUpdate,
 )
 from app.models.release_artist import ReleaseArtistLink, ReleaseArtistOut
 from app.models.release_label import ReleaseLabelLink, ReleaseLabelOut
@@ -21,7 +22,9 @@ from app.models.release_label import ReleaseLabelLink, ReleaseLabelOut
 router = APIRouter()
 
 
-def release_artist_link_to_release_artist_out(artist_link: ReleaseArtistLink) -> ReleaseArtistOut:
+def release_artist_link_to_release_artist_out(
+    artist_link: ReleaseArtistLink,
+) -> ReleaseArtistOut:
     release_artist_out = ReleaseArtistOut(
         id=artist_link.id,
         release_id=artist_link.release_id,
@@ -40,7 +43,9 @@ def release_artist_link_to_release_artist_out(artist_link: ReleaseArtistLink) ->
     return release_artist_out
 
 
-def release_label_link_to_release_label_out(label_link: ReleaseLabelLink) -> ReleaseLabelOut:
+def release_label_link_to_release_label_out(
+    label_link: ReleaseLabelLink,
+) -> ReleaseLabelOut:
     entity_type_name = label_link.entity_type.name if label_link.entity_type else None
 
     release_label_out = ReleaseLabelOut(
@@ -129,12 +134,16 @@ def read_releases(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     """
 
     statement = select(Release)
-    count_statement = (select(func.count()).select_from(Release))
+    count_statement = select(func.count()).select_from(Release)
 
     count = session.exec(count_statement).one()
-    results = session.exec(statement.offset(skip).limit(limit).distinct().order_by(Release.sort_date.asc())).all()
+    results = session.exec(
+        statement.offset(skip).limit(limit).distinct().order_by(asc(Release.sort_date))
+    ).all()
 
-    releases_out = list(map(release_public_to_release_out, results))
+    releases_public = ReleasesPublic(data=results, count=count)
+
+    releases_out = list(map(release_public_to_release_out, releases_public.data))
 
     return ReleasesOut(data=releases_out, count=count)
 
@@ -165,11 +174,11 @@ def create_release(*, session: SessionDep, release_in: ReleaseCreate) -> Any:
 
 @router.put("/{id}", response_model=ReleasePublic)
 def update_release(
-        *,
-        session: SessionDep,
-        current_user: CurrentUser,
-        id: uuid.UUID,
-        release_in: ReleaseUpdate,
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    id: uuid.UUID,
+    release_in: ReleaseUpdate,
 ) -> Any:
     """
     Update a release.
@@ -189,7 +198,7 @@ def update_release(
 
 @router.delete("/{id}")
 def delete_release(
-        session: SessionDep, current_user: CurrentUser, id: uuid.UUID
+    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
 ) -> Message:
     """
     Delete an release.

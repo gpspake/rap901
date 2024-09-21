@@ -1,7 +1,7 @@
 import json
 import os
 import uuid
-from typing import Union, Literal
+from typing import Literal
 
 from psycopg import errors
 from sqlalchemy import MetaData, Table, delete
@@ -307,6 +307,8 @@ def load_release(session: Session, release: ReleaseImport) -> Release:
 
     release_date = release.release if release.release else None
 
+    print("xxx", release.sortDate, discogs_title)
+
     # Release
     release_in = ReleaseCreate(
         discogs_url=release.discogsUrl,
@@ -323,8 +325,8 @@ def load_release(session: Session, release: ReleaseImport) -> Release:
         storage_location_id=storage_location_id,
     )
 
-    return crud.create_release(session=session, release_in=release_in)
-
+    print("(((", release_in, release_in.sort_date)
+    release_out = crud.create_release(session=session, release_in=release_in)
 
     return release_out
 
@@ -332,11 +334,6 @@ def load_release(session: Session, release: ReleaseImport) -> Release:
 def seed_db(session: Session, releases_in: list[ReleaseImport], clean: bool = False) -> list[Release]:
     if clean:
         clean_db(session)
-
-    print("**************", "\n")
-    print("releases_in[0]", releases_in[0], "\n")
-    print("**************", "\n")
-    print("releases_in[1]", releases_in[1], "\n")
 
     releases = []
     for _release in releases_in:

@@ -64,7 +64,7 @@ class LabelReleaseLink(ReleaseLabelPublic):
 
 
 class ReleaseLabelLink(ReleaseLabelPublic):
-    label: LabelBaseWithId | None
+    label: LabelBaseWithId
 
 
 class ReleaseLabelsPublic(SQLModel):
