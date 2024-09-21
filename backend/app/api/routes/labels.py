@@ -43,6 +43,9 @@ def read_label(session: SessionDep, slug: str) -> Any:
     stmt = select(Label).where(Label.slug == slug)
     label = session.execute(stmt).scalar_one_or_none()
 
+    if not label:
+        raise HTTPException(status_code=404, detail="Label not found")
+
     unique_release_ids = set()
     unique_credit_ids = set()
 
@@ -74,8 +77,6 @@ def read_label(session: SessionDep, slug: str) -> Any:
                 # add to credit release id to a set
                 unique_credit_ids.add(release.id)
 
-    if not label:
-        raise HTTPException(status_code=404, detail="Label not found")
     return LabelOut(
         id=label.id,
         name=label.name,

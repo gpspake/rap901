@@ -12,6 +12,7 @@ def test_create_artist(
 ) -> None:
     data = {
         "name": "Bill",
+        "slug": "bill",
         "profile": "Artist from Memphis TN",
         "discogs_id": "1234",
         "discogs_resource_url": "https://new.com/1234",
@@ -36,6 +37,7 @@ def test_create_artist_not_enough_permissions(
 ) -> None:
     data = {
         "name": "Bill",
+        "slug": "bill",
         "profile": "Artist from Memphis TN",
         "discogs_id": "1234",
         "discogs_resource_url": "https://new.com/1234",
@@ -56,7 +58,7 @@ def test_read_artist(
 ) -> None:
     artist = create_random_artist(db=db)
     response = client.get(
-        f"{settings.API_V1_STR}/artists/{artist.id}",
+        f"{settings.API_V1_STR}/artists/{artist.slug}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 200
@@ -72,7 +74,7 @@ def test_read_artist_not_found(
     client: TestClient, superuser_token_headers: dict[str, str]
 ) -> None:
     response = client.get(
-        f"{settings.API_V1_STR}/artists/{uuid.uuid4()}",
+        f"{settings.API_V1_STR}/artists/fake",
         headers=superuser_token_headers,
     )
     assert response.status_code == 404

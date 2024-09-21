@@ -28,6 +28,7 @@ def build_random_release(
         release_date=fake.date(),
         storage_location_id=storage_location_id,
         storage_location=new_storage_location,
+        slug=fake.word(),
     )
 
 

@@ -18,6 +18,7 @@ def test_create_identifier(
         "description": "Test description",
         "value": "Test value",
         "release_id": str(release.id),
+        "sort_order": 0,
     }
 
     response = client.post(

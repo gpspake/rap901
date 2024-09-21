@@ -19,6 +19,7 @@ def test_create_track(
         "title": "Track Title",
         "duration": "3:22",
         "release_id": str(release.id),
+        "sort_order": 0,
     }
 
     response = client.post(

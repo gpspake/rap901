@@ -17,6 +17,7 @@ from app.models.database_models import (
     Role,
     Track,
     TrackArtist,
+    Image,
 )
 from app.models.models import Item, User
 from app.tests.utils.user import authentication_token_from_email
@@ -37,6 +38,7 @@ def db() -> Generator[Session, None, None]:
         session.execute(delete(Artist))
         session.execute(delete(Track))
         session.execute(delete(Role))
+        session.execute(delete(Image))
         session.execute(delete(Release))
         session.execute(delete(User))
         session.commit()

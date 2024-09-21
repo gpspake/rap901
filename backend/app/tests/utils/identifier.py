@@ -16,5 +16,6 @@ def create_random_identifier(db: Session, release_id: uuid.UUID) -> Identifier:
         value=fake.word(),
         description=fake.sentence(nb_words=3).title().rstrip("."),
         release_id=release_id,
+        sort_order=0,
     )
     return crud.create_identifier(session=db, identifier_in=identifier_in)
