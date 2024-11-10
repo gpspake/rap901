@@ -4,8 +4,7 @@ import {useEffect} from "react"
 import {z} from "zod"
 import {ReleasesService} from "../../client"
 import {Container, RootLayout} from "./index.tsx";
-import {ReleasesGrid} from "../../components/ReleasesGrid.tsx";
-// import {ReleasesTable} from "../../components/ReleasesTable.tsx";
+import {PaginatedReleasesGrid} from "../../components/PaginatedReleasesGrid.tsx";
 
 const releasesSearchSchema = z.object({
   page: z.number().catch(1),
@@ -16,7 +15,7 @@ export const Route = createFileRoute("/_layout/releases")({
   validateSearch: (search) => releasesSearchSchema.parse(search),
 })
 
-const PER_PAGE = 16
+const PER_PAGE = 24
 
 function getReleasesQueryOptions({page}: { page: number }) {
   return {
@@ -32,9 +31,6 @@ function ShowReleases() {
   const navigate = useNavigate({from: Route.fullPath})
   const setPage = (page: number) =>
     navigate({search: (prev) => ({...prev, page})})
-
-  // type LayoutType = 'grid' | 'table';
-  // const [layout, setLayout] = useState<LayoutType>('grid')
   const layout = 'grid'
 
   const {
@@ -48,7 +44,6 @@ function ShowReleases() {
   })
 
   const releasesCount = releases?.count || 0
-  // const pagesCount = Math.ceil(releasesCount / PER_PAGE) || 0
   const hasNextPage = !isPlaceholderData && releases?.data.length === PER_PAGE
   const pageLast = PER_PAGE * page
   const pageFirst = pageLast - (PER_PAGE - 1)
@@ -65,11 +60,8 @@ function ShowReleases() {
 
   return (
     <>
-      {/*<span onClick={() => setLayout('table')}>Table</span>*/}
-      {/*<span onClick={() => setLayout('grid')}>Grid</span>*/}
-      {/*<span id="releases-top"></span>*/}
       {layout === 'grid' && (
-        <ReleasesGrid
+        <PaginatedReleasesGrid
           releases={releases}
           releasesCount={releasesCount}
           hasNextPage={hasNextPage}
@@ -80,22 +72,10 @@ function ShowReleases() {
           page={page}
           isPending={isPending}
           isLoading={isLoading}
+          isPlaceholderData={isPlaceholderData}
           perPage={PER_PAGE}
         />
       )}
-      {/*{layout === 'table' && (*/}
-      {/*  <ReleasesTable*/}
-      {/*    releases={releases}*/}
-      {/*    releasesCount={releasesCount}*/}
-      {/*    hasNextPage={hasNextPage}*/}
-      {/*    hasPreviousPage={hasPreviousPage}*/}
-      {/*    pageFirst={pageFirst}*/}
-      {/*    pageLast={pageLast}*/}
-      {/*    setPage={setPage}*/}
-      {/*    page={page}*/}
-      {/*    isPending={isPending}*/}
-      {/*  />*/}
-      {/*)}*/}
     </>
   )
 }
@@ -105,7 +85,7 @@ function Releases() {
     <RootLayout>
       <Container className="mt-9">
         <div className="max-w-2xl">
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-zinc-100">
             Releases
           </h1>
         </div>

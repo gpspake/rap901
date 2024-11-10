@@ -1,24 +1,6 @@
-export type AppearanceReleasePublic = {
-	title: string | null;
-	discogs_url: string | null;
-	discogs_title: string | null;
-	title_long: string | null;
-	matrix: string | null;
-	slug: string | null;
-	sealed: boolean | null;
-	spreadsheet_id?: number | null;
-	year: number | null;
-	sort_date: string | null;
-	release_date: string | null;
-	id: string;
-	images: Array<ReleaseImage> | null;
-};
-
-
-
 export type ArtistBaseWithId = {
 	name?: string | null;
-	slug?: string | null;
+	slug: string;
 	profile?: string | null;
 	discogs_id?: number | null;
 	discogs_resource_url?: string | null;
@@ -44,8 +26,8 @@ export type ArtistOut = {
 	discogs_id: number;
 	discogs_resource_url: string;
 	id: string;
-	releases: Array<ReleaseOut>;
-	credits: Array<ReleaseOut>;
+	releases: Array<ReleaseCard>;
+	credits: Array<ReleaseCard>;
 };
 
 
@@ -304,8 +286,8 @@ export type LabelOut = {
 	discogs_id: number;
 	discogs_resource_url: string;
 	id: string;
-	releases: Array<ReleaseOut>;
-	credits: Array<ReleaseOut>;
+	releases: Array<ReleaseCard>;
+	credits: Array<ReleaseCard>;
 };
 
 
@@ -398,25 +380,7 @@ export type ReleaseArtistLink = {
 	anv: string | null;
 	join: string | null;
 	sort_order: number;
-	artist: ArtistBaseWithId | null;
-};
-
-
-
-export type ReleaseArtistOut = {
-	release_id: string;
-	artist_id: string;
-	role_id?: string | null;
-	id: string;
-	role?: Role | null;
-	anv: string | null;
-	join: string | null;
-	sort_order: number;
-	name: string | null;
-	slug: string;
-	profile: string | null;
-	discogs_id: number | null;
-	discogs_resource_url: string | null;
+	artist: ArtistBaseWithId;
 };
 
 
@@ -468,6 +432,32 @@ export type ReleaseBase = {
 
 
 
+export type ReleaseCard = {
+	title?: string | null;
+	discogs_url?: string | null;
+	discogs_title?: string | null;
+	title_long?: string | null;
+	matrix?: string | null;
+	slug?: string | null;
+	sealed?: boolean | null;
+	spreadsheet_id?: number | null;
+	year: number;
+	sort_date?: string | null;
+	release_date?: string | null;
+	id: string;
+	images?: Array<ReleaseImage> | null;
+	artist_links?: Array<ReleaseArtistLink>;
+};
+
+
+
+export type ReleaseCards = {
+	data: Array<ReleaseCard>;
+	count: number;
+};
+
+
+
 export type ReleaseCreate = {
 	title?: string | null;
 	discogs_url?: string | null;
@@ -478,7 +468,7 @@ export type ReleaseCreate = {
 	sealed?: boolean | null;
 	spreadsheet_id?: number | null;
 	year?: number | null;
-	sort_date?: string | null;
+	sort_date: string;
 	release_date?: string | null;
 	storage_location_id?: string | null;
 };
@@ -518,25 +508,7 @@ export type ReleaseLabelLink = {
 	entity_type?: EntityType | null;
 	catalog_number: string | null;
 	sort_order: number;
-	label: LabelBaseWithId | null;
-};
-
-
-
-export type ReleaseLabelOut = {
-	release_id?: string | null;
-	artist_id?: string | null;
-	entity_type_id: string | null;
-	id: string;
-	entity_type_name: string | null;
-	catalog_number: string | null;
-	sort_order: number | null;
-	label_id: string;
-	name?: string | null;
-	slug: string;
-	profile?: string | null;
-	discogs_id?: number | null;
-	discogs_resource_url?: string | null;
+	label: LabelBaseWithId;
 };
 
 
@@ -572,48 +544,24 @@ export type ReleaseLabelsPublic = {
 
 
 
-export type ReleaseOut = {
-	title: string | null;
-	discogs_url: string | null;
-	discogs_title: string | null;
-	title_long: string | null;
-	matrix: string | null;
-	slug: string | null;
-	sealed: boolean | null;
-	spreadsheet_id: number | null;
-	year: number | null;
-	sort_date: string | null;
-	release_date: string | null;
-	id: string;
-	storage_location: StorageLocationPublic | null;
-	images: Array<ReleaseImage> | null;
-	artists: Array<ReleaseArtistOut> | null;
-	extra_artists: Array<ReleaseArtistOut> | null;
-	labels: Array<ReleaseLabelOut> | null;
-	companies: Array<ReleaseLabelOut> | null;
-	tracks: Array<TrackPublic> | null;
-};
-
-
-
 export type ReleasePublic = {
-	title: string | null;
-	discogs_url: string | null;
-	discogs_title: string | null;
-	title_long: string | null;
-	matrix: string | null;
-	slug: string | null;
-	sealed: boolean | null;
-	spreadsheet_id: number | null;
-	year: number | null;
-	sort_date: string | null;
-	release_date: string | null;
+	title?: string | null;
+	discogs_url?: string | null;
+	discogs_title?: string | null;
+	title_long?: string | null;
+	matrix?: string | null;
+	slug?: string | null;
+	sealed?: boolean | null;
+	spreadsheet_id?: number | null;
+	year?: number | null;
+	sort_date?: string | null;
+	release_date?: string | null;
 	id: string;
-	storage_location: StorageLocationPublic | null;
-	images: Array<ReleaseImage> | null;
-	artist_links: Array<ReleaseArtistLink> | null;
-	label_links: Array<ReleaseLabelLink> | null;
-	tracks: Array<TrackPublic> | null;
+	images?: Array<ReleaseImage> | null;
+	artist_links?: Array<ReleaseArtistLink>;
+	label_links?: Array<ReleaseLabelLink>;
+	tracks: Array<TrackPublic>;
+	identifiers: Array<IdentifierPublic>;
 };
 
 
@@ -630,13 +578,6 @@ export type ReleaseUpdate = {
 	year?: number | null;
 	sort_date?: string | null;
 	release_date?: string | null;
-};
-
-
-
-export type ReleasesOut = {
-	data: Array<ReleaseOut>;
-	count: number;
 };
 
 

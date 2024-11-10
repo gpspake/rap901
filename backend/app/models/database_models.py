@@ -11,34 +11,24 @@ from sqlmodel import Field, Relationship, SQLModel
 
 # Shared properties
 class ReleaseBase(SQLModel):
-    title: str | None = Field(default=None, min_length=1, max_length=255)
-    discogs_url: str | None = Field(default=None, min_length=1, max_length=255)
-    discogs_title: str | None = Field(default=None, min_length=1, max_length=255)
-    title_long: str | None = Field(default=None, min_length=1, max_length=255)
-    matrix: str | None = Field(default=None, min_length=1, max_length=255)
-    slug: str | None = Field(default=None, min_length=1, max_length=255)
-    sealed: bool | None = Field(default=False)
-    spreadsheet_id: int | None = Field(default=None)
-    year: int | None = Field(default=None)
-    sort_date: date | None = Field(default=None)
-    release_date: date | None = Field(default=None)
+    title: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    discogs_url: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    discogs_title: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    title_long: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    matrix: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    slug: Optional[str] = Field(default=None, min_length=1, max_length=255)
+    sealed: Optional[bool] = Field(default=False)
+    spreadsheet_id: Optional[int] = Field(default=None)
+    year: Optional[int] = Field(default=None)
+    sort_date: Optional[date] = Field(default=None)
+    release_date: Optional[date] = Field(default=None)
 
 
 # Database model, database table inferred from class name
 class Release(ReleaseBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    discogs_url: str | None = Field(default=None, max_length=255)
-    discogs_title: str | None = Field(default=None, max_length=255)
-    title: str | None = Field(default=None, max_length=255)
-    slug: str | None = Field(default=None, min_length=1)
-    title_long: str | None = Field(default=None, max_length=255)
-    matrix: str | None = Field(default=None, max_length=255)
-    sealed: bool | None = Field(default=False)
-    spreadsheet_id: int | None = Field(default=None)
-    year: int | None = Field(default=None)
-    sort_date: date
-    release_date: date | None = Field(default=None)
 
+    # Foreign key and relationship for storage location
     storage_location_id: uuid.UUID | None = Field(
         default=None, foreign_key="storage_location.id"
     )
@@ -46,7 +36,7 @@ class Release(ReleaseBase, table=True):
         back_populates="release"
     )
 
-    # many images to one release
+    # Relationships for many-to-one associations
     images: list["Image"] = Relationship(back_populates="release")
     tracks: list["Track"] = Relationship(back_populates="release")
     identifiers: list["Identifier"] = Relationship(back_populates="release")
@@ -164,12 +154,12 @@ class Artist(ArtistBase, table=True):
 
     # one artist to many releases
     release_links: list["ReleaseArtist"] = Relationship(back_populates="artist")
-
     track_links: list["TrackArtist"] = Relationship(back_populates="artist")
 
 
 class ArtistBaseWithId(ArtistBase):
     id: uuid.UUID
+    slug: str
 
 
 # Shared properties

@@ -3,7 +3,7 @@ import uuid
 from sqlmodel import Field, SQLModel
 
 from app.models.database_models import ArtistBase
-from app.models.release import ReleaseOut
+from app.models.release import ReleaseCard
 from app.models.release_artist import ArtistReleaseLink
 
 
@@ -60,7 +60,7 @@ class ArtistOut(ArtistBase):
     discogs_resource_url: str
 
     # albums where the artist is the album artist
-    releases: list["ReleaseOut"]
+    releases: list["ReleaseCard"]
 
     # album credits grouped by release
-    credits: list["ReleaseOut"]
+    credits: list["ReleaseCard"]

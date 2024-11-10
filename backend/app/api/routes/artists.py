@@ -6,7 +6,6 @@ from sqlmodel import func, select
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
-from app.api.routes.releases import release_public_to_release_out
 from app.models.artist import (
     ArtistCreate,
     ArtistOut,
@@ -16,7 +15,7 @@ from app.models.artist import (
 )
 from app.models.database_models import Artist
 from app.models.models import Message
-from app.models.release import ReleaseOut, ReleasePublic
+from app.models.release import ReleaseCard
 
 router = APIRouter()
 
@@ -50,27 +49,22 @@ def read_artist(session: SessionDep, slug: str) -> Any:
     unique_release_ids: set[uuid.UUID] = set()
     unique_credit_ids: set[uuid.UUID] = set()
 
-    # right now, I push artist.release_links objects to these
-    releases: list[ReleaseOut] = []
-    credits: list[ReleaseOut] = []
+    # create lists for releases and credits
+    releases: list[ReleaseCard] = []
+    credits: list[ReleaseCard] = []
 
     # separate album artists from credits
     for release_link in artist.release_links:
-        # get release out from release link
-        release = release_public_to_release_out(
-            ReleasePublic.model_validate(release_link.release)
-        )
 
-        # these release link objects are
         if release_link.role.name == "":
             # add release id to a set
-            unique_release_ids.add(release.id)
+            unique_release_ids.add(release_link.release.id)
 
             # add release to releases list
-            releases.append(release)
+            releases.append(release_link.release)
 
             # if release is in credits, remove it from credits
-            if release.id in unique_credit_ids:
+            if release_link.release_id in unique_credit_ids:
                 credits = [
                     _release
                     for _release in credits
@@ -81,9 +75,9 @@ def read_artist(session: SessionDep, slug: str) -> Any:
             if release_link.release_id not in unique_release_ids.union(
                 unique_credit_ids
             ):
-                credits.append(release)
+                credits.append(release_link.release)
                 # add to credit release id to a set
-                unique_credit_ids.add(release.id)
+                unique_credit_ids.add(release_link.release_id)
 
     return ArtistOut(
         id=artist.id,

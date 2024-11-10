@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_layout/artists")({
   validateSearch: (search) => artistsSearchSchema.parse(search),
 })
 
-const PER_PAGE = 16
+const PER_PAGE = 24
 
 function getArtistsQueryOptions({page}: { page: number }) {
   return {
@@ -42,7 +42,6 @@ function ShowArtists() {
   })
 
   const artistsCount = artists?.count || 0
-  // const pagesCount = Math.ceil(artistsCount / PER_PAGE) || 0
   const hasNextPage = !isPlaceholderData && artists?.data.length === PER_PAGE
   const pageLast = PER_PAGE * page
   const pageFirst = pageLast - (PER_PAGE - 1)
@@ -77,7 +76,7 @@ function Artists() {
     <RootLayout>
       <Container className="mt-9">
         <div className="max-w-2xl">
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-zinc-100">
             Artists
           </h1>
         </div>

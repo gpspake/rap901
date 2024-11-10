@@ -10,11 +10,10 @@ from app.models.database_models import Release
 from app.models.models import Message
 from app.models.release import (
     ReleaseCreate,
+    ReleaseCards,
     ReleaseOut,
     ReleasePublic,
-    ReleasesOut,
-    ReleasesPublic,
-    ReleaseUpdate,
+    ReleaseUpdate
 )
 from app.models.release_artist import ReleaseArtistLink, ReleaseArtistOut
 from app.models.release_label import ReleaseLabelLink, ReleaseLabelOut
@@ -124,31 +123,33 @@ def release_public_to_release_out(release: ReleasePublic) -> ReleaseOut:
         labels=labels,
         companies=companies,
         tracks=release.tracks,
+        identifiers=release.identifiers
     )
 
 
-@router.get("/", response_model=ReleasesOut)
+@router.get("/", response_model=ReleaseCards)
 def read_releases(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     """
     Retrieve releases.
     """
 
-    statement = select(Release)
-    count_statement = select(func.count()).select_from(Release)
+    count = session.exec(
+        select(func.count()).select_from(Release)
+    ).one()
 
-    count = session.exec(count_statement).one()
     results = session.exec(
-        statement.offset(skip).limit(limit).distinct().order_by(asc(Release.sort_date))
+        select(Release)
+        .offset(skip)
+        .limit(limit)
+        .order_by(asc(Release.sort_date))
     ).all()
 
-    releases_public = ReleasesPublic(data=results, count=count)
+    releases_public = ReleaseCards(data=results, count=count)
 
-    releases_out = list(map(release_public_to_release_out, releases_public.data))
-
-    return ReleasesOut(data=releases_out, count=count)
+    return releases_public
 
 
-@router.get("/{slug}", response_model=ReleaseOut)
+@router.get("/{slug}", response_model=ReleasePublic)
 def read_release(session: SessionDep, slug: str) -> Any:
     """
     Get release by ID.
@@ -159,9 +160,7 @@ def read_release(session: SessionDep, slug: str) -> Any:
     if not release:
         raise HTTPException(status_code=404, detail="Release not found")
 
-    release_out = release_public_to_release_out(release)
-
-    return release_out
+    return release
 
 
 @router.post("/", response_model=ReleasePublic)

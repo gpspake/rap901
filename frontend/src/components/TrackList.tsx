@@ -9,11 +9,11 @@ const JoinedArtistLinks = (props: JoinedArtistLinksProps) => {
   const {trackArtists} = props
 
   return trackArtists.map((trackArtist, index) => (
-    <>
+    <span key={trackArtist.id}>
       <TrackArtistsLink trackArtist={trackArtist}/>
       {/*<a href={`/artists/${trackArtist.artist?.id}`}>{trackArtist.artist?.name}</a>*/}
       {index < trackArtists.length - 1 && ', '}
-    </>
+    </span>
   ))
 }
 
@@ -51,7 +51,7 @@ const TrackArtists = (props: TrackArtistsProps) => {
   return (
     <>
       {Object.keys(trackArtists.extra_artists).map(group => (
-        <>{group} - <JoinedArtistLinks trackArtists={trackArtists.extra_artists[group]} /><br/></>
+        <span key={group}>{group} - <JoinedArtistLinks trackArtists={trackArtists.extra_artists[group]} /><br/></span>
       ))}
     </>
   )
@@ -76,13 +76,10 @@ export const TrackList = (props: TrackListProps) => {
         {sortedTracks.map(track => {
           const trackArtists = getTrackArtists(track.artist_links || [])
           return (
-            <div className="px-4 py-1 grid grid-cols-8 sm:gap-8 sm:px-0">
+            <div key={track.id} className="px-4 py-1 grid grid-cols-8 sm:gap-8 sm:px-0">
               <dt className="text-sm font-medium leading-6 text-white">{track.position}</dt>
               <dt className="text-sm font-medium leading-6 col-span-6 text-white">
-                <JoinedArtistLinks
-                  // className={'mt-2 block truncate'}
-                  trackArtists={trackArtists.artists}
-                /> {track.title} <br/>
+                <JoinedArtistLinks trackArtists={trackArtists.artists} /> {track.title} <br/>
                 <p className="text-xs font-light leading-6 sm:col-span-6 text-white">
                   {track.artist_links && <TrackArtists trackArtists={trackArtists} />}
                 </p>

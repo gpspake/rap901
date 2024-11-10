@@ -4,8 +4,6 @@ import {useEffect, useState} from "react"
 import {z} from "zod"
 import {LabelsService} from "../../client"
 import {Container, RootLayout} from "./index.tsx";
-// import {LabelsGrid} from "../../components/LabelsGrid.tsx";
-// import {LabelsTable} from "../../components/LabelsTable.tsx";
 
 const labelsSearchSchema = z.object({
   page: z.number().catch(1),
@@ -16,7 +14,7 @@ export const Route = createFileRoute("/_layout/labels")({
   validateSearch: (search) => labelsSearchSchema.parse(search),
 })
 
-const PER_PAGE = 16
+const PER_PAGE = 24
 
 function getLabelsQueryOptions({page}: { page: number }) {
   return {
@@ -47,7 +45,6 @@ function ShowLabels() {
   })
 
   const labelsCount = labels?.count || 0
-  // const pagesCount = Math.ceil(labelsCount / PER_PAGE) || 0
   const hasNextPage = !isPlaceholderData && labels?.data.length === PER_PAGE
   const pageLast = PER_PAGE * page
   const pageFirst = pageLast - (PER_PAGE - 1)
@@ -76,7 +73,7 @@ function Labels() {
     <RootLayout>
       <Container className="mt-9">
         <div className="max-w-2xl">
-          <h1 className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-zinc-100">
             Labels
           </h1>
         </div>

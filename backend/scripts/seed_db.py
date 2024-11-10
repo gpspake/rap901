@@ -372,7 +372,7 @@ def seed_db_from_file(clean: bool = False) -> list[Release]:
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Construct a path relative to the script directory
-    file_path = os.path.join(script_dir, "data.json")
+    file_path = os.path.join(script_dir, "cds_combined.json")
 
     try:
         with open(file_path) as file:

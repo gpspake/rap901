@@ -2,7 +2,7 @@ import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
 
-import type { Body_login_login_access_token,Message,NewPassword,Token,UserPublic,UpdatePassword,UserCreate,UserRegister,UsersPublic,UserUpdate,UserUpdateMe,ItemCreate,ItemPublic,ItemsPublic,ItemUpdate,ReleaseCreate,ReleaseOut,ReleasePublic,ReleasesOut,ReleaseUpdate,StorageLocationCreate,StorageLocationPublic,StorageLocationsPublic,StorageLocationUpdate,ImageCreate,ImagePublic,ImagesPublic,ImageUpdate,ArtistCreate,ArtistOut,ArtistPublic,ArtistsPublic,ArtistUpdate,ReleaseArtistCreate,ReleaseArtistPublic,ReleaseArtistsPublic,ReleaseArtistUpdate,LabelCreate,LabelOut,LabelPublic,LabelsPublic,LabelUpdate,ReleaseLabelCreate,ReleaseLabelPublic,ReleaseLabelsPublic,ReleaseLabelUpdate,IdentifierCreate,IdentifierPublic,IdentifiersPublic,IdentifierUpdate,TrackCreate,TrackPublic,TracksPublic,TrackUpdate,AppearanceReleasePublic,TrackArtistCreate,TrackArtistPublic,TrackArtistsPublic,TrackArtistUpdate } from './models';
+import type { Body_login_login_access_token,Message,NewPassword,Token,UserPublic,UpdatePassword,UserCreate,UserRegister,UsersPublic,UserUpdate,UserUpdateMe,ItemCreate,ItemPublic,ItemsPublic,ItemUpdate,ReleaseCards,ReleaseCreate,ReleasePublic,ReleaseUpdate,StorageLocationCreate,StorageLocationPublic,StorageLocationsPublic,StorageLocationUpdate,ImageCreate,ImagePublic,ImagesPublic,ImageUpdate,ArtistCreate,ArtistOut,ArtistPublic,ArtistsPublic,ArtistUpdate,ReleaseArtistCreate,ReleaseArtistPublic,ReleaseArtistsPublic,ReleaseArtistUpdate,LabelCreate,LabelOut,LabelPublic,LabelsPublic,LabelUpdate,ReleaseLabelCreate,ReleaseLabelPublic,ReleaseLabelsPublic,ReleaseLabelUpdate,IdentifierCreate,IdentifierPublic,IdentifiersPublic,IdentifierUpdate,TrackCreate,TrackPublic,TracksPublic,TrackUpdate,ReleaseCard,TrackArtistCreate,TrackArtistPublic,TrackArtistsPublic,TrackArtistUpdate } from './models';
 
 export type TDataLoginAccessToken = {
                 formData: Body_login_login_access_token
@@ -564,10 +564,10 @@ export class ReleasesService {
 	/**
 	 * Read Releases
 	 * Retrieve releases.
-	 * @returns ReleasesOut Successful Response
+	 * @returns ReleaseCards Successful Response
 	 * @throws ApiError
 	 */
-	public static readReleases(data: TDataReadReleases = {}): CancelablePromise<ReleasesOut> {
+	public static readReleases(data: TDataReadReleases = {}): CancelablePromise<ReleaseCards> {
 		const {
 limit = 100,
 skip = 0,
@@ -608,10 +608,10 @@ requestBody,
 	/**
 	 * Read Release
 	 * Get release by ID.
-	 * @returns ReleaseOut Successful Response
+	 * @returns ReleasePublic Successful Response
 	 * @throws ApiError
 	 */
-	public static readRelease(data: TDataReadRelease): CancelablePromise<ReleaseOut> {
+	public static readRelease(data: TDataReadRelease): CancelablePromise<ReleasePublic> {
 		const {
 slug,
 } = data;
@@ -1872,10 +1872,10 @@ requestBody,
 	/**
 	 * Read Artist Appearances
 	 * Retrieve releases an artist has track credits on
-	 * @returns AppearanceReleasePublic Successful Response
+	 * @returns ReleaseCard Successful Response
 	 * @throws ApiError
 	 */
-	public static readArtistAppearances(data: TDataReadArtistAppearances): CancelablePromise<Array<AppearanceReleasePublic>> {
+	public static readArtistAppearances(data: TDataReadArtistAppearances): CancelablePromise<Array<ReleaseCard>> {
 		const {
 artistId,
 } = data;

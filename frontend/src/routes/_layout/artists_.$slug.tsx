@@ -2,8 +2,8 @@ import {createFileRoute} from '@tanstack/react-router'
 import {ArtistsService} from "../../client";
 import {useQuery} from "@tanstack/react-query";
 import {RootLayout} from "./index.tsx";
-import {ArtistReleasesGrid} from "../../components/ArtistReleasesGrid.tsx";
 import {ArtistAppearances} from "../../components/ArtistAppearances.tsx";
+import {ReleasesGrid} from "../../components/ReleasesGrid.tsx";
 
 export const Route = createFileRoute('/_layout/artists/$slug')({
   component: ArtistComponent,
@@ -13,7 +13,7 @@ function getArtistQueryOptions({slug}: { slug: string }) {
   return {
     queryFn: () =>
       ArtistsService.readArtist({slug}),
-    queryKey: ["artists", {slug}],
+    queryKey: ["artist", {slug}],
   }
 }
 
@@ -22,7 +22,6 @@ function ArtistComponent() {
   const {
     data: artist,
     isPending,
-    // isPlaceholderData,
   } = useQuery({
     ...getArtistQueryOptions({slug}),
     placeholderData: (prevData) => prevData,
@@ -38,7 +37,7 @@ function ArtistComponent() {
                 <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-12">
                   <div className="lg:order-first lg:row-span-2">
                     <h1
-                      className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+                      className="text-4xl font-bold tracking-tight sm:text-5xl text-zinc-100">
                       {artist.name}
                     </h1>
                   </div>
@@ -48,13 +47,13 @@ function ArtistComponent() {
                     <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">
                       Releases
                     </h2>
-                    <ArtistReleasesGrid releases={artist.releases}/>
+                    <ReleasesGrid releases={artist.releases.sort((a, b) => a.year - b.year)} columns={4}/>
                   </>
                 )}
                 {artist.credits.length && (
                   <>
-                    <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">Credits</h2>
-                    <ArtistReleasesGrid releases={artist.credits}/>
+                    <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">Album Credits</h2>
+                    <ReleasesGrid releases={artist.credits.sort((a, b) => a.year - b.year)} columns={5}/>
                   </>
                 )}
 

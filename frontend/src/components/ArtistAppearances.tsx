@@ -1,6 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {TrackArtistsService} from "../client";
-import {ArtistReleasesGrid} from "./ArtistReleasesGrid.tsx";
+import {ReleasesGrid} from "./ReleasesGrid.tsx";
 
 
 function getArtistAppearanceQueryOptions({artistId}: { artistId: string }) {
@@ -33,10 +33,10 @@ export function ArtistAppearances(props: ArtistAppearancesProps) {
     <>
       {isLoading ? "Loading" : (
         <p className="text-slate-300">
-          {releases && (
+          {!!releases?.length && (
             <>
-              <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">Appearances</h2>
-              <ArtistReleasesGrid releases={releases}/>
+              <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">Track Credits</h2>
+              <ReleasesGrid releases={releases} columns={5}/>
             </>
           )}
         </p>

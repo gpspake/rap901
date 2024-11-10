@@ -2,7 +2,7 @@ import {createFileRoute} from '@tanstack/react-router'
 import {LabelsService} from "../../client";
 import {useQuery} from "@tanstack/react-query";
 import {RootLayout} from "./index.tsx";
-import {LabelReleasesGrid} from "../../components/LabelReleasesGrid.tsx";
+import {ReleasesGrid} from "../../components/ReleasesGrid.tsx";
 
 export const Route = createFileRoute('/_layout/labels/$slug')({
   component: LabelComponent,
@@ -22,7 +22,6 @@ function LabelComponent() {
   const {
     data: label,
     isPending,
-    // isPlaceholderData,
   } = useQuery({
     ...getLabelQueryOptions({slug}),
     placeholderData: (prevData) => prevData,
@@ -37,34 +36,27 @@ function LabelComponent() {
               <div className="mx-auto max-w-2xl lg:max-w-5xl">
                 <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-12">
                   <h1
-                    className="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
+                    className="text-4xl font-bold tracking-tight sm:text-5xl text-zinc-100">
                     {label.name}
                   </h1>
                 </div>
-                <h2
-                  className="text-2xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-                  Label
-                </h2>
-                <LabelReleasesGrid releases={label.releases}/>
+                {label.releases.length && (
+                  <>
+                    <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">
+                      Label Credits
+                    </h2>
+                    <ReleasesGrid releases={label.releases.sort((a, b) => a.year - b.year)} columns={5}/>
+                  </>
+                )}
 
-                <h2
-                  className="text-2xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100">
-                  Credits
-                </h2>
-                <LabelReleasesGrid releases={label.credits}/>
-                <div>
-                  {/*{label.releases*/}
-                  {/*  .filter(release => release.entity_type_name && release_link.entity_type.name === "Label")*/}
-                  {/*  .map(release_link => {*/}
-                  {/*    return (*/}
-                  {/*      <p className="text-xs dark:text-zinc-100">*/}
-                  {/*        {JSON.stringify(release_link, null, 4)}*/}
-                  {/*        <br/><br/>*/}
-                  {/*      </p>*/}
-                  {/*    )*/}
-                  {/*  })*/}
-                  {/*}*/}
-                </div>
+                {label.credits.length && (
+                  <>
+                    <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">
+                      Album Credits
+                    </h2>
+                    <ReleasesGrid releases={label.credits.sort((a, b) => a.year - b.year)} columns={5}/>
+                  </>
+                )}
               </div>
             </div>
           </div>

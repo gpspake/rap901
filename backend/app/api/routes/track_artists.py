@@ -8,7 +8,7 @@ from app import crud
 from app.api.deps import CurrentUser, SessionDep
 from app.models.database_models import TrackArtist
 from app.models.models import Message
-from app.models.release import AppearanceReleasePublic
+from app.models.release import ReleaseCard
 from app.models.track_artist import (
     TrackArtistCreate,
     TrackArtistPublic,
@@ -33,7 +33,7 @@ def read_track_artists(session: SessionDep, skip: int = 0, limit: int = 100) -> 
     return TrackArtistsPublic(data=track_artists, count=count)
 
 
-@router.get("/artist_appearances", response_model=list[AppearanceReleasePublic])
+@router.get("/artist_appearances", response_model=list[ReleaseCard])
 def read_artist_appearances(session: SessionDep, artist_id: uuid.UUID) -> Any:
     """
     Retrieve releases an artist has track credits on
