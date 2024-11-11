@@ -232,4 +232,4 @@ def test_create_random_release_label(
     content = response.json()
 
     assert content["id"] == str(release_label.release_id)
-    assert content["companies"][0]["label_id"] == str(release_label.label_id)
+    assert content["label_links"][0]["label_id"] == str(release_label.label_id)
