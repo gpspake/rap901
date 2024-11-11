@@ -64,6 +64,7 @@ class ReleasePublic(ReleaseBase):
     label_links: list["ReleaseLabelLink"] = []
     tracks: list["TrackPublic"]
     identifiers: list["IdentifierPublic"]
+    storage_location: Optional[StorageLocationPublic] = None
 
 
 class ReleaseCards(SQLModel):
