@@ -146,15 +146,8 @@ def test_seed_db_from_import(
     assert release_one_result is not None
     assert release_two_result is not None
 
-    assert len(release_one_result["artists"]) == 1
-    assert len(release_one_result["extra_artists"]) == 1
-    assert len(release_one_result["labels"]) == 1
-    assert len(release_one_result["companies"]) == 1
-
-    assert len(release_two_result["artists"]) == 1
-    assert len(release_two_result["extra_artists"]) == 1
-    assert len(release_two_result["labels"]) == 1
-    assert len(release_two_result["companies"]) == 1
+    assert len(release_one_result["artist_links"]) == 2
+    assert len(release_two_result["artist_links"]) == 2
 
 
 def test_validate_import_file() -> None:

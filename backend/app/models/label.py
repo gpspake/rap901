@@ -3,7 +3,7 @@ import uuid
 from sqlmodel import Field, SQLModel
 
 from app.models.database_models import LabelBase
-from app.models.release import ReleaseOut
+from app.models.release import ReleaseCard
 from app.models.release_label import LabelReleaseLink
 
 
@@ -58,8 +58,11 @@ class LabelOut(LabelBase):
     discogs_id: int
     discogs_resource_url: str
 
-    releases: list["ReleaseOut"]
-    credits: list["ReleaseOut"]
+    # albums where the label is the album label
+    releases: list["ReleaseCard"]
+
+    # album credits (companies)
+    credits: list["ReleaseCard"]
 
 
 class LabelsOut(SQLModel):

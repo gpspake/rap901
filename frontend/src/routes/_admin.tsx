@@ -1,8 +1,8 @@
 import { Outlet, createRootRoute } from "@tanstack/react-router"
 
+import { ChakraProvider } from "@chakra-ui/react"
 import NotFound from "../components/Common/NotFound"
-import theme from "../theme.tsx";
-import {ChakraProvider} from "@chakra-ui/react";
+import theme from "../theme.tsx"
 
 export const Route = createRootRoute({
   component: () => (

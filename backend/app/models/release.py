@@ -7,6 +7,7 @@ from app.models.database_models import (
     ReleaseBase,
     ReleaseImage,
 )
+from app.models.identifier import IdentifierPublic
 from app.models.release_artist import ReleaseArtistLink, ReleaseArtistOut
 from app.models.release_label import ReleaseLabelLink, ReleaseLabelOut
 from app.models.storage_location import StorageLocationPublic
@@ -44,46 +45,29 @@ class ReleaseUpdate(ReleaseBase):
     release_date: date | None = Field(default=None)
 
 
-# Release used for artist track appearances
-class AppearanceReleasePublic(ReleaseBase):
+# Used to display a Release Card Component
+# Includes all ReleaseBase attributes, images for the thumbnail,
+# and artist_links to display a list of artists with links.
+class ReleaseCard(ReleaseBase):
     id: uuid.UUID
-    discogs_url: str | None
-    discogs_title: str | None
-    title: str | None
-    title_long: str | None
-    slug: str | None
-    matrix: str | None
-    sealed: bool | None
-    year: int | None
-    sort_date: date | None
-    release_date: date | None
-    images: list[ReleaseImage] | None
-    artist_links: list["ReleaseArtistLink"] | None
+    year: int
+    images: list["ReleaseImage"] | None = None
+    artist_links: list["ReleaseArtistLink"] = []
 
 
-# Properties to return via API, id is always required
+# Used to display a single Release view
 class ReleasePublic(ReleaseBase):
     id: uuid.UUID
-    discogs_url: str | None
-    discogs_title: str | None
-    title: str | None
-    title_long: str | None
-    slug: str | None
-    matrix: str | None
-    sealed: bool | None
-    spreadsheet_id: int | None
-    year: int | None
-    sort_date: date | None
-    release_date: date | None
-    storage_location: StorageLocationPublic | None
-    images: list[ReleaseImage] | None
-    artist_links: list["ReleaseArtistLink"]
-    label_links: list["ReleaseLabelLink"]
+    images: list["ReleaseImage"] | None = None
+    artist_links: list["ReleaseArtistLink"] = []
+    label_links: list["ReleaseLabelLink"] = []
     tracks: list["TrackPublic"]
+    identifiers: list["IdentifierPublic"]
+    storage_location: StorageLocationPublic | None = None
 
 
-class ReleasesPublic(SQLModel):
-    data: list[ReleasePublic]
+class ReleaseCards(SQLModel):
+    data: list[ReleaseCard]
     count: int
 
 
@@ -102,11 +86,13 @@ class ReleaseOut(ReleaseBase):
     release_date: date | None
     storage_location: StorageLocationPublic | None
     images: list[ReleaseImage] | None
+
     artists: list[ReleaseArtistOut] | None
     extra_artists: list[ReleaseArtistOut] | None
     labels: list["ReleaseLabelOut"] | None
     companies: list["ReleaseLabelOut"] | None
     tracks: list["TrackPublic"] | None
+    identifiers: list["IdentifierPublic"] | None
 
 
 class ReleasesOut(SQLModel):

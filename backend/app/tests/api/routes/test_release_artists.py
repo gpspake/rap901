@@ -225,4 +225,4 @@ def test_create_random_release_artist(
     content = response.json()
 
     assert content["id"] == str(release_artist.release_id)
-    assert content["extra_artists"][0]["artist_id"] == str(release_artist.artist_id)
+    assert content["artist_links"][0]["artist_id"] == str(release_artist.artist_id)

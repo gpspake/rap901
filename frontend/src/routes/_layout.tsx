@@ -5,5 +5,5 @@ export const Route = createFileRoute("/_layout")({
 })
 
 function Layout() {
-  return (<Outlet />)
+  return <Outlet />
 }

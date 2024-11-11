@@ -172,7 +172,7 @@ def load_artists(
                 )
             )
 
-        print("created artist {}".format(artist))
+        # print("created artist {}".format(artist))
 
 
 def load_release_labels(session: Session, release_id: uuid.uuid4(), labels: list[DiscogsLabel]) -> None:
@@ -246,7 +246,7 @@ def load_release_tracks(session: Session, release_id: uuid.uuid4(), tracks: list
             relationship="track_artist"
         )
 
-        print("created track {}".format(track))
+        # print("created track {}".format(track))
 
 
 def load_release_identifiers(session: Session, release_id: uuid.uuid4(), identifiers: list[DiscogsIdentifier]) -> None:
@@ -262,7 +262,7 @@ def load_release_identifiers(session: Session, release_id: uuid.uuid4(), identif
             )
         )
 
-        print("created identifier {}".format(identifier))
+        # print("created identifier {}".format(identifier))
 
 
 def load_images(session: Session, release_id: uuid.uuid4(), images: list[ImageImport]) -> None:
@@ -280,7 +280,7 @@ def load_images(session: Session, release_id: uuid.uuid4(), images: list[ImageIm
                 release_id=release_id,
             )
         )
-        print("created image {}".format(db_image))
+        # print("created image {}".format(db_image))
 
 
 def load_release(session: Session, release: ReleaseImport) -> Release:
@@ -307,7 +307,7 @@ def load_release(session: Session, release: ReleaseImport) -> Release:
 
     release_date = release.release if release.release else None
 
-    print("xxx", release.sortDate, discogs_title)
+    # print("xxx", release.sortDate, discogs_title)
 
     # Release
     release_in = ReleaseCreate(
@@ -325,7 +325,7 @@ def load_release(session: Session, release: ReleaseImport) -> Release:
         storage_location_id=storage_location_id,
     )
 
-    print("(((", release_in, release_in.sort_date)
+    # print("(((", release_in, release_in.sort_date)
     release_out = crud.create_release(session=session, release_in=release_in)
 
     return release_out
