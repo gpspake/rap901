@@ -36,7 +36,10 @@ const PER_PAGE = 5
 function getReleasesQueryOptions({ page }: { page: number }) {
   return {
     queryFn: () =>
-      ReleasesService.readReleases({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+      ReleasesService.readReleases({
+        skip: (page - 1) * PER_PAGE,
+        limit: PER_PAGE,
+      }),
     queryKey: ["releases", { page }],
   }
 }

@@ -11,17 +11,17 @@ from sqlmodel import Field, Relationship, SQLModel
 
 # Shared properties
 class ReleaseBase(SQLModel):
-    title: Optional[str] = Field(default=None, min_length=1, max_length=255)
-    discogs_url: Optional[str] = Field(default=None, min_length=1, max_length=255)
-    discogs_title: Optional[str] = Field(default=None, min_length=1, max_length=255)
-    title_long: Optional[str] = Field(default=None, min_length=1, max_length=255)
-    matrix: Optional[str] = Field(default=None, min_length=1, max_length=255)
-    slug: Optional[str] = Field(default=None, min_length=1, max_length=255)
-    sealed: Optional[bool] = Field(default=False)
-    spreadsheet_id: Optional[int] = Field(default=None)
-    year: Optional[int] = Field(default=None)
-    sort_date: Optional[date] = Field(default=None)
-    release_date: Optional[date] = Field(default=None)
+    title: str | None = Field(default=None, min_length=1, max_length=255)
+    discogs_url: str | None = Field(default=None, min_length=1, max_length=255)
+    discogs_title: str | None = Field(default=None, min_length=1, max_length=255)
+    title_long: str | None = Field(default=None, min_length=1, max_length=255)
+    matrix: str | None = Field(default=None, min_length=1, max_length=255)
+    slug: str | None = Field(default=None, min_length=1, max_length=255)
+    sealed: bool | None = Field(default=False)
+    spreadsheet_id: int | None = Field(default=None)
+    year: int | None = Field(default=None)
+    sort_date: date | None = Field(default=None)
+    release_date: date | None = Field(default=None)
 
 
 # Database model, database table inferred from class name

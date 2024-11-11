@@ -9,11 +9,11 @@ from app.api.deps import CurrentUser, SessionDep
 from app.models.database_models import Release
 from app.models.models import Message
 from app.models.release import (
-    ReleaseCreate,
     ReleaseCards,
+    ReleaseCreate,
     ReleaseOut,
     ReleasePublic,
-    ReleaseUpdate
+    ReleaseUpdate,
 )
 from app.models.release_artist import ReleaseArtistLink, ReleaseArtistOut
 from app.models.release_label import ReleaseLabelLink, ReleaseLabelOut
@@ -123,7 +123,7 @@ def release_public_to_release_out(release: ReleasePublic) -> ReleaseOut:
         labels=labels,
         companies=companies,
         tracks=release.tracks,
-        identifiers=release.identifiers
+        identifiers=release.identifiers,
     )
 
 
@@ -133,15 +133,10 @@ def read_releases(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     Retrieve releases.
     """
 
-    count = session.exec(
-        select(func.count()).select_from(Release)
-    ).one()
+    count = session.exec(select(func.count()).select_from(Release)).one()
 
     results = session.exec(
-        select(Release)
-        .offset(skip)
-        .limit(limit)
-        .order_by(asc(Release.sort_date))
+        select(Release).offset(skip).limit(limit).order_by(asc(Release.sort_date))
     ).all()
 
     releases_public = ReleaseCards(data=results, count=count)

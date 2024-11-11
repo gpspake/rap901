@@ -1,23 +1,30 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react"
 
-interface ProgressiveImgProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-  placeholderSrc: string;
-  src: string;
+interface ProgressiveImgProps
+  extends React.ImgHTMLAttributes<HTMLImageElement> {
+  placeholderSrc: string
+  src: string
 }
 
-export const ProgressiveImg: React.FC<ProgressiveImgProps> = ({ placeholderSrc, src, ...props }) => {
-  const [imgSrc, setImgSrc] = useState<string>(placeholderSrc || src);
+export const ProgressiveImg: React.FC<ProgressiveImgProps> = ({
+  placeholderSrc,
+  src,
+  ...props
+}) => {
+  const [imgSrc, setImgSrc] = useState<string>(placeholderSrc || src)
 
   useEffect(() => {
-    const img = new Image();
-    img.src = src;
+    const img = new Image()
+    img.src = src
     img.onload = () => {
-      setImgSrc(src);
-    };
-  }, [src]);
+      setImgSrc(src)
+    }
+  }, [src])
 
   const loading = placeholderSrc && imgSrc === placeholderSrc
-  const customClass = loading ? "blur-sm [clip-path:inset(0)] shadow-inner-lg" : "blur-none transition";
+  const customClass = loading
+    ? "blur-sm [clip-path:inset(0)] shadow-inner-lg"
+    : "blur-none transition"
 
   return (
     <img
@@ -25,5 +32,5 @@ export const ProgressiveImg: React.FC<ProgressiveImgProps> = ({ placeholderSrc, 
       alt={props.alt || ""}
       className={`${props.className} ${customClass}`}
     />
-  );
-};
+  )
+}

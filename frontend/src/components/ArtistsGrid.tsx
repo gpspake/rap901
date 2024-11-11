@@ -1,6 +1,6 @@
-import {ArtistsPublic} from "../client"
-import clsx from "clsx";
-import { Link} from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
+import clsx from "clsx"
+import type { ArtistsPublic } from "../client"
 
 interface ArtistsGridProps {
   artistsCount: number
@@ -9,13 +9,12 @@ interface ArtistsGridProps {
   hasPreviousPage: boolean
   pageFirst: number
   pageLast: number
-  setPage: (pageNumber: number) => void,
-  page: number,
+  setPage: (pageNumber: number) => void
+  page: number
   isPending: boolean
 }
 
 export const ArtistsGrid = (props: ArtistsGridProps) => {
-
   const {
     artists,
     artistsCount,
@@ -25,10 +24,8 @@ export const ArtistsGrid = (props: ArtistsGridProps) => {
     pageLast,
     setPage,
     page,
-    isPending
+    isPending,
   } = props
-
-
 
   return (
     <>
@@ -38,39 +35,29 @@ export const ArtistsGrid = (props: ArtistsGridProps) => {
             <div className="mt-8 flow-root">
               <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-
-                  <ul role="list"
-                      className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+                  <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                     {isPending ? (
-                        <p>loading</p>
-
-                    ) : (<>
-
+                      <p>loading</p>
+                    ) : (
+                      <>
                         {artists?.data.map((artist) => {
-
                           return (
                             <li key={artist.id}>
-                              <div
-                                className="group aspect-h-1 aspect-w-[1.14] block w-full overflow-hidden rounded bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100"
-                              >
+                              <div className="group aspect-h-1 aspect-w-[1.14] block w-full overflow-hidden rounded bg-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100">
                                 <Link
-                                  to={'/artists/$slug'}
+                                  to={"/artists/$slug"}
                                   params={{ slug: artist.slug }}
                                   type="button"
                                   className="absolute inset-0 focus:outline-none"
                                 >
-                                  <span className="sr-only">
-                                    {artist.name}
-                                  </span>
+                                  <span className="sr-only">{artist.name}</span>
                                 </Link>
                               </div>
                             </li>
                           )
                         })}
                       </>
-
                     )}
-
                   </ul>
                 </div>
 
@@ -87,12 +74,17 @@ export const ArtistsGrid = (props: ArtistsGridProps) => {
                     </p>
                   </div>
                   <div>
-                    <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                    <nav
+                      className="isolate inline-flex -space-x-px rounded-md shadow-sm"
+                      aria-label="Pagination"
+                    >
                       <button
                         onClick={() => setPage(page - 1)}
                         className={clsx(
                           "relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 ",
-                          hasPreviousPage && "hover:bg-gray-50 focus:z-20 focus:outline-offset-0")}
+                          hasPreviousPage &&
+                            "hover:bg-gray-50 focus:z-20 focus:outline-offset-0",
+                        )}
                         disabled={!hasPreviousPage}
                       >
                         <span className="">Previous</span>
@@ -101,7 +93,9 @@ export const ArtistsGrid = (props: ArtistsGridProps) => {
                         onClick={() => setPage(page + 1)}
                         className={clsx(
                           "relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300",
-                          hasNextPage && "hover:bg-gray-50 focus:z-20 focus:outline-offset-0")}
+                          hasNextPage &&
+                            "hover:bg-gray-50 focus:z-20 focus:outline-offset-0",
+                        )}
                       >
                         <span>Next</span>
                       </button>

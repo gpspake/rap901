@@ -15,7 +15,11 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 import { type ApiError, LoginService, type NewPassword } from "../../client"
 import { isLoggedIn } from "../../hooks/useAuth.ts"
 import useCustomToast from "../../hooks/useCustomToast.ts"
-import { confirmPasswordRules, handleError, passwordRules } from "../../utils.ts"
+import {
+  confirmPasswordRules,
+  handleError,
+  passwordRules,
+} from "../../utils.ts"
 
 interface NewPasswordForm extends NewPassword {
   confirm_password: string

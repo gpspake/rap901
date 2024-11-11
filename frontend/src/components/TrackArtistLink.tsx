@@ -1,5 +1,5 @@
-import {TrackArtistPublic} from "../client";
-import {Link} from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router"
+import type { TrackArtistPublic } from "../client"
 
 interface TrackArtistOutProps {
   trackArtist: TrackArtistPublic
@@ -7,21 +7,25 @@ interface TrackArtistOutProps {
 }
 
 export const TrackArtistsLink = (props: TrackArtistOutProps) => {
-  const {trackArtist, className} = props
+  const { trackArtist, className } = props
   const getArtistName = (trackArtist: TrackArtistPublic): string => {
-    const artistName = trackArtist.anv ? trackArtist.anv : trackArtist.artist?.name
+    const artistName = trackArtist.anv
+      ? trackArtist.anv
+      : trackArtist.artist?.name
     return artistName || ""
   }
 
   return (
     <>
-      {trackArtist.artist?.slug && <Link
-        to={'/artists/$slug'}
-        params={{slug: trackArtist.artist.slug}}
-        className={`hover:underline text-red-600 font-semibold ${className}`}
-      >
-        {getArtistName(trackArtist)}
-      </Link>}
+      {trackArtist.artist?.slug && (
+        <Link
+          to={"/artists/$slug"}
+          params={{ slug: trackArtist.artist.slug }}
+          className={`hover:underline text-red-600 font-semibold ${className}`}
+        >
+          {getArtistName(trackArtist)}
+        </Link>
+      )}
     </>
   )
 }
