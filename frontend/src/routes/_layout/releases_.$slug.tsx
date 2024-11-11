@@ -24,10 +24,10 @@ function ReleaseComponent() {
     placeholderData: (prevData) => prevData,
   })
 
-  const frontImage = release.images?.find(
+  const frontImage = release?.images?.find(
     (image) => image.display_type === "front",
   )
-  const backImage = release.images?.find(
+  const backImage = release?.images?.find(
     (image) => image.display_type === "back",
   )
 
