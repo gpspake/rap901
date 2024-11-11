@@ -1,17 +1,17 @@
-import {createFileRoute} from "@tanstack/react-router"
-import '../../../index.css'
-import {forwardRef} from "react";
-import clsx from 'clsx'
-import {Header} from "../../components/header.tsx";
-import {Footer} from "../../components/Footer.tsx";
-import tapes from './tapes.png';
-import cdStack from './cd-stack.png';
+import { createFileRoute } from "@tanstack/react-router"
+import clsx from "clsx"
+import { forwardRef } from "react"
+import "../../../index.css"
+import { Footer } from "../../components/Footer.tsx"
+import { Header } from "../../components/header.tsx"
+import cdStack from "./cd-stack.png"
+import tapes from "./tapes.png"
 
 export const Route = createFileRoute("/_layout/about")({
   component: Dashboard,
 })
 
-export function RootLayout({children}: { children: React.ReactNode }) {
+export function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex w-full">
       <Layout>{children}</Layout>
@@ -19,43 +19,42 @@ export function RootLayout({children}: { children: React.ReactNode }) {
   )
 }
 
-export function Layout({children}: { children: React.ReactNode }) {
+export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="fixed inset-0 flex justify-center">
         <div className="flex w-full max-w-7xl">
-          <div className="w-full ring-1 bg-gradient-to-br from-black from-20% via-black to-sky-900 ring-zinc-300/20"/>
+          <div className="w-full ring-1 bg-gradient-to-br from-black from-20% via-black to-sky-900 ring-zinc-300/20" />
         </div>
       </div>
       <div className="relative flex w-full flex-col">
-        <Header/>
+        <Header />
         <main className="flex-auto pb-16">{children}</main>
-        <Footer/>
+        <Footer />
       </div>
     </>
   )
 }
 
-
 export const ContainerOuter = forwardRef<
-  React.ElementRef<'div'>,
-  React.ComponentPropsWithoutRef<'div'>
->(function OuterContainer({className, children, ...props}, ref) {
+  React.ElementRef<"div">,
+  React.ComponentPropsWithoutRef<"div">
+>(function OuterContainer({ className, children, ...props }, ref) {
   return (
-    <div ref={ref} className={clsx('sm:px-8', className)} {...props}>
+    <div ref={ref} className={clsx("sm:px-8", className)} {...props}>
       <div className="mx-auto w-full max-w-7xl lg:px-8">{children}</div>
     </div>
   )
 })
 
 export const ContainerInner = forwardRef<
-  React.ElementRef<'div'>,
-  React.ComponentPropsWithoutRef<'div'>
->(function InnerContainer({className, children, ...props}, ref) {
+  React.ElementRef<"div">,
+  React.ComponentPropsWithoutRef<"div">
+>(function InnerContainer({ className, children, ...props }, ref) {
   return (
     <div
       ref={ref}
-      className={clsx('relative px-4 sm:px-8 lg:px-12', className)}
+      className={clsx("relative px-4 sm:px-8 lg:px-12", className)}
       {...props}
     >
       <div className="mx-auto max-w-2xl lg:max-w-5xl">{children}</div>
@@ -66,7 +65,7 @@ export const ContainerInner = forwardRef<
 export const Container = forwardRef<
   React.ElementRef<typeof ContainerOuter>,
   React.ComponentPropsWithoutRef<typeof ContainerOuter>
->(function Container({children, ...props}, ref) {
+>(function Container({ children, ...props }, ref) {
   return (
     <ContainerOuter ref={ref} {...props}>
       <ContainerInner>{children}</ContainerInner>
@@ -76,10 +75,8 @@ export const Container = forwardRef<
 
 function Dashboard() {
   return (
-
     <RootLayout>
       <div className="px-4">
-
         <Container className="mt-9">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-zinc-100">
             Memphis Rap is Memphis Music
@@ -88,23 +85,31 @@ function Dashboard() {
           <div className="grid grid-cols-8 gap-4">
             <div className="col-span-6 md:col-span-4 lg:col-span-5 pt-4">
               <p className="mt-6 text-base text-zinc-300">
-                Memphis' contributions to music history are known and celebrated worldwide.<br/>
-                It's called the Home of the Blues and The birthplace of Rock and Roll. <br/>
+                Memphis' contributions to music history are known and celebrated
+                worldwide.
+                <br />
+                It's called the Home of the Blues and The birthplace of Rock and
+                Roll. <br />
                 Stax Records, Sun Studios, Beale St...
               </p>
 
               <p className="mt-6 text-base text-zinc-300">
-                The story of Memphis music continued in to the 1990s when another underground local music scene became something bigger. After more than 30 years, Memphis Rap's influence is well established and has been embraced by a new generation.
+                The story of Memphis music continued in to the 1990s when
+                another underground local music scene became something bigger.
+                After more than 30 years, Memphis Rap's influence is well
+                established and has been embraced by a new generation.
               </p>
 
               <p className="mt-6 text-base text-zinc-300">
-                This digital Archive includes photos, credits, and notes from over 200 Memphis rap CD releases spanning four decades. Each release in the archive represents a physical copy in the collection.
+                This digital Archive includes photos, credits, and notes from
+                over 200 Memphis rap CD releases spanning four decades. Each
+                release in the archive represents a physical copy in the
+                collection.
               </p>
             </div>
           </div>
 
-          <div className="border-t border-white/10 pb-4 mt-8"></div>
-
+          <div className="border-t border-white/10 pb-4 mt-8" />
         </Container>
 
         <Container className="mt-9">
@@ -115,27 +120,35 @@ function Dashboard() {
           <div className="grid grid-cols-8 gap-4">
             <div className="col-span-6 md:col-span-4 lg:col-span-5 pt-4">
               <p className="mt-6 text-base text-zinc-300">
-                Memphis rap originated and thrived in an era when physical media was as much of a part the music
-                experience as the music itself. Albums came with iconic artwork, photos, credits, and shout outs. The
-                mom & pop sound shops and record stores where CDs, tapes, and vinyls were bought and sold became
-                institutions.</p>
+                Memphis rap originated and thrived in an era when physical media
+                was as much of a part the music experience as the music itself.
+                Albums came with iconic artwork, photos, credits, and shout
+                outs. The mom & pop sound shops and record stores where CDs,
+                tapes, and vinyls were bought and sold became institutions.
+              </p>
               <p className="mt-6 text-base text-zinc-300">
-                In the age of streaming, there’s more access to music and more interest in Memphis rap than ever before.
-                For long-time fans or those discovering artists and classic albums for the first time, physical copies
-                offer a way to understand and connect with the music beyond a tiny album cover on a phone screen.</p>
+                In the age of streaming, there’s more access to music and more
+                interest in Memphis rap than ever before. For long-time fans or
+                those discovering artists and classic albums for the first time,
+                physical copies offer a way to understand and connect with the
+                music beyond a tiny album cover on a phone screen.
+              </p>
             </div>
             <div className="col-span-2 md:col-span-4 lg:col-span-3">
-              <img className="ml-4 xl:-mt-16 lg:-mt-14 mt-0 invisible md:visible" src={cdStack} alt=""/>
+              <img
+                className="ml-4 xl:-mt-16 lg:-mt-14 mt-0 invisible md:visible"
+                src={cdStack}
+                alt=""
+              />
             </div>
           </div>
 
-          <div className="border-t border-white/10 pb-4 mt-8"></div>
-
+          <div className="border-t border-white/10 pb-4 mt-8" />
         </Container>
 
         <Container className="mt-9">
           <div className="grid grid-cols-8 gap-4">
-            <div className="col-span-2 md:col-span-4"></div>
+            <div className="col-span-2 md:col-span-4" />
             <div className="col-span-8 sm:col-span-6 md:col-span-4">
               <h2 className="text-2xl font-bold tracking-tight sm:text-2xl text-zinc-100">
                 Why CDs? Where Are The Tapes?
@@ -144,27 +157,36 @@ function Dashboard() {
           </div>
 
           <div className="grid grid-cols-8 gap-4">
-            <div className="hidden sm:block sm:col-span-2 md:col-span-4"><img className="invisible md:visible"
-                                                                              src={tapes} alt=""/></div>
+            <div className="hidden sm:block sm:col-span-2 md:col-span-4">
+              <img className="invisible md:visible" src={tapes} alt="" />
+            </div>
             <div className="col-span-8 sm:col-span-6 md:col-span-4">
               <p className="mt-6 text-base text-zinc-300">
-                The earliest Memphis rap recordings were independently produced and distributed on cassette tapes. The
-                story isn't complete without them. Many classic tapes have never been reissued and are exceptionally
-                rare. Fortunately there are collective efforts to document and preserve those recordings.</p>
+                The earliest Memphis rap recordings were independently produced
+                and distributed on cassette tapes. The story isn't complete
+                without them. Many classic tapes have never been reissued and
+                are exceptionally rare. Fortunately there are collective efforts
+                to document and preserve those recordings.
+              </p>
               <p className="mt-6 text-base text-zinc-300">
-                Archiving tapes is challenging for a few reasons. Original cassettes are hard to find and easily sell
-                for hundreds of dollars for a single tape. Because of their independent production and ease of
-                bootlegging, it’s difficult to verify whether a tape is authentic.</p>
+                Archiving tapes is challenging for a few reasons. Original
+                cassettes are hard to find and easily sell for hundreds of
+                dollars for a single tape. Because of their independent
+                production and ease of bootlegging, it’s difficult to verify
+                whether a tape is authentic.
+              </p>
               <p className="mt-6 text-base text-zinc-300">
-                Memphis rap started moving to CDs as early as 1991 as the new medium began to supplant cassettes. Today,
-                CDs are much easier to find for reasonable prices. Because they’re digital and their production and
-                distribution are well documented, it’s easier to verify their authenticity.</p>
-              <br/>
+                Memphis rap started moving to CDs as early as 1991 as the new
+                medium began to supplant cassettes. Today, CDs are much easier
+                to find for reasonable prices. Because they’re digital and their
+                production and distribution are well documented, it’s easier to
+                verify their authenticity.
+              </p>
+              <br />
             </div>
-
           </div>
 
-          <div className="border-t border-white/10 pb-4 mt-4"></div>
+          <div className="border-t border-white/10 pb-4 mt-4" />
         </Container>
 
         <Container className="mt-9">
@@ -174,16 +196,19 @@ function Dashboard() {
             </h2>
 
             <p className="mt-6 text-base text-zinc-300">
-              All the photos and scans are created for this project from physical copies that belong to the archive. The
-              majority of the data presented on the site comes from the Discogs API.</p>
+              All the photos and scans are created for this project from
+              physical copies that belong to the archive. The majority of the
+              data presented on the site comes from the Discogs API.
+            </p>
 
             <p className="mt-6 text-base text-zinc-300">
-              Memphis Rap Archive is a fan made project and is not affiliated with any of the artists included in the
-              archive.</p><br/>
+              Memphis Rap Archive is a fan made project and is not affiliated
+              with any of the artists included in the archive.
+            </p>
+            <br />
           </div>
         </Container>
       </div>
     </RootLayout>
-
   )
 }

@@ -55,7 +55,6 @@ def read_artist(session: SessionDep, slug: str) -> Any:
 
     # separate album artists from credits
     for release_link in artist.release_links:
-
         if release_link.role.name == "":
             # add release id to a set
             unique_release_ids.add(release_link.release.id)

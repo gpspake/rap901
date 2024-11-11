@@ -1,9 +1,9 @@
-import {useQuery, useQueryClient} from "@tanstack/react-query"
-import {createFileRoute, useNavigate} from "@tanstack/react-router"
-import {useEffect, useState} from "react"
-import {z} from "zod"
-import {LabelsService} from "../../client"
-import {Container, RootLayout} from "./index.tsx";
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { useEffect, useState } from "react"
+import { z } from "zod"
+import { LabelsService } from "../../client"
+import { Container, RootLayout } from "./index.tsx"
 
 const labelsSearchSchema = z.object({
   page: z.number().catch(1),
@@ -16,31 +16,34 @@ export const Route = createFileRoute("/_layout/labels")({
 
 const PER_PAGE = 24
 
-function getLabelsQueryOptions({page}: { page: number }) {
+function getLabelsQueryOptions({ page }: { page: number }) {
   return {
     queryFn: () =>
-      LabelsService.readLabels({skip: (page - 1) * PER_PAGE, limit: PER_PAGE}),
-    queryKey: ["labels", {page}],
+      LabelsService.readLabels({
+        skip: (page - 1) * PER_PAGE,
+        limit: PER_PAGE,
+      }),
+    queryKey: ["labels", { page }],
   }
 }
 
 function ShowLabels() {
   const queryClient = useQueryClient()
-  const {page} = Route.useSearch()
-  const navigate = useNavigate({from: Route.fullPath})
+  const { page } = Route.useSearch()
+  const navigate = useNavigate({ from: Route.fullPath })
   const setPage = (page: number) =>
-    navigate({search: (prev) => ({...prev, page})})
+    navigate({ search: (prev) => ({ ...prev, page }) })
 
-  type LayoutType = 'grid' | 'table';
+  type LayoutType = "grid" | "table"
 
-  const [layout, setLayout] = useState<LayoutType>('grid')
+  const [layout, setLayout] = useState<LayoutType>("grid")
 
   const {
     data: labels,
     isPending,
     isPlaceholderData,
   } = useQuery({
-    ...getLabelsQueryOptions({page}),
+    ...getLabelsQueryOptions({ page }),
     placeholderData: (prevData) => prevData,
   })
 
@@ -49,20 +52,18 @@ function ShowLabels() {
   const pageLast = PER_PAGE * page
   const pageFirst = pageLast - (PER_PAGE - 1)
 
-
   const hasPreviousPage = page > 1
 
   useEffect(() => {
     if (hasNextPage) {
-      queryClient.prefetchQuery(getLabelsQueryOptions({page: page + 1}))
+      queryClient.prefetchQuery(getLabelsQueryOptions({ page: page + 1 }))
     }
   }, [page, queryClient, hasNextPage])
 
-
   return (
     <>
-      <span onClick={() => setLayout('table')}>Table</span>
-      <span onClick={() => setLayout('grid')}>Grid</span>
+      <span onClick={() => setLayout("table")}>Table</span>
+      <span onClick={() => setLayout("grid")}>Grid</span>
       {hasPreviousPage} {pageFirst} {labelsCount} {isPending} {layout} {setPage}
     </>
   )

@@ -1,68 +1,78 @@
-import {createFileRoute} from '@tanstack/react-router'
-import {ArtistsService} from "../../client";
-import {useQuery} from "@tanstack/react-query";
-import {RootLayout} from "./index.tsx";
-import {ArtistAppearances} from "../../components/ArtistAppearances.tsx";
-import {ReleasesGrid} from "../../components/ReleasesGrid.tsx";
+import { useQuery } from "@tanstack/react-query"
+import { createFileRoute } from "@tanstack/react-router"
+import { ArtistsService } from "../../client"
+import { ArtistAppearances } from "../../components/ArtistAppearances.tsx"
+import { ReleasesGrid } from "../../components/ReleasesGrid.tsx"
+import { RootLayout } from "./index.tsx"
 
-export const Route = createFileRoute('/_layout/artists/$slug')({
+export const Route = createFileRoute("/_layout/artists/$slug")({
   component: ArtistComponent,
 })
 
-function getArtistQueryOptions({slug}: { slug: string }) {
+function getArtistQueryOptions({ slug }: { slug: string }) {
   return {
-    queryFn: () =>
-      ArtistsService.readArtist({slug}),
-    queryKey: ["artist", {slug}],
+    queryFn: () => ArtistsService.readArtist({ slug }),
+    queryKey: ["artist", { slug }],
   }
 }
 
 function ArtistComponent() {
-  const {slug} = Route.useParams()
-  const {
-    data: artist,
-    isPending,
-  } = useQuery({
-    ...getArtistQueryOptions({slug}),
+  const { slug } = Route.useParams()
+  const { data: artist, isPending } = useQuery({
+    ...getArtistQueryOptions({ slug }),
     placeholderData: (prevData) => prevData,
   })
 
-  return !isPending && artist && (
-    <RootLayout>
-      <main className="flex-auto">
-        <div className="sm:px-8 mt-16">
-          <div className="mx-auto w-full max-w-7xl lg:px-8">
-            <div className="relative px-4 sm:px-8 lg:px-12">
-              <div className="mx-auto max-w-2xl lg:max-w-5xl">
-                <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-12">
-                  <div className="lg:order-first lg:row-span-2">
-                    <h1
-                      className="text-4xl font-bold tracking-tight sm:text-5xl text-zinc-100">
-                      {artist.name}
-                    </h1>
+  return (
+    !isPending &&
+    artist && (
+      <RootLayout>
+        <main className="flex-auto">
+          <div className="sm:px-8 mt-16">
+            <div className="mx-auto w-full max-w-7xl lg:px-8">
+              <div className="relative px-4 sm:px-8 lg:px-12">
+                <div className="mx-auto max-w-2xl lg:max-w-5xl">
+                  <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:grid-rows-[auto_1fr] lg:gap-y-12">
+                    <div className="lg:order-first lg:row-span-2">
+                      <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-zinc-100">
+                        {artist.name}
+                      </h1>
+                    </div>
                   </div>
-                </div>
-                {artist.releases.length && (
-                  <>
-                    <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">
-                      Releases
-                    </h2>
-                    <ReleasesGrid releases={artist.releases.sort((a, b) => a.year - b.year)} columns={4}/>
-                  </>
-                )}
-                {artist.credits.length && (
-                  <>
-                    <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">Album Credits</h2>
-                    <ReleasesGrid releases={artist.credits.sort((a, b) => a.year - b.year)} columns={5}/>
-                  </>
-                )}
+                  {artist.releases.length && (
+                    <>
+                      <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">
+                        Releases
+                      </h2>
+                      <ReleasesGrid
+                        releases={artist.releases.sort(
+                          (a, b) => a.year - b.year,
+                        )}
+                        columns={4}
+                      />
+                    </>
+                  )}
+                  {artist.credits.length && (
+                    <>
+                      <h2 className="text-xl font-bold tracking-tight sm:text-xl text-zinc-100 pt-8 pb-4">
+                        Album Credits
+                      </h2>
+                      <ReleasesGrid
+                        releases={artist.credits.sort(
+                          (a, b) => a.year - b.year,
+                        )}
+                        columns={5}
+                      />
+                    </>
+                  )}
 
-                <ArtistAppearances artistId={artist.id}/>
+                  <ArtistAppearances artistId={artist.id} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </main>
-    </RootLayout>
+        </main>
+      </RootLayout>
+    )
   )
 }

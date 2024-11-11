@@ -1,6 +1,5 @@
 import uuid
 from datetime import date
-from typing import Optional
 
 from sqlmodel import Field, SQLModel
 
@@ -52,19 +51,19 @@ class ReleaseUpdate(ReleaseBase):
 class ReleaseCard(ReleaseBase):
     id: uuid.UUID
     year: int
-    images: Optional[list["ReleaseImage"]] = None
+    images: list["ReleaseImage"] | None = None
     artist_links: list["ReleaseArtistLink"] = []
 
 
 # Used to display a single Release view
 class ReleasePublic(ReleaseBase):
     id: uuid.UUID
-    images: Optional[list["ReleaseImage"]] = None
+    images: list["ReleaseImage"] | None = None
     artist_links: list["ReleaseArtistLink"] = []
     label_links: list["ReleaseLabelLink"] = []
     tracks: list["TrackPublic"]
     identifiers: list["IdentifierPublic"]
-    storage_location: Optional[StorageLocationPublic] = None
+    storage_location: StorageLocationPublic | None = None
 
 
 class ReleaseCards(SQLModel):

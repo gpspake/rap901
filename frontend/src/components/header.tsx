@@ -1,17 +1,17 @@
-'use client'
+"use client"
 
-import { useEffect, useRef } from 'react'
 import {
   Popover,
-  PopoverButton,
   PopoverBackdrop,
+  PopoverButton,
   PopoverPanel,
-} from '@headlessui/react'
-import clsx from 'clsx'
-import {Container} from './Container.tsx'
-import {Link, useRouterState} from "@tanstack/react-router"
+} from "@headlessui/react"
+import { Link, useRouterState } from "@tanstack/react-router"
+import clsx from "clsx"
+import { useEffect, useRef } from "react"
+import { Container } from "./Container.tsx"
 
-function CloseIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+function CloseIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
       <path
@@ -26,7 +26,7 @@ function CloseIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
-function ChevronDownIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+function ChevronDownIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg viewBox="0 0 8 6" aria-hidden="true" {...props}>
       <path
@@ -43,7 +43,7 @@ function ChevronDownIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 function MobileNavItem({
   href,
   children,
-  isActive
+  isActive,
 }: {
   href: string
   isActive: boolean
@@ -54,10 +54,8 @@ function MobileNavItem({
       <Link
         to={href}
         className={clsx(
-          'relative block py-2 transition',
-          isActive
-            ? 'text-teal-400'
-            : 'hover:text-teal-500',
+          "relative block py-2 transition",
+          isActive ? "text-teal-400" : "hover:text-teal-500",
         )}
       >
         {children}
@@ -72,21 +70,18 @@ function MobileNavItem({
 function MobileNavigation(
   props: React.ComponentPropsWithoutRef<typeof Popover>,
 ) {
-
-  const router = useRouterState();
+  const router = useRouterState()
 
   const isActive = (matchPath: string): boolean => {
-    if(matchPath === "/") {
+    if (matchPath === "/") {
       return router.location.pathname === "/"
-    } else {
-      return router.location.pathname.includes(matchPath)
     }
+    return router.location.pathname.includes(matchPath)
   }
 
   return (
     <Popover {...props}>
-      <PopoverButton
-        className="group flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-lg shadow-zinc-800/5 ring-1 backdrop-blur bg-zinc-800/90 text-zinc-200 ring-white/10 hover:ring-white/20">
+      <PopoverButton className="group flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-lg shadow-zinc-800/5 ring-1 backdrop-blur bg-zinc-800/90 text-zinc-200 ring-white/10 hover:ring-white/20">
         Menu
         <ChevronDownIcon className="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-400" />
       </PopoverButton>
@@ -103,15 +98,19 @@ function MobileNavigation(
           <PopoverButton aria-label="Close menu" className="-m-1 p-1">
             <CloseIcon className="h-6 w-6 text-zinc-400" />
           </PopoverButton>
-          <h2 className="text-sm font-medium text-zinc-400">
-            Navigation
-          </h2>
+          <h2 className="text-sm font-medium text-zinc-400">Navigation</h2>
         </div>
         <nav className="mt-6">
           <ul className="-my-2 divide-y text-base divide-zinc-100/5 text-zinc-300">
-            <MobileNavItem isActive={isActive("/")} href="/">Home</MobileNavItem>
-            <MobileNavItem isActive={isActive("/releases")} href="/releases">Releases</MobileNavItem>
-            <MobileNavItem isActive={isActive("/about")} href="/about">About</MobileNavItem>
+            <MobileNavItem isActive={isActive("/")} href="/">
+              Home
+            </MobileNavItem>
+            <MobileNavItem isActive={isActive("/releases")} href="/releases">
+              Releases
+            </MobileNavItem>
+            <MobileNavItem isActive={isActive("/about")} href="/about">
+              About
+            </MobileNavItem>
             {/*<MobileNavItem href="/speaking">Speaking</MobileNavItem>*/}
             {/*<MobileNavItem href="/uses">Uses</MobileNavItem>*/}
           </ul>
@@ -130,16 +129,13 @@ function NavItem({
   children: React.ReactNode
   isActive: boolean
 }) {
-
   return (
     <li>
       <Link
         to={href}
         className={clsx(
-          'relative block px-3 py-2 transition',
-          isActive
-            ? 'text-teal-400'
-            : 'hover:text-teal-500',
+          "relative block px-3 py-2 transition",
+          isActive ? "text-teal-400" : "hover:text-teal-500",
         )}
       >
         {children}
@@ -151,24 +147,28 @@ function NavItem({
   )
 }
 
-function DesktopNavigation(props: React.ComponentPropsWithoutRef<'nav'>) {
-
-  const router = useRouterState();
+function DesktopNavigation(props: React.ComponentPropsWithoutRef<"nav">) {
+  const router = useRouterState()
 
   const isActive = (matchPath: string): boolean => {
-    if(matchPath === "/") {
+    if (matchPath === "/") {
       return router.location.pathname === "/"
-    } else {
-      return router.location.pathname.includes(matchPath)
     }
+    return router.location.pathname.includes(matchPath)
   }
 
   return (
     <nav {...props}>
       <ul className="flex rounded px-3 text-sm font-medium shadow-lg shadow-zinc-800/5 ring-1 backdrop-blur bg-zinc-900/90 text-zinc-200 ring-white/10">
-        <NavItem isActive={isActive("/")} href="/">Home</NavItem>
-        <NavItem isActive={isActive("/releases")} href="/releases">Releases</NavItem>
-        <NavItem isActive={isActive("/about")} href="/about">About</NavItem>
+        <NavItem isActive={isActive("/")} href="/">
+          Home
+        </NavItem>
+        <NavItem isActive={isActive("/releases")} href="/releases">
+          Releases
+        </NavItem>
+        <NavItem isActive={isActive("/about")} href="/about">
+          About
+        </NavItem>
         {/*<NavItem isActive={isActive("/speaking")} href="/speaking">Speaking</NavItem>*/}
         {/*<NavItem isActive={isActive("/uses")} href="/uses">Uses</NavItem>*/}
       </ul>
@@ -177,20 +177,19 @@ function DesktopNavigation(props: React.ComponentPropsWithoutRef<'nav'>) {
 }
 
 function clamp(number: number, a: number, b: number) {
-  let min = Math.min(a, b)
-  let max = Math.max(a, b)
+  const min = Math.min(a, b)
+  const max = Math.max(a, b)
   return Math.min(Math.max(number, min), max)
 }
 
 export function Header() {
-
-  let headerRef = useRef<React.ElementRef<'div'>>(null)
-  let avatarRef = useRef<React.ElementRef<'div'>>(null)
-  let isInitial = useRef(true)
+  const headerRef = useRef<React.ElementRef<"div">>(null)
+  const avatarRef = useRef<React.ElementRef<"div">>(null)
+  const isInitial = useRef(true)
 
   useEffect(() => {
-    let downDelay = avatarRef.current?.offsetTop ?? 0
-    let upDelay = 64
+    const downDelay = avatarRef.current?.offsetTop ?? 0
+    const upDelay = 64
 
     function setProperty(property: string, value: string) {
       document.documentElement.style.setProperty(property, value)
@@ -205,39 +204,39 @@ export function Header() {
         return
       }
 
-      let { top, height } = headerRef.current.getBoundingClientRect()
-      let scrollY = clamp(
+      const { top, height } = headerRef.current.getBoundingClientRect()
+      const scrollY = clamp(
         window.scrollY,
         0,
         document.body.scrollHeight - window.innerHeight,
       )
 
       if (isInitial.current) {
-        setProperty('--header-position', 'sticky')
+        setProperty("--header-position", "sticky")
       }
 
-      setProperty('--content-offset', `${downDelay}px`)
+      setProperty("--content-offset", `${downDelay}px`)
 
       if (isInitial.current || scrollY < downDelay) {
-        setProperty('--header-height', `${downDelay + height}px`)
-        setProperty('--header-mb', `${-downDelay}px`)
+        setProperty("--header-height", `${downDelay + height}px`)
+        setProperty("--header-mb", `${-downDelay}px`)
       } else if (top + height < -upDelay) {
-        let offset = Math.max(height, scrollY - upDelay)
-        setProperty('--header-height', `${offset}px`)
-        setProperty('--header-mb', `${height - offset}px`)
+        const offset = Math.max(height, scrollY - upDelay)
+        setProperty("--header-height", `${offset}px`)
+        setProperty("--header-mb", `${height - offset}px`)
       } else if (top === 0) {
-        setProperty('--header-height', `${scrollY + height}px`)
-        setProperty('--header-mb', `${-scrollY}px`)
+        setProperty("--header-height", `${scrollY + height}px`)
+        setProperty("--header-mb", `${-scrollY}px`)
       }
 
       if (top === 0 && scrollY > 0 && scrollY >= downDelay) {
-        setProperty('--header-inner-position', 'fixed')
-        removeProperty('--header-top')
-        removeProperty('--avatar-top')
+        setProperty("--header-inner-position", "fixed")
+        removeProperty("--header-top")
+        removeProperty("--avatar-top")
       } else {
-        removeProperty('--header-inner-position')
-        setProperty('--header-top', '0px')
-        setProperty('--avatar-top', '0px')
+        removeProperty("--header-inner-position")
+        setProperty("--header-top", "0px")
+        setProperty("--avatar-top", "0px")
       }
     }
 
@@ -247,12 +246,12 @@ export function Header() {
     }
 
     updateStyles()
-    window.addEventListener('scroll', updateStyles, { passive: true })
-    window.addEventListener('resize', updateStyles)
+    window.addEventListener("scroll", updateStyles, { passive: true })
+    window.addEventListener("resize", updateStyles)
 
     return () => {
-      window.removeEventListener('scroll', updateStyles)
-      window.removeEventListener('resize', updateStyles)
+      window.removeEventListener("scroll", updateStyles)
+      window.removeEventListener("resize", updateStyles)
     }
   }, [])
 
@@ -261,8 +260,8 @@ export function Header() {
       <header
         className="pointer-events-none relative z-50 flex flex-none flex-col"
         style={{
-          height: 'var(--header-height)',
-          marginBottom: 'var(--header-mb)',
+          height: "var(--header-height)",
+          marginBottom: "var(--header-mb)",
         }}
       >
         <div
@@ -270,27 +269,24 @@ export function Header() {
           className="top-0 z-10 h-16 pt-6"
           style={{
             position:
-              'var(--header-position)' as React.CSSProperties['position'],
+              "var(--header-position)" as React.CSSProperties["position"],
           }}
         >
           <Container
             className="top-[var(--header-top,theme(spacing.6))] w-full"
             style={{
               position:
-                'var(--header-inner-position)' as React.CSSProperties['position'],
+                "var(--header-inner-position)" as React.CSSProperties["position"],
             }}
           >
             <div className="relative flex gap-4">
-              <div className="flex flex-1">
-              </div>
+              <div className="flex flex-1"></div>
               <div className="flex flex-1 justify-end md:justify-center">
-                <MobileNavigation className="pointer-events-auto md:hidden"/>
-                <DesktopNavigation className="pointer-events-auto hidden md:block"/>
+                <MobileNavigation className="pointer-events-auto md:hidden" />
+                <DesktopNavigation className="pointer-events-auto hidden md:block" />
               </div>
               <div className="flex justify-end md:flex-1">
-                <div className="pointer-events-auto">
-                  {/*<ThemeToggle/>*/}
-                </div>
+                <div className="pointer-events-auto">{/*<ThemeToggle/>*/}</div>
               </div>
             </div>
           </Container>

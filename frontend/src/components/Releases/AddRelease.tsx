@@ -15,7 +15,11 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { type ApiError, type ReleaseCreate, ReleasesService } from "../../client"
+import {
+  type ApiError,
+  type ReleaseCreate,
+  ReleasesService,
+} from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
@@ -36,7 +40,7 @@ const AddRelease = ({ isOpen, onClose }: AddReleaseProps) => {
     mode: "onBlur",
     criteriaMode: "all",
     defaultValues: {
-      title: ""
+      title: "",
     },
   })
 

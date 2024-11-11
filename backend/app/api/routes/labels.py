@@ -6,7 +6,6 @@ from sqlmodel import func, select
 
 from app import crud
 from app.api.deps import CurrentUser, SessionDep
-from app.api.routes.releases import release_public_to_release_out
 from app.models.database_models import Label
 from app.models.label import (
     LabelCreate,
@@ -56,7 +55,6 @@ def read_label(session: SessionDep, slug: str) -> Any:
 
     # separate album artists from credits
     for release_link in label.release_links:
-
         if release_link.entity_type.name == "Label":
             # add release id to a set
             unique_release_ids.add(release_link.release.id)

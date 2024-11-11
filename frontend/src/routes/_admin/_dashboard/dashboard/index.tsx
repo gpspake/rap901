@@ -1,6 +1,6 @@
 import { Box, Container, Text } from "@chakra-ui/react"
 import { createFileRoute } from "@tanstack/react-router"
-import useAuth from "../../../../hooks/useAuth.ts";
+import useAuth from "../../../../hooks/useAuth.ts"
 
 export const Route = createFileRoute("/_admin/_dashboard/dashboard/")({
   component: Dashboard,
