@@ -55,22 +55,23 @@ def unique_slug(session: Session, slug: str, i: int = 0) -> str:
 
 def clean_db(session: Session):
     # Clean DB
-    metadata = MetaData()
-    metadata.reflect(bind=engine)
-
-    session.execute(delete(Table("identifier", metadata, autoload_with=engine)))
-    session.execute(delete(Table("image", metadata, autoload_with=engine)))
-    session.execute(delete(Table("track_artist", metadata, autoload_with=engine)))
-    session.execute(delete(Table("track", metadata, autoload_with=engine)))
-    session.execute(delete(Table("release_label", metadata, autoload_with=engine)))
-    session.execute(delete(Table("label", metadata, autoload_with=engine)))
-    session.execute(delete(Table("release_artist", metadata, autoload_with=engine)))
-    session.execute(delete(Table("artist", metadata, autoload_with=engine)))
-    session.execute(delete(Table("release_label", metadata, autoload_with=engine)))
-    session.execute(delete(Table("role", metadata, autoload_with=engine)))
-    session.execute(delete(Table("release", metadata, autoload_with=engine)))
-    session.execute(delete(Table("storage_location", metadata, autoload_with=engine)))
-    session.execute(delete(Table("entity_type", metadata, autoload_with=engine)))
+    # metadata = MetaData()
+    # metadata.reflect(bind=engine)
+    #
+    # session.execute(delete(Table("identifier", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("image", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("track_artist", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("track", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("release_label", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("label", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("release_artist", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("artist", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("release_label", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("role", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("release", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("storage_location", metadata, autoload_with=engine)))
+    # session.execute(delete(Table("entity_type", metadata, autoload_with=engine)))
+    return
 
 
 def validate_import_file() -> list[ReleaseImport]:
