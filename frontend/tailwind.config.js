@@ -1,5 +1,4 @@
-/** @type {import('tailwindcss').Config} */
-const typographyStyles = require("./typography")
+import typographyStyles from './typography.js'
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
