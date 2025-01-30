@@ -6,7 +6,7 @@ import {
   PopoverButton,
   PopoverPanel,
 } from "@headlessui/react"
-import { Link, useRouterState } from "@tanstack/react-router"
+import {Link, useRouterState} from "@tanstack/react-router"
 import clsx from "clsx"
 import { useEffect, useRef } from "react"
 import { Container } from "./Container.tsx"
@@ -256,42 +256,62 @@ export function Header() {
   }, [])
 
   return (
-    <>
-      <header
-        className="pointer-events-none relative z-50 flex flex-none flex-col"
-        style={{
-          height: "var(--header-height)",
-          marginBottom: "var(--header-mb)",
-        }}
-      >
-        <div
-          ref={headerRef}
-          className="top-0 z-10 h-16 pt-6"
-          style={{
-            position:
-              "var(--header-position)" as React.CSSProperties["position"],
-          }}
-        >
-          <Container
-            className="top-[var(--header-top,theme(spacing.6))] w-full"
+      <>
+
+
+        <header
+            className="relative z-50 flex flex-none flex-col"
             style={{
-              position:
-                "var(--header-inner-position)" as React.CSSProperties["position"],
+              height: "var(--header-height)",
+              marginBottom: "var(--header-mb)",
             }}
-          >
-            <div className="relative flex gap-4">
-              <div className="flex flex-1"></div>
-              <div className="flex flex-1 justify-end md:justify-center">
-                <MobileNavigation className="pointer-events-auto md:hidden" />
-                <DesktopNavigation className="pointer-events-auto hidden md:block" />
-              </div>
-              <div className="flex justify-end md:flex-1">
-                <div className="pointer-events-auto">{/*<ThemeToggle/>*/}</div>
+        >
+          <div className="bg-zinc-950">
+            <div className="px-8 ">
+              <div className="mx-auto w-full max-w-5xl py-4">
+                <Link
+                    to="/"
+                    className="bg-red-300">
+                  <h1 className="text-4xl font-bold tracking-tight md:text-6xl text-zinc-100 ">
+                    Memphis Rap Archive
+                  </h1>
+                </Link>
               </div>
             </div>
-          </Container>
-        </div>
-      </header>
-    </>
+          </div>
+
+          <div
+              ref={headerRef}
+              className="top-0 z-10 h-16 pt-6"
+              style={{
+                position:
+                    "var(--header-position)" as React.CSSProperties["position"],
+              }}
+          >
+
+
+            <Container
+                className="top-[var(--header-top,theme(spacing.6))] w-full"
+                style={{
+                  position:
+                      "var(--header-inner-position)" as React.CSSProperties["position"],
+                }}
+            >
+
+
+              <div className="relative flex gap-4">
+                <div className="flex flex-1"></div>
+                <div className="flex flex-1 justify-end md:justify-center">
+                  <MobileNavigation className="pointer-events-auto md:hidden"/>
+                  <DesktopNavigation className="pointer-events-auto hidden md:block"/>
+                </div>
+                <div className="flex justify-end md:flex-1">
+                  <div className="pointer-events-auto">{/*<ThemeToggle/>*/}</div>
+                </div>
+              </div>
+            </Container>
+          </div>
+        </header>
+      </>
   )
 }

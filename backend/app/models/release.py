@@ -1,5 +1,6 @@
 import uuid
 from datetime import date
+from typing import List, Optional
 
 from sqlmodel import Field, SQLModel
 
@@ -54,6 +55,23 @@ class ReleaseCard(ReleaseBase):
     images: list["ReleaseImage"] | None = None
     artist_links: list["ReleaseArtistLink"] = []
 
+# Define the search result wrapper
+class Highlight(SQLModel):
+    field: str
+    matched_tokens: List[str]
+    snippet: str
+
+class ReleaseSearchResult(SQLModel):
+    document: ReleaseCard
+    highlight: Optional[dict]
+    highlights: Optional[List[Highlight]]
+    text_match: Optional[int]
+    text_match_info: Optional[dict]
+
+class ReleaseSearchResponse(SQLModel):
+    results: List[ReleaseSearchResult]
+    count: int
+
 
 # Used to display a single Release view
 class ReleasePublic(ReleaseBase):
@@ -64,6 +82,10 @@ class ReleasePublic(ReleaseBase):
     tracks: list["TrackPublic"]
     identifiers: list["IdentifierPublic"]
     storage_location: StorageLocationPublic | None = None
+
+class ReleasesPublic(SQLModel):
+    data: list[ReleasePublic]
+    count: int
 
 
 class ReleaseCards(SQLModel):

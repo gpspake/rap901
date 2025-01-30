@@ -122,8 +122,24 @@ services:
       # Enable www redirection for HTTP and HTTPS
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-https.middlewares=${STACK_NAME?Variable not set}-www-redirect
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.middlewares=https-redirect,${STACK_NAME?Variable not set}-www-redirect
+
+  typesense:
+    image: typesense/typesense:27.1
+    container_name: typesense
+    ports:
+      - "8108:8108"
+    environment:
+      - TYPESENSE_API_KEY=typesense-api-key
+      - TYPESENSE_DATA_DIR=/data
+    volumes:
+      - typesense-data:/data
+    networks:
+      - traefik-public
+      - default
+
 volumes:
   app-db-data:
+  typesense-data:
 
 networks:
   traefik-public:

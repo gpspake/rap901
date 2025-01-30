@@ -486,6 +486,26 @@ export const $HTTPValidationError = {
 	},
 } as const;
 
+export const $Highlight = {
+	properties: {
+		field: {
+	type: 'string',
+	isRequired: true,
+},
+		matched_tokens: {
+	type: 'array',
+	contains: {
+	type: 'string',
+},
+	isRequired: true,
+},
+		snippet: {
+	type: 'string',
+	isRequired: true,
+},
+	},
+} as const;
+
 export const $IdentifierCreate = {
 	properties: {
 		type: {
@@ -2544,6 +2564,86 @@ export const $ReleasePublic = {
 	contains: {
 		type: 'IdentifierPublic',
 	},
+	isRequired: true,
+},
+		storage_location: {
+	type: 'any-of',
+	contains: [{
+	type: 'StorageLocationPublic',
+}, {
+	type: 'null',
+}],
+},
+	},
+} as const;
+
+export const $ReleaseSearchResponse = {
+	properties: {
+		results: {
+	type: 'array',
+	contains: {
+		type: 'ReleaseSearchResult',
+	},
+	isRequired: true,
+},
+		count: {
+	type: 'number',
+	isRequired: true,
+},
+	},
+} as const;
+
+export const $ReleaseSearchResult = {
+	properties: {
+		document: {
+	type: 'ReleaseCard',
+	isRequired: true,
+},
+		highlight: {
+	type: 'any-of',
+	contains: [{
+	type: 'dictionary',
+	contains: {
+	properties: {
+	},
+},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		highlights: {
+	type: 'any-of',
+	contains: [{
+	type: 'array',
+	contains: {
+		type: 'Highlight',
+	},
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		text_match: {
+	type: 'any-of',
+	contains: [{
+	type: 'number',
+}, {
+	type: 'null',
+}],
+	isRequired: true,
+},
+		text_match_info: {
+	type: 'any-of',
+	contains: [{
+	type: 'dictionary',
+	contains: {
+	properties: {
+	},
+},
+}, {
+	type: 'null',
+}],
 	isRequired: true,
 },
 	},

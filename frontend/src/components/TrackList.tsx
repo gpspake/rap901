@@ -1,5 +1,5 @@
 import type { TrackArtistPublic, TrackPublic } from "../client"
-import { TrackArtistsLink } from "./TrackArtistLink.tsx"
+import { TrackArtistsLink } from "./Releases/TrackArtistLink.tsx"
 
 interface JoinedArtistLinksProps {
   trackArtists: TrackArtistPublic[]

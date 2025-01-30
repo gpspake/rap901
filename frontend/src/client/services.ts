@@ -2,7 +2,7 @@ import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
 
-import type { Body_login_login_access_token,Message,NewPassword,Token,UserPublic,UpdatePassword,UserCreate,UserRegister,UsersPublic,UserUpdate,UserUpdateMe,ItemCreate,ItemPublic,ItemsPublic,ItemUpdate,ReleaseCards,ReleaseCreate,ReleasePublic,ReleaseUpdate,StorageLocationCreate,StorageLocationPublic,StorageLocationsPublic,StorageLocationUpdate,ImageCreate,ImagePublic,ImagesPublic,ImageUpdate,ArtistCreate,ArtistOut,ArtistPublic,ArtistsPublic,ArtistUpdate,ReleaseArtistCreate,ReleaseArtistPublic,ReleaseArtistsPublic,ReleaseArtistUpdate,LabelCreate,LabelOut,LabelPublic,LabelsPublic,LabelUpdate,ReleaseLabelCreate,ReleaseLabelPublic,ReleaseLabelsPublic,ReleaseLabelUpdate,IdentifierCreate,IdentifierPublic,IdentifiersPublic,IdentifierUpdate,TrackCreate,TrackPublic,TracksPublic,TrackUpdate,ReleaseCard,TrackArtistCreate,TrackArtistPublic,TrackArtistsPublic,TrackArtistUpdate } from './models';
+import type { Body_login_login_access_token,Message,NewPassword,Token,UserPublic,UpdatePassword,UserCreate,UserRegister,UsersPublic,UserUpdate,UserUpdateMe,ItemCreate,ItemPublic,ItemsPublic,ItemUpdate,ReleaseCards,ReleaseCreate,ReleasePublic,ReleaseSearchResponse,ReleaseUpdate,StorageLocationCreate,StorageLocationPublic,StorageLocationsPublic,StorageLocationUpdate,ImageCreate,ImagePublic,ImagesPublic,ImageUpdate,ArtistCreate,ArtistOut,ArtistPublic,ArtistsPublic,ArtistUpdate,ReleaseArtistCreate,ReleaseArtistPublic,ReleaseArtistsPublic,ReleaseArtistUpdate,LabelCreate,LabelOut,LabelPublic,LabelsPublic,LabelUpdate,ReleaseLabelCreate,ReleaseLabelPublic,ReleaseLabelsPublic,ReleaseLabelUpdate,IdentifierCreate,IdentifierPublic,IdentifiersPublic,IdentifierUpdate,TrackCreate,TrackPublic,TracksPublic,TrackUpdate,ReleaseCard,TrackArtistCreate,TrackArtistPublic,TrackArtistsPublic,TrackArtistUpdate } from './models';
 
 export type TDataLoginAccessToken = {
                 formData: Body_login_login_access_token
@@ -545,6 +545,17 @@ export type TDataCreateRelease = {
                 requestBody: ReleaseCreate
                 
             }
+export type TDataReleasesIndex = {
+                limit?: number
+skip?: number
+                
+            }
+export type TDataReleasesSearch = {
+                limit?: number
+page?: number
+query: string
+                
+            }
 export type TDataReadRelease = {
                 slug: string
                 
@@ -599,6 +610,78 @@ requestBody,
 			url: '/api/v1/releases/',
 			body: requestBody,
 			mediaType: 'application/json',
+			errors: {
+				422: `Validation Error`,
+			},
+		});
+	}
+
+	/**
+	 * Releases Index
+	 * Index releases in Typesense.
+	 * @returns unknown Successful Response
+	 * @throws ApiError
+	 */
+	public static releasesIndex(data: TDataReleasesIndex = {}): CancelablePromise<Record<string, unknown>> {
+		const {
+limit = 100,
+skip = 0,
+} = data;
+		return __request(OpenAPI, {
+			method: 'GET',
+			url: '/api/v1/releases/releases-index',
+			query: {
+				skip, limit
+			},
+			errors: {
+				422: `Validation Error`,
+			},
+		});
+	}
+
+	/**
+	 * Clear Releases Index
+	 * Clear the 'releases' collection index in Typesense.
+	 * @returns unknown Successful Response
+	 * @throws ApiError
+	 */
+	public static clearReleasesIndex(): CancelablePromise<Record<string, unknown>> {
+				return __request(OpenAPI, {
+			method: 'DELETE',
+			url: '/api/v1/releases/releases-index',
+		});
+	}
+
+	/**
+	 * Get Indexed Releases
+	 * Get all documents from the releases collection.
+	 * @returns unknown Successful Response
+	 * @throws ApiError
+	 */
+	public static getIndexedReleases(): CancelablePromise<unknown> {
+				return __request(OpenAPI, {
+			method: 'GET',
+			url: '/api/v1/releases/releases-indexed',
+		});
+	}
+
+	/**
+	 * Releases Search
+	 * @returns ReleaseSearchResponse Successful Response
+	 * @throws ApiError
+	 */
+	public static releasesSearch(data: TDataReleasesSearch): CancelablePromise<ReleaseSearchResponse> {
+		const {
+limit = 10,
+page = 1,
+query,
+} = data;
+		return __request(OpenAPI, {
+			method: 'GET',
+			url: '/api/v1/releases/releases-search',
+			query: {
+				query, page, limit
+			},
 			errors: {
 				422: `Validation Error`,
 			},

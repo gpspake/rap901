@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import type { ReleaseArtistLink } from "../client"
+import type { ReleaseArtistLink } from "../../client"
 
 export const getReleaseArtists = (
   artistLinks: ReleaseArtistLink[],
@@ -19,7 +19,6 @@ export const ReleaseArtistsLink = (props: ReleaseArtistsLinkProps) => {
   const releaseArtists = getReleaseArtists(props.releaseArtists)
 
   const getArtistName = (releaseArtistLink: ReleaseArtistLink): string => {
-    console.log("get artist name", releaseArtistLink)
     const artistName = releaseArtistLink.anv
       ? releaseArtistLink.anv
       : releaseArtistLink.artist.name
@@ -29,16 +28,16 @@ export const ReleaseArtistsLink = (props: ReleaseArtistsLinkProps) => {
   return (
     <span className={className}>
       {releaseArtists.map((releaseArtist) => (
-        <>
+        <span key={releaseArtist.id}>
           <Link
-            className="hover:underline font-semibold text-red-500"
+            className="transition-all duration-300 hover:text-red-500 hover:underline no-underline font-semibold text-red-600 "
             to={"/artists/$slug"}
             params={{ slug: releaseArtist.artist.slug }}
           >
             {getArtistName(releaseArtist)}
           </Link>
           {releaseArtist.join && ` ${releaseArtist.join} `}
-        </>
+        </span>
       ))}
     </span>
   )

@@ -4,7 +4,8 @@ import { useEffect } from "react"
 import { z } from "zod"
 import { ArtistsService } from "../../client"
 import { ArtistsGrid } from "../../components/ArtistsGrid.tsx"
-import { Container, RootLayout } from "./index.tsx"
+import { RootLayout } from "./index.tsx"
+import {Container} from "../../components/Container.tsx";
 
 const artistsSearchSchema = z.object({
   page: z.number().catch(1),

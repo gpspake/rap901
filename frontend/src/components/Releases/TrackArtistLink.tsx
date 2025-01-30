@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import type { TrackArtistPublic } from "../client"
+import type { TrackArtistPublic } from "../../client"
 
 interface TrackArtistOutProps {
   trackArtist: TrackArtistPublic

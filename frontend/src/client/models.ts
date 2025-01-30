@@ -117,6 +117,14 @@ export type HTTPValidationError = {
 
 
 
+export type Highlight = {
+	field: string;
+	matched_tokens: Array<string>;
+	snippet: string;
+};
+
+
+
 export type IdentifierCreate = {
 	type: string;
 	description: string | null;
@@ -562,6 +570,24 @@ export type ReleasePublic = {
 	label_links?: Array<ReleaseLabelLink>;
 	tracks: Array<TrackPublic>;
 	identifiers: Array<IdentifierPublic>;
+	storage_location?: StorageLocationPublic | null;
+};
+
+
+
+export type ReleaseSearchResponse = {
+	results: Array<ReleaseSearchResult>;
+	count: number;
+};
+
+
+
+export type ReleaseSearchResult = {
+	document: ReleaseCard;
+	highlight: Record<string, unknown> | null;
+	highlights: Array<Highlight> | null;
+	text_match: number | null;
+	text_match_info: Record<string, unknown> | null;
 };
 
 

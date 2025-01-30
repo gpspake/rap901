@@ -3,7 +3,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 import { z } from "zod"
 import { LabelsService } from "../../client"
-import { Container, RootLayout } from "./index.tsx"
+import { RootLayout } from "./index.tsx"
+import {Container} from "../../components/Container.tsx";
 
 const labelsSearchSchema = z.object({
   page: z.number().catch(1),
