@@ -25,13 +25,11 @@ function Dashboard() {
               Memphis' contributions to music history are known and celebrated worldwide.</p>
             <p className="mt-6 text-base text-zinc-300">
               The story of Memphis music continued in to the early 1990s when another underground local
-              music
-              began to take hold. Now, after nearly 40 years, Memphis rap's influence
+              music scene began to take hold. Now, after nearly 40 years, Memphis rap's influence
               is well established and has been embraced by a new generation.</p>
             <p className="mt-6 text-base text-zinc-300">
-              This digital Archive includes photos, credits, and notes from over Memphis rap CD releases
-              spanning
-              four decades including original photos of physical copies.</p>
+              This digital Archive includes photos, credits, and notes from over 300 Memphis rap CD releases
+              spanning four decades.</p>
           </div>
         </div>
       </Container>
@@ -53,20 +51,16 @@ function Dashboard() {
               classic albums for the first time, physical copies offer a way to understand and connect
               with the music beyond a tiny album cover thumbnail on a phone screen.</p>
             <p className="mt-6 text-base text-zinc-300">
-              This archive includes photos, credits, and notes from over 200 Memphis rap CD releases and
+              This archive includes photos, credits, and notes from over 300 Memphis rap CD releases and
               counting
               spanning four decades. Each release in the archive represents a physical copy belonging to
               the archive. Future updates will include HD images of all of the artwork including inserts
               and Discs.</p>
-
           </div>
           <div className="hidden md:block md:col-span-4 lg:col-span-3">
             <img className="ml-4 xl:-mt-16 lg:-mt-14 mt-0 invisible md:visible" src={cdStack} alt=""/>
           </div>
         </div>
-
-        {/*<div className="border-t border-white/10 pb-4 mt-8"></div>*/}
-
       </Container>
 
       <Container className="mt-9">
@@ -89,20 +83,17 @@ function Dashboard() {
               story isn't complete without them. Many classic tapes have never been reissued and are
               exceptionally
               rare. Fortunately there are collective efforts to document and preserve those recordings and
-              some lost tapes are
-              starting to re-emerge</p>
+              some lost tapes have become available again.</p>
             <p className="mt-6 text-base text-zinc-300">
               Archiving tapes is challenging for a few reasons. Original cassettes are hard to find and
               easily sell
               for hundreds of dollars for a single tape. Because of their independent production and ease
-              of
-              bootlegging,
-              it’s difficult to verify whether a tape is authentic.</p>
+              of bootlegging, it’s difficult to verify whether a tape is authentic.</p>
             <p className="mt-6 text-base text-zinc-300">
               Memphis rap started moving to CDs as early as 1991 as the new medium began to supplant
               cassettes.
               Today,
-              CDs are much easier to find in for reasonable prices. Because they’re digital and their
+              CDs are much easier to find for reasonable prices. Because they’re digital and their
               production and distribution are well documented, it’s easier to verify their
               authenticity.</p>
             <br/>

@@ -30,7 +30,7 @@ export const ReleasesGrid = ({releases, columns = 4}: CommonGridProps) => {
                     placeholderSrc={`https://imagedelivery.net/br00h4PfwSBLLXuS3E5D-g/${frontImage.cloudflare_id}/loading`}
                     src={`https://imagedelivery.net/br00h4PfwSBLLXuS3E5D-g/${frontImage.cloudflare_id}/sm`}
                     alt={frontImage?.alt_text || ""}
-                    className="pointer-events-none object-cover group-hover:scale-110 group-hover:rotate-2 group-hover:shadow group-hover:shadow-black transition-all duration-300"
+                    className="pointer-events-none object-cover group-hover:scale-105  group-hover:shadow group-hover:shadow-black transition-all duration-300"
                   />
                 )}
 

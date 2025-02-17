@@ -10,9 +10,9 @@ import {Container} from "../../components/Container.tsx";
 
 export function Stats() {
   const stats = [
-    { id: 1, name: "CD Releases", value: "287" },
-    { id: 2, name: "Artists and Contributors", value: "1,896" },
-    { id: 3, name: "labels and Companies", value: "422" },
+    { id: 1, name: "CD Releases", value: "342" },
+    { id: 2, name: "Artists and Contributors", value: "2,108" },
+    { id: 3, name: "labels and Companies", value: "486" },
   ]
 
   return (
@@ -83,7 +83,7 @@ function Dashboard() {
 
             <p className="mt-6 text-base text-zinc-300">
               This digital Archive includes photos, credits, and notes from over
-              200 Memphis rap CD releases spanning four decades. Each release in
+              300 Memphis rap CD releases spanning four decades. Each release in
               the archive represents a physical copy in the collection and all
               of the photos on this site were created for this project.
             </p>

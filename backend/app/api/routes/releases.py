@@ -147,10 +147,13 @@ def read_releases(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     return ReleaseCards(data=results, count=count)
 
 @router.get("/releases-index", response_model=dict)
-def releases_index(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
+def releases_index(session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100) -> Any:
     """
     Index releases in Typesense.
     """
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+
     releases = session.exec(
         select(Release).offset(skip).limit(limit).order_by(asc(Release.sort_date))
     ).all()
@@ -249,10 +252,13 @@ def releases_index(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
 
 
 @router.delete("/releases-index", response_model=dict)
-def clear_releases_index() -> Any:
+def clear_releases_index(current_user: CurrentUser) -> Any:
     """
     Clear the 'releases' collection index in Typesense.
     """
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+
     try:
         # Attempt to delete the collection
         TypesenseClient.collections['releases'].delete()
@@ -268,10 +274,13 @@ def clear_releases_index() -> Any:
 
 
 @router.get("/releases-indexed", response_model=Any)
-def get_indexed_releases() -> Any:
+def get_indexed_releases(current_user: CurrentUser) -> Any:
     """
     Get all documents from the releases collection.
     """
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+
     try:
         documents = TypesenseClient.collections['releases'].documents.export()
         return {"documents": documents}
@@ -373,10 +382,12 @@ def read_release(session: SessionDep, slug: str) -> Any:
     return release
 
 @router.post("/", response_model=ReleasePublic)
-def create_release(*, session: SessionDep, release_in: ReleaseCreate) -> Any:
+def create_release(*, session: SessionDep, release_in: ReleaseCreate, current_user: CurrentUser) -> Any:
     """
     Create new release.
     """
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=400, detail="Not enough permissions")
     return crud.create_release(session=session, release_in=release_in)
 
 @router.put("/{id}", response_model=ReleasePublic)
